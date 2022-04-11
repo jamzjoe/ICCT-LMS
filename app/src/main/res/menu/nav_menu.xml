@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+<item android:title="Others">
+
+    <menu>
+
+
+
+        <item android:id="@+id/nav_backpack" android:icon="@drawable/backpack" android:title="Backpack"/>
+        <item
+            android:id="@+id/whats_new"
+            android:icon="@drawable/ic_whats_new"
+            android:title="What's New" />
+        <item
+            android:id="@+id/help_center"
+            android:icon="@drawable/ic_help_center"
+            android:title="Help Center" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+
+    </menu>
+</item>
+    <item android:id="@+id/nav_logout" android:icon="@drawable/logout"
+        android:title="Logout"/>
+    <item
+        android:id="@+id/delete_account"
+        android:icon="@drawable/ic_delete"
+        android:title="Delete Account" />
+
+</menu>
+

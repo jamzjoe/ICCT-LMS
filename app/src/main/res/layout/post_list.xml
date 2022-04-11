@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="10dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp">
+
+    <RelativeLayout
+        android:id="@+id/holder_post_info"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/post_profile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/profile" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/post_profile"
+                android:elevation="8dp">
+
+                <RelativeLayout
+                    android:layout_centerVertical="true"
+                    android:id="@+id/headings_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/post_subject_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/headings"
+                        android:text="Teacher"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/posted_to"
+                        android:fontFamily="@font/sub_headings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/post_subject_title"
+                        android:text="posted from" />
+
+                    <TextView
+
+                        android:id="@+id/post_person_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@id/posted_to"
+                        android:fontFamily="@font/headings"
+                        android:text="Room Name"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/post_type_display"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/post_person_name"
+                        android:layout_marginStart="10dp"
+                        android:text="Type"
+                        android:fontFamily="@font/sub_headings"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/post_hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/post_type_display"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/sub_headings"
+                        android:hint="00 hours ago"
+                        android:text=""
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+<RelativeLayout
+    android:layout_below="@id/holder"
+    android:layout_marginTop="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="6dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/post_task_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/tw_font"
+                android:hint="Task title"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:fontFamily="@font/sub_headings"
+                android:id="@+id/post_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_task_title"
+                android:layout_marginStart="8dp"
+                android:hint="January 1, 2022"
+                android:text=""
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/post_message_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_date"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:autoLink="web"
+                android:fontFamily="@font/sub_headings"
+                android:text="Instructions/Messages"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

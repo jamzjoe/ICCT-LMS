@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/room_post"
+        android:icon="@drawable/ic_timeline"
+        android:title="Posts" />
+    <item
+        android:id="@+id/room_folders"
+        android:icon="@drawable/ic_folders"
+        android:title="Folders" />
+    <item
+        android:id="@+id/room_members"
+        android:icon="@drawable/myclass"
+        android:title="Members" />
+</menu>
