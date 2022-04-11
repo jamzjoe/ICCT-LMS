@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
 class CreateTeacherPost : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     private lateinit var storageReference: StorageReference
-    private lateinit var progressDialog : ProgressDialog
+    private lateinit var dialog : Dialog
     private lateinit var classArrayList : ArrayList<CreateClassData>
     private lateinit var groupArrayList: ArrayList<GroupListData>
     private lateinit var groupRecyclerView: RecyclerView
@@ -299,14 +299,16 @@ class CreateTeacherPost : AppCompatActivity() {
             }.show()
     }
     private fun progressDialogShow(){
-        progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Loading please wait...")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_layout)
+        dialog.setTitle("Loading please wait")
+        dialog.setCancelable(false)
+        dialog.show()
     }
     private fun progressDialogHide(){
-        progressDialog.hide()
+        dialog.hide()
     }
+
 
     private fun showName() {
         val auth = FirebaseAuth.getInstance()
@@ -320,6 +322,7 @@ databaseReference = FirebaseDatabase.getInstance().getReference("Teachers")
             }
         }
     }
+
 
 
 
