@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -135,6 +136,8 @@ class TeacherMainActivity : AppCompatActivity() {
                 R.id.teacher_settings -> settings()
                 R.id.teacher_delete_account -> deleteAccount()
                 R.id.announcement -> openNews()
+                R.id.lms_web -> openWeb()
+                R.id.git -> openGit()
             }
             true
         }
@@ -142,6 +145,19 @@ class TeacherMainActivity : AppCompatActivity() {
         teacher_hamburger.setOnClickListener{
             drawerToggle.openDrawer(GravityCompat.START)
         }
+    }
+
+    private fun openGit() {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse("https://github.com/JangManWol-source/ICCT-LMS")
+        startActivity(i)
+    }
+
+    private fun openWeb() {
+
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse("https://icct.herokuapp.com/")
+        startActivity(i)
     }
 
     private fun openNews() {

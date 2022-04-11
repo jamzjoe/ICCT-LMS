@@ -16,9 +16,18 @@
         </menu>
     </item>
     <group>
-        <item android:title="CREATE">
+        <item android:title="Create">
             <menu>
                 <item android:id="@+id/announcement" android:icon="@drawable/ic_news" android:title="Announcement and Updates"/>
+            </menu>
+        </item>
+    </group>
+
+    <group>
+        <item android:title="Go to">
+            <menu>
+                <item android:id="@+id/lms_web" android:icon="@drawable/ic_whats_new" android:title="Go to ICCT LMS Web"/>
+            <item android:id="@+id/git" android:icon="@drawable/ic_github_brands" android:title="Github"/>
             </menu>
         </item>
     </group>

@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:name=".newsAndUpdates.LMSWeb"
+            android:exported="false" />
+        <activity
             android:name=".newsAndUpdates.CreateNewsAndUpdates"
             android:exported="false" />
         <activity
