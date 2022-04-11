@@ -40,6 +40,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout-v28/classes_item.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin.xml" value="0.21920289855072464" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_class.xml" value="0.21" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_nesws_and_updates.xml" value="0.29846014492753625" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_teacher_post.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_forgot_password.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_login.xml" value="0.25" />
@@ -70,6 +71,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/delete_layout.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/dialog_layout.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_class.xml" value="0.2" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_create_news_and_updates.xml" value="0.29846014492753625" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_dashboard.xml" value="0.29322916666666665" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_home.xml" value="0.16" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_home2.xml" value="0.33" />
@@ -116,7 +118,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/room_top_nav.xml" value="0.29322916666666665" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/settings_menu.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/teacher_menu.xml" value="0.29322916666666665" />
-        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/teacher_nav_menu.xml" value="0.29322916666666665" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/teacher_nav_menu.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/menu/top_nav_menu.xml" value="0.25" />
       </map>
     </option>

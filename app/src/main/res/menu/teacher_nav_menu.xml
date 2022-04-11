@@ -15,12 +15,20 @@
 
         </menu>
     </item>
+    <group>
+        <item android:title="CREATE">
+            <menu>
+                <item android:id="@+id/announcement" android:icon="@drawable/ic_news" android:title="Announcement and Updates"/>
+            </menu>
+        </item>
+    </group>
     <item android:id="@+id/teacher_nav_logout" android:icon="@drawable/logout"
         android:title="Logout"/>
     <item
         android:id="@+id/teacher_delete_account"
         android:icon="@drawable/ic_delete"
         android:title="Delete Account" />
+
 
 </menu>
 

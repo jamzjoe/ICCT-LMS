@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +24,7 @@ import com.google.firebase.storage.StorageReference
 import com.icct.icctlms.R
 import com.icct.icctlms.UpdateProfile.UpdateTeachersProfile
 import com.icct.icctlms.Welcome
+import com.icct.icctlms.newsAndUpdates.CreateNewsAndUpdates
 import com.icct.icctlms.teacherfragments.*
 import kotlinx.android.synthetic.main.activity_teacher_main.*
 import kotlinx.android.synthetic.main.teacher_nav_header.*
@@ -134,6 +134,7 @@ class TeacherMainActivity : AppCompatActivity() {
                 R.id.teacher_nav_logout -> logOut()
                 R.id.teacher_settings -> settings()
                 R.id.teacher_delete_account -> deleteAccount()
+                R.id.announcement -> openNews()
             }
             true
         }
@@ -143,6 +144,9 @@ class TeacherMainActivity : AppCompatActivity() {
         }
     }
 
+    private fun openNews() {
+        startActivity(Intent(this, CreateNewsAndUpdates::class.java))
+    }
 
 
     private fun deleteAccount() {
