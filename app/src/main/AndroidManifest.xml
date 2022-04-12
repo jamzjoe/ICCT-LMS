@@ -11,6 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:name=".SchoolAnnouncement"
+            android:exported="false" />
+        <activity
+            android:name=".Authentication.Admin.AdminMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".newsAndUpdates.LMSWeb"
             android:exported="false" />
         <activity

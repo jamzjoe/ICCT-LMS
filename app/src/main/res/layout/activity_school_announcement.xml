@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SchoolAnnouncement">
+<RelativeLayout
+    android:id="@+id/header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:backgroundTint="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="SCHOOL ANNOUNCEMENTS AND UPDATES"/>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            tools:listitem="@layout/announcement_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teacher_news_and_updates"/>
+    </RelativeLayout>
+</RelativeLayout>

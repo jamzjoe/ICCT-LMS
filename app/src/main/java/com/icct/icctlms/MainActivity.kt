@@ -169,8 +169,9 @@ class MainActivity : AppCompatActivity() {
                         database = FirebaseDatabase.getInstance().getReference("Students")
                         database.child(uid).removeValue().addOnCompleteListener{
                             Toast.makeText(this, "Database deleted",Toast.LENGTH_SHORT).show()
+                            finish()
+                            Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show()
                         }
-                        Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show()
                     }
                 }
                 val intent = Intent(this, Login::class.java)
@@ -190,7 +191,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun whatsNew() {
-        Toast.makeText(this, "This features is on development. Stay updated.", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, SchoolAnnouncement::class.java))
     }
 
     private fun settings() {

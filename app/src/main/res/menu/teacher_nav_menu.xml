@@ -16,7 +16,7 @@
         </menu>
     </item>
     <group>
-        <item android:title="Create">
+        <item android:title="Extras">
             <menu>
                 <item android:id="@+id/announcement" android:icon="@drawable/ic_news" android:title="Announcement and Updates"/>
             </menu>

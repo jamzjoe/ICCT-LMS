@@ -42,14 +42,9 @@ class CreateNewsAndUpdates : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_nesws_and_updates)
-        database = FirebaseDatabase.getInstance().getReference("Announcements")
-        uid = Firebase.auth.currentUser?.uid.toString()
-        val getName = FirebaseDatabase.getInstance().getReference("Teachers")
-        getName.child(uid).get().addOnSuccessListener {
-            if (it.exists()){
-                name = it.child("name").value.toString()
-            }
-        }
+        database = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements")
+        uid = randomCode()
+        name = "Admin na walang Jowa"
 
         today = Calendar.getInstance()
         val dateString = "2020-07-18"
@@ -78,7 +73,7 @@ class CreateNewsAndUpdates : AppCompatActivity() {
             title = et_title.text.toString()
             description = et_desc.text.toString()
             val data = AnnouncementData(name, uid, title, description, date, announcementID)
-val announce = FirebaseDatabase.getInstance().getReference("Announcements").child(announcementID)
+val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements").child(announcementID)
             announce.setValue(data).addOnSuccessListener {
                 progressDialogHide()
                 MaterialAlertDialogBuilder(this)

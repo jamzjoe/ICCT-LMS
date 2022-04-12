@@ -62,5 +62,15 @@
         android:text="PARENT"
         android:textColor="@color/black" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/admin_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/parent_btn"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/white"
+        android:text="ADMIN"
+        android:textColor="@color/black" />
+
 
 </RelativeLayout>

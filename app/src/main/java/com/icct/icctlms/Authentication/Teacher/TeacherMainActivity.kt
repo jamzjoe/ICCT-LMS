@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.icct.icctlms.R
+import com.icct.icctlms.SchoolAnnouncement
 import com.icct.icctlms.UpdateProfile.UpdateTeachersProfile
 import com.icct.icctlms.Welcome
 import com.icct.icctlms.newsAndUpdates.CreateNewsAndUpdates
@@ -161,7 +162,7 @@ class TeacherMainActivity : AppCompatActivity() {
     }
 
     private fun openNews() {
-        startActivity(Intent(this, CreateNewsAndUpdates::class.java))
+        startActivity(Intent(this, SchoolAnnouncement::class.java))
     }
 
 
@@ -176,8 +177,9 @@ class TeacherMainActivity : AppCompatActivity() {
                         database = FirebaseDatabase.getInstance().getReference("Teachers")
                         database.child(uid).removeValue().addOnCompleteListener{
                             Toast.makeText(this, "Database deleted", Toast.LENGTH_SHORT).show()
+                            finish()
+                            Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show()
                         }
-                        Toast.makeText(this, "Account deleted successfully", Toast.LENGTH_SHORT).show()
                     }
                 }
                 val intent = Intent(this, TeacherLogin::class.java)
