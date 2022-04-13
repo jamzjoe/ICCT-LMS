@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.activity_create_nesws_and_updates.*
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.announcement_item.*
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,13 +48,18 @@ class CreateNewsAndUpdates : AppCompatActivity() {
         uid = randomCode()
         name = "Admin na walang Jowa"
 
+
+
         today = Calendar.getInstance()
-        val dateString = "2020-07-18"
-        val currentDate = LocalDate.parse(dateString)
-        val month = currentDate.month.toString()
+        val day = today.get(Calendar.DAY_OF_MONTH)
+        val monthList = arrayOf("January", "February",
+            "March", "April", "May", "June", "July",
+            "August", "September", "October", "November",
+            "December")
+        val month = monthList[today.get(Calendar.MONTH)].uppercase()
         val trimMonth = month.subSequence(0, 3)
-        val day = currentDate.dayOfMonth.toString()
         date = "$trimMonth\n$day"
+
         submitAnnounce()
         
         recyclerView = findViewById(R.id.recyclerView_announcement)
@@ -70,9 +77,15 @@ class CreateNewsAndUpdates : AppCompatActivity() {
         submit_ann_btn.setOnClickListener{
             progressDialogShow()
             val announcementID = randomCode()
+            val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime.now()
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val sortKey = now.toMillis().toString()
             title = et_title.text.toString()
             description = et_desc.text.toString()
-            val data = AnnouncementData(name, uid, title, description, date, announcementID)
+            val data = AnnouncementData(name, uid, title, description, date, announcementID, sortKey)
 val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements").child(announcementID)
             announce.setValue(data).addOnSuccessListener {
                 progressDialogHide()
@@ -116,7 +129,7 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
                     }
                     val adapter = AnnouncementAdapter(announcementArrayList)
                     announcementArrayList.sortByDescending {
-                        it.announcerName
+                        it.sortKey
                     }
                     recyclerView.adapter = adapter
 
@@ -125,7 +138,7 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
                         override fun onItemClick(position: Int) {
                             val message = announcementArrayList[position].description
                             val annID = announcementArrayList[position].announcementID
-                            val reference = FirebaseDatabase.getInstance().getReference("Announcements")
+                            val reference = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements")
 
                             MaterialAlertDialogBuilder(this@CreateNewsAndUpdates)
                                 .setMessage("Announcement: $message $annID")
@@ -160,6 +173,8 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun LocalDateTime.toMillis(zone: ZoneId = ZoneId.systemDefault()) = atZone(zone)?.toInstant()?.toEpochMilli()
     private fun randomCode(): String = List(6) {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
-import com.icct.icctlms.adapter.AnnouncementAdapter
+import com.icct.icctlms.adapter.ViewersAnnouncementAdapter
 import com.icct.icctlms.data.AnnouncementData
 
 class SchoolAnnouncement : AppCompatActivity() {
@@ -42,37 +42,20 @@ class SchoolAnnouncement : AppCompatActivity() {
                         val announcement = postSnapShot.getValue(AnnouncementData::class.java)
                         announcementArrayList.add(announcement!!)
                     }
-                    val adapter = AnnouncementAdapter(announcementArrayList)
+                    val adapter = ViewersAnnouncementAdapter(announcementArrayList)
                     announcementArrayList.sortByDescending {
                         it.announcerName
                     }
                     recyclerView.adapter = adapter
 
                     //adapter click listener
-                    adapter.setOnItemClickListener(object : AnnouncementAdapter.onItemClickListener{
+                    adapter.setOnItemClickListener(object : ViewersAnnouncementAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
                             val message = announcementArrayList[position].description
-                            val annID = announcementArrayList[position].announcementID
-                            val reference = FirebaseDatabase.getInstance().getReference("Announcements")
 
                             MaterialAlertDialogBuilder(this@SchoolAnnouncement)
-                                .setMessage("Announcement: $message $annID")
-                                .setPositiveButton("UPDATE"){_,_ ->
-                                    Toast.makeText(this@SchoolAnnouncement, "In development.", Toast.LENGTH_SHORT).show()
-                                }
-                                .setNegativeButton("CANCEL"){_,_ ->
-
-                                }
-                                .setNeutralButton("DELETE"){_,_ ->
-                                    progressDialogShow()
-                                    reference.child(annID.toString()).removeValue().addOnSuccessListener {
-                                        progressDialogHide()
-                                        Toast.makeText(this@SchoolAnnouncement, "Deleted successfully!", Toast.LENGTH_SHORT).show()
-                                        adapter.deleteItem(position)
-                                        recyclerView.adapter?.notifyItemRemoved(position)
-                                        executeNews()
-
-                                    }
+                                .setMessage("Announcement: $message")
+                                .setPositiveButton("OKAY"){_,_ ->
                                 }.show()
                         }
 

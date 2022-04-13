@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,6 +16,7 @@ import com.icct.icctlms.Authentication.Login
 import com.icct.icctlms.Authentication.Parent.Parent
 import com.icct.icctlms.Authentication.Teacher.TeacherLogin
 import kotlinx.android.synthetic.main.activity_welcome.*
+import kotlinx.android.synthetic.main.alert_admin__login.*
 
 class Welcome : AppCompatActivity() {
     private lateinit var adminLoginLayout : View
@@ -71,10 +73,15 @@ class Welcome : AppCompatActivity() {
                 MaterialAlertDialogBuilder(this)
                     .setTitle("Admin Access")
                     .setView(adminLoginLayout)
+                    .setOnCancelListener{
+                        val parent : ViewGroup = adminLoginLayout.parent as ViewGroup
+                        parent.removeView(adminLoginLayout)
+                    }
                     .show()
 
                 adminSubmit.setOnClickListener{
                     when{
+
                         TextUtils.isEmpty(adminUsername.text.toString().trim { it <= ' '}) -> {
                             Toast.makeText(this, "Please input username!", Toast.LENGTH_SHORT).show()
                         }
@@ -100,6 +107,13 @@ class Welcome : AppCompatActivity() {
                         }
                     }
                 }
+
+
+
+
+
+
+
 
 
             }

@@ -47,6 +47,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:hint="Description"
+                android:maxHeight="200dp"
                 android:id="@+id/et_desc"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
