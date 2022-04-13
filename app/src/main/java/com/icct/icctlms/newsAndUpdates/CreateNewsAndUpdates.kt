@@ -36,7 +36,6 @@ class CreateNewsAndUpdates : AppCompatActivity() {
     private lateinit var uid : String
     private lateinit var recyclerView: RecyclerView
     private lateinit var announcementArrayList: ArrayList<AnnouncementData>
-    private var backPressed  = 0L
     private lateinit var name : String
     private lateinit var date : String
     private lateinit var title : String
@@ -211,22 +210,7 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
         })
     }
 
-    override fun onBackPressed() {
-        if (backPressed + 2000 > System.currentTimeMillis()){
-            MaterialAlertDialogBuilder(this)
-                .setMessage("Click okay to logged out.")
-                .setNegativeButton("Cancel"){_, _ ->
-                }
-                .setCancelable(false)
-                .setPositiveButton("Okay"){_,_ ->
-                    super.onBackPressed()
-                }.show()
-        }else{
-            Toast.makeText(this, "Press again to logged out.", Toast.LENGTH_SHORT).show()
-        }
-        backPressed = System.currentTimeMillis()
 
-    }
 
     private fun hideLayout() {
         val parent : ViewGroup = updateLayout.parent as ViewGroup
