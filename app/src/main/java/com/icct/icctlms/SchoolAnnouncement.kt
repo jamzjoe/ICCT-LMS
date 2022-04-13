@@ -44,7 +44,7 @@ class SchoolAnnouncement : AppCompatActivity() {
                     }
                     val adapter = ViewersAnnouncementAdapter(announcementArrayList)
                     announcementArrayList.sortByDescending {
-                        it.announcerName
+                        it.sortKey
                     }
                     recyclerView.adapter = adapter
 

@@ -3,10 +3,12 @@ package com.icct.icctlms.newsAndUpdates
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.icu.util.LocaleData
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import com.icct.icctlms.data.AnnouncementData
 import kotlinx.android.synthetic.main.activity_create_nesws_and_updates.*
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 import kotlinx.android.synthetic.main.announcement_item.*
+import kotlinx.android.synthetic.main.announcement_update_layout.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -33,12 +36,16 @@ class CreateNewsAndUpdates : AppCompatActivity() {
     private lateinit var uid : String
     private lateinit var recyclerView: RecyclerView
     private lateinit var announcementArrayList: ArrayList<AnnouncementData>
+    private var backPressed  = 0L
     private lateinit var name : String
     private lateinit var date : String
     private lateinit var title : String
     private lateinit var today : Calendar
     private lateinit var description : String
     private lateinit var dialog: Dialog
+    private lateinit var updateLayout : View
+    private lateinit var updateEditText: EditText
+    private lateinit var updateTitle : EditText
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +65,7 @@ class CreateNewsAndUpdates : AppCompatActivity() {
             "December")
         val month = monthList[today.get(Calendar.MONTH)].uppercase()
         val trimMonth = month.subSequence(0, 3)
-        date = "$trimMonth\n$day"
+        date = "$day\n$trimMonth"
 
         submitAnnounce()
         
@@ -67,6 +74,10 @@ class CreateNewsAndUpdates : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this.applicationContext)
         announcementArrayList = arrayListOf()
 
+        val layoutInflater = layoutInflater
+        updateLayout = layoutInflater.inflate(R.layout.announcement_update_layout, null)
+        updateEditText = updateLayout.findViewById(R.id.update_et)
+        updateTitle = updateLayout.findViewById(R.id.update_et_title)
 
 
         executeAnnouncement()
@@ -137,13 +148,40 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
                     adapter.setOnItemClickListener(object : AnnouncementAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
                             val message = announcementArrayList[position].description
-                            val annID = announcementArrayList[position].announcementID
+                            val annID = announcementArrayList[position].announcementID.toString()
+                            title = announcementArrayList[position].title.toString()
                             val reference = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements")
+                            updateEditText.setText(message)
+                            updateTitle.setText(title)
 
                             MaterialAlertDialogBuilder(this@CreateNewsAndUpdates)
-                                .setMessage("Announcement: $message $annID")
+                                .setMessage("Announcement: $message")
                                 .setPositiveButton("UPDATE"){_,_ ->
-                                    Toast.makeText(this@CreateNewsAndUpdates, "In development.", Toast.LENGTH_SHORT).show()
+                                  MaterialAlertDialogBuilder(this@CreateNewsAndUpdates)
+                                   .setTitle("Update Announcement")
+                                    .setView(updateLayout)
+                                    .setOnCancelListener{
+                                            hideLayout()
+                                        }
+                                    .setPositiveButton("UPDATE"){_, _ ->
+                                        val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            LocalDateTime.now()
+                                        } else {
+                                            TODO("VERSION.SDK_INT < O")
+                                        }
+                                        val sortKey = now.toMillis().toString()
+                                        title = updateTitle.text.toString()
+                                        description = updateEditText.text.toString()
+                                        val data = AnnouncementData(name, uid, title, description, date, annID, sortKey)
+                                        reference.child(annID).setValue(data).addOnSuccessListener {
+                                            Toast.makeText(this@CreateNewsAndUpdates, "Successfully Updated", Toast.LENGTH_SHORT).show()
+                                            executeAnnouncement()
+                                            hideLayout()
+                                    }
+
+
+                                    }.show()
+
                                 }
                                 .setNegativeButton("CANCEL"){_,_ ->
 
@@ -171,6 +209,28 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
             }
 
         })
+    }
+
+    override fun onBackPressed() {
+        if (backPressed + 2000 > System.currentTimeMillis()){
+            MaterialAlertDialogBuilder(this)
+                .setMessage("Click okay to logged out.")
+                .setNegativeButton("Cancel"){_, _ ->
+                }
+                .setCancelable(false)
+                .setPositiveButton("Okay"){_,_ ->
+                    super.onBackPressed()
+                }.show()
+        }else{
+            Toast.makeText(this, "Press again to logged out.", Toast.LENGTH_SHORT).show()
+        }
+        backPressed = System.currentTimeMillis()
+
+    }
+
+    private fun hideLayout() {
+        val parent : ViewGroup = updateLayout.parent as ViewGroup
+        parent.removeView(updateLayout)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

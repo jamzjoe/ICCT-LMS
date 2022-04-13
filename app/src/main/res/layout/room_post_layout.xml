@@ -109,11 +109,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:autoLink="web"
+                android:autoLink="all"
                 android:fontFamily="@font/sub_headings"
                 android:text="Instructions/Messages"
                 android:textColor="@color/black"
-                android:textIsSelectable="true"/>
+                android:textIsSelectable="true" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

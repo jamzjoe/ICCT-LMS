@@ -263,21 +263,6 @@ class MainActivity : AppCompatActivity() {
             }.show()
     }
 
-    // method for bitmap to base64
-    fun encodeTobase64(image: Bitmap): String? {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos)
-        val b: ByteArray = baos.toByteArray()
-        val imageEncoded: String = Base64.encodeToString(b, Base64.DEFAULT)
-        Log.d("Image Log:", imageEncoded)
-        return imageEncoded
-    }
-
-    fun decodeBase64(input: String?): Bitmap? {
-        val decodedByte = Base64.decode(input, 0)
-        return BitmapFactory
-            .decodeByteArray(decodedByte, 0, decodedByte.size)
-    }
 
     override fun onBackPressed() {
         if (backPressed + 2000 > System.currentTimeMillis()){
