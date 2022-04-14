@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:name=".Authentication.Teacher.RoomMemberRequest"
+            android:exported="false" />
+        <activity
             android:name=".SchoolAnnouncement"
             android:exported="false" />
         <activity

@@ -3,45 +3,95 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
+        android:id="@+id/restrict_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/setting_header"
-            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_margin="10dp"
             android:text="Settings"
             android:textColor="@color/black"
+            android:textSize="15sp"
             android:textStyle="bold" />
         <RelativeLayout
             android:layout_below="@id/setting_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/settings_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:fontFamily="@font/sub_headings"
-                android:text="Restrict the student post?" />
+           <com.google.android.material.card.MaterialCardView
+               android:layout_margin="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+               <com.google.android.material.circularreveal.CircularRevealRelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <TextView
+                       android:id="@+id/settings_text"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerVertical="true"
+                       android:layout_marginStart="20dp"
+                       android:fontFamily="@font/headings"
+                       android:text="Restrict the student post?" />
 
-            <ToggleButton
-                android:id="@+id/settings_switch"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/settings_text"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+                   <ToggleButton
+                       android:id="@+id/settings_switch"
+                       android:layout_width= "wrap_content"
+                       android:layout_height="40dp"
+                       android:layout_alignParentEnd="true"
+                       android:textSize="10sp"
+                       android:textStyle="bold" />
+               </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
+           </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
 
 
     </RelativeLayout>
+
+<com.google.android.material.circularreveal.CircularRevealRelativeLayout
+    android:layout_width="match_parent"
+    android:layout_below="@id/restrict_holder"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp">
+
+            <TextView
+                android:id="@+id/member_request_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/headings"
+                android:text="Member request" />
+
+            <TextView
+                android:id="@+id/member_count_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/headings"
+                android:hint="0"
+                android:textColor="@color/button_color"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</com.google.android.material.circularreveal.CircularRevealRelativeLayout>
+
+
 </RelativeLayout>

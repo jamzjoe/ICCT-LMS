@@ -20,7 +20,11 @@ class MembersAdapter(private val memberList: ArrayList<RoomMembersData>) : Recyc
     fun setOnItemClickListener(listener: onItemClickListener){
         mListener = listener
     }
+    fun deleteItem(int: Int){
 
+        memberList.removeAt(int)
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder{
 
         val memberView = LayoutInflater.from(parent.context).inflate(R.layout.room_members_item, parent, false)

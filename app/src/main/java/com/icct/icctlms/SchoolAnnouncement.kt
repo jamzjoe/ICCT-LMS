@@ -20,6 +20,7 @@ class SchoolAnnouncement : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_school_announcement)
 
+
         database = FirebaseDatabase.getInstance().getReference("Admin").child("Announcements")
         
         recyclerView = findViewById(R.id.teacher_news_and_updates)

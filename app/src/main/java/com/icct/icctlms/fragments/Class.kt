@@ -113,18 +113,36 @@ class Class : Fragment() {
                     adapter.setOnItemClickListener(object : StudentClassAdapter.onItemClickListener{
 
                         override fun onItemClick(position: Int) {
+
+                            val uid = classArrayList[position].uid.toString()
                             val intent = Intent(this@Class.requireContext(), StudentRoomActivity::class.java)
                             roomID = classArrayList[position].roomID.toString()
+                            val getBoolean = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Accept")
+                            getBoolean.child(uid).get().addOnSuccessListener {
+                                if (it.exists()){
 
-                            intent.putExtra("student_room_name", classArrayList[position].subjectTitle)
-                            intent.putExtra("student_roomID", classArrayList[position].roomID)
-                            intent.putExtra("student_uid", classArrayList[position].uid)
-                            intent.putExtra("student_roomCode", classArrayList[position].roomID)
-                            intent.putExtra("student_section", classArrayList[position].section)
-                            intent.putExtra("student_name", classArrayList[position].name)
-                            intent.putExtra("student_type", classArrayList[position].type)
-                            intent.putExtra("student_room_type", "Class")
-                            startActivity(intent)
+                                    val isAccept = it.child("accept").value.toString()
+
+                                    if (isAccept != "true"){
+                                        toastError("Please wait until your teacher accepts your request.")
+                                    }
+                                    else{
+                                        intent.putExtra("student_room_name", classArrayList[position].subjectTitle)
+                                        intent.putExtra("student_roomID", classArrayList[position].roomID)
+                                        intent.putExtra("student_uid", classArrayList[position].uid)
+                                        intent.putExtra("student_roomCode", classArrayList[position].roomID)
+                                        intent.putExtra("student_section", classArrayList[position].section)
+                                        intent.putExtra("student_name", classArrayList[position].name)
+                                        intent.putExtra("student_type", classArrayList[position].type)
+                                        intent.putExtra("student_room_type", "Class")
+                                        startActivity(intent)
+                                    }
+                                }else{
+                                    toastError("This class was deleted by the owner.")
+                                }
+                            }.addOnFailureListener{
+                                toastError("Please wait until your teacher accepts your request.")
+                            }
 
                         }
 
@@ -194,19 +212,38 @@ class Class : Fragment() {
                     adapter.setOnItemClickListener(object : StudentGroupAdapter.onItemClickListener{
 
                         override fun onItemClick(position: Int) {
+
+                            val uid = groupArrayList[position].uid.toString()
                             val intent = Intent(this@Class.requireContext(), StudentRoomActivity::class.java)
                             roomID = groupArrayList[position].roomID.toString()
-                            intent.putExtra("student_room_name", groupArrayList[position].subjectTitle)
-                            intent.putExtra("student_roomID", groupArrayList[position].roomID)
-                            intent.putExtra("student_uid", groupArrayList[position].uid)
-                            intent.putExtra("student_roomCode", groupArrayList[position].roomID)
-                            intent.putExtra("student_section", groupArrayList[position].section)
-                            intent.putExtra("student_name", groupArrayList[position].name)
-                            intent.putExtra("student_type", groupArrayList[position].type)
-                            intent.putExtra("student_room_type", "Group")
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
+                            val getBoolean = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Accept")
+                            getBoolean.child(uid).get().addOnSuccessListener{
+                                if (it.exists()) {
+                                    val isAccept = it.child("accept").value.toString()
+
+                                    if (isAccept != "true") {
+                                        toastError("Please wait until your teacher accepts your request.")
+                                    }else{
+                                        roomID = groupArrayList[position].roomID.toString()
+                                        intent.putExtra("student_room_name", groupArrayList[position].subjectTitle)
+                                        intent.putExtra("student_roomID", groupArrayList[position].roomID)
+                                        intent.putExtra("student_uid", groupArrayList[position].uid)
+                                        intent.putExtra("student_roomCode", groupArrayList[position].roomID)
+                                        intent.putExtra("student_section", groupArrayList[position].section)
+                                        intent.putExtra("student_name", groupArrayList[position].name)
+                                        intent.putExtra("student_type", groupArrayList[position].type)
+                                        intent.putExtra("student_room_type", "Group")
+                                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                        startActivity(intent)
+                                    }
+                                }else{
+                                    toastError("This group was deleted by the owner.")
+                                }
+                            }.addOnFailureListener{
+                                toastError("Please wait until your teacher accepts your request.")
+                            }
+
 
                         }
 
@@ -228,6 +265,15 @@ class Class : Fragment() {
         })
     }
 
+    private  fun toastError(message: String){
+        MaterialAlertDialogBuilder(this@Class.requireContext())
+            .setTitle("Note")
+            .setMessage(message)
+            .setPositiveButton("OKAY"){_,_ ->
+
+            }
+            .show()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -317,12 +363,21 @@ class Class : Fragment() {
                             val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                             currentUser.child(userID).get().addOnSuccessListener {
                                 if (it.exists()){
+                                    val isAccept = "false"
                                     val currentName = it.child("name").value.toString()
                                     val currentType = it.child("type").value.toString()
-                                    val data = RoomMembersData(currentName, currentType, userID)
+                                    val data = RoomMembersData(currentName, currentType, userID, isAccept)
                                     val randomID = randomCode()
                                     val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
-                                    databasePublic.child(roomID).child("Members").child(uid).setValue(data)
+                                        val accept = FirebaseDatabase.getInstance().getReference("Public Class")
+                                        accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
+                                            val request = FirebaseDatabase.getInstance().getReference("Public Class")
+                                            request.child(roomID).child("Request").child(uid).setValue(data)
+                                        }
+
+
+
+
                                 }
                             }
                         } else {
@@ -348,7 +403,7 @@ class Class : Fragment() {
             MaterialAlertDialogBuilder(requireActivity())
                 .setMessage("Join Group")
                 .setView(dialogLayout)
-                .setPositiveButton("Okay"){_, _ ->
+                .setPositiveButton("JOIN"){_, _ ->
                     databaseGroup.child(groupCode.text.toString()).get().addOnSuccessListener { it ->
                         if (it.exists()){
                             val letter = it.child("letter").value.toString()
@@ -378,11 +433,17 @@ class Class : Fragment() {
                             val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                             currentUser.child(userID).get().addOnSuccessListener {
                                 if (it.exists()){
+                                    val isAccept = "false"
                                     val currentName = it.child("name").value.toString()
                                     val currentType = it.child("type").value.toString()
-                                    val data = RoomMembersData(currentName, currentType, userID)
+                                    val data = RoomMembersData(currentName, currentType, userID, isAccept)
                                     val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
-                                    databasePublic.child(roomID).child("Members").child(uid).setValue(data)
+                                        val accept = FirebaseDatabase.getInstance().getReference("Public Group")
+                                        accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
+                                            val request = FirebaseDatabase.getInstance().getReference("Public Group")
+                                            request.child(roomID).child("Request").child(uid).setValue(data)
+                                        }
+
                                 }
                             }
                         }else{

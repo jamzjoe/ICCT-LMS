@@ -34,6 +34,7 @@ class TeachersRoomMembers : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         membersArrayList = arrayListOf()
 
+
         databaseGroup = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Members")
         databaseClass = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Members")
         executeGroupMembers()

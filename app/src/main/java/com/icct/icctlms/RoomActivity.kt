@@ -22,8 +22,8 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.icct.icctlms.Authentication.Teacher.RoomMemberRequest
 import com.icct.icctlms.Authentication.Teacher.TeacherMainActivity
 import com.icct.icctlms.data.LinkData
 import com.icct.icctlms.data.State
@@ -60,6 +60,8 @@ class RoomActivity : AppCompatActivity() {
     private lateinit var day : String
     private lateinit var settings : View
     private lateinit var switch : ToggleButton
+    private lateinit var memberRequest : TextView
+    private lateinit var memberCountText : TextView
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +84,8 @@ class RoomActivity : AppCompatActivity() {
         val inflater = layoutInflater
         settings = inflater.inflate(R.layout.settings_post_layout, null)
         switch = settings.findViewById<ToggleButton>(R.id.settings_switch)
+        memberRequest = settings.findViewById(R.id.member_request_btn)
+        memberCountText = settings.findViewById(R.id.member_count_txt)
 
 
 
@@ -89,6 +93,8 @@ class RoomActivity : AppCompatActivity() {
         roomID = intent.getStringExtra("roomID").toString()
         roomType = intent.getStringExtra("roomType").toString()
         roomName = intent.getStringExtra("roomName").toString()
+
+        showCount()
         showHelp()
         navClick()
         replaceFragment(roomPost)
@@ -102,6 +108,27 @@ class RoomActivity : AppCompatActivity() {
         deleteRoom()
 
     }
+
+    private fun showCount() {
+        val membersCount = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+        membersCount.child("Request").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val count = snapshot.childrenCount
+
+                    memberCountText.text = count.toString()
+                    if(count > 0){
+                        alert_.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+        }
+
 
     private fun deleteRoom() {
 
@@ -171,9 +198,19 @@ class RoomActivity : AppCompatActivity() {
 
 
     private fun setSettings() {
+       memberRequest.setOnClickListener{
+           val intent = Intent(this, RoomMemberRequest::class.java)
+           intent.putExtra("member_room_id", roomID)
+           intent.putExtra("member_room_type", roomType)
+            startActivity(intent)
+        }
         settings_post.setOnClickListener {
             val alertDialogBuilder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
             alertDialogBuilder.setView(settings)
+            alertDialogBuilder.setOnCancelListener{
+                val parent : ViewGroup = settings.parent as ViewGroup
+                parent.removeView(settings)
+            }
             alertDialogBuilder.setPositiveButton("Done") { _, _ ->
                 var data = State()
                 if (roomType == "Class") {
@@ -199,27 +236,48 @@ class RoomActivity : AppCompatActivity() {
                 }
             }
             alertDialogBuilder.setNeutralButton("DELETE THIS ROOM"){_,_ ->
+                val parent : ViewGroup = settings.parent as ViewGroup
+                parent.removeView(settings)
                 MaterialAlertDialogBuilder(this)
                     .setMessage("Are you sure you want to delete this room?")
                     .setPositiveButton("CONFIRM") { _, _ ->
-                        val deleteClassSelf =
-                            FirebaseDatabase.getInstance().getReference("Class").child(uid)
-                        deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
-                            val deleteClassGlobal =
-                                FirebaseDatabase.getInstance().getReference("Public Class")
-                            deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
-                                val deleteClassPost =
-                                    FirebaseDatabase.getInstance().getReference("Class Post")
-                                deleteClassPost.child("Room ID: $roomID").removeValue()
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
-                                        startActivity(Intent(this, TeacherMainActivity::class.java))
-                                    }
-                            }
-                        }
+                       if (roomType == "Class"){
+                           val deleteClassSelf =
+                               FirebaseDatabase.getInstance().getReference("Class").child(uid)
+                           deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                               val deleteClassGlobal =
+                                   FirebaseDatabase.getInstance().getReference("Public Class")
+                               deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
+                                   val deleteClassPost =
+                                       FirebaseDatabase.getInstance().getReference("Class Post")
+                                   deleteClassPost.child("Room ID: $roomID").removeValue()
+                                       .addOnSuccessListener {
+                                           Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
+                                           startActivity(Intent(this, TeacherMainActivity::class.java))
+                                       }
+                               }
+                           }
+                       }else{
+                           val deleteClassSelf =
+                               FirebaseDatabase.getInstance().getReference("Group").child(uid)
+                           deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                               val deleteClassGlobal =
+                                   FirebaseDatabase.getInstance().getReference("Public Group")
+                               deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
+                                   val deleteClassPost =
+                                       FirebaseDatabase.getInstance().getReference("Group Post")
+                                   deleteClassPost.child("Room ID: $roomID").removeValue()
+                                       .addOnSuccessListener {
+                                           Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
+                                           startActivity(Intent(this, TeacherMainActivity::class.java))
+                                       }
+                               }
+                           }
+                       }
                     }
                     .setNegativeButton("CANCEL"){_,_ ->
-
+                        val parent : ViewGroup = settings.parent as ViewGroup
+                        parent.removeView(settings)
                     }.show()
             }
             alertDialogBuilder.show()
