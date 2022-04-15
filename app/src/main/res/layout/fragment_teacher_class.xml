@@ -5,9 +5,34 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".teacherfragments.TeacherClass">
+   <RelativeLayout
+       android:id="@+id/nav_holder"
+       android:layout_centerHorizontal="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+       <com.google.android.material.card.MaterialCardView
+           android:layout_centerHorizontal="true"
+           android:layout_margin="5dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
 
+           <com.google.android.material.bottomnavigation.BottomNavigationView
+               android:layout_width="match_parent"
+               android:id="@+id/teacher_class_nav"
+               app:itemActiveIndicatorStyle="@style/ThemeOverlay.Material3.NavigationView"
+               style="@style/Widget.Material3.NavigationRailView.ActiveIndicator"
+               android:textAlignment="center"
+               app:itemTextAppearanceActive="@style/TextAppearance.Material3.TitleLarge"
+               app:itemTextAppearanceInactive="@style/TextAppearance.Material3.TitleSmall"
+               app:itemTextColor="@color/black"
+               app:menu="@menu/classlist_nav"
+               app:itemIconSize="0dp"
+               android:layout_height="32dp"/>
+       </com.google.android.material.card.MaterialCardView>
+   </RelativeLayout>
 
     <ScrollView
+        android:layout_below="@id/nav_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -21,17 +46,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_bg">
 
-                <TextView
-                    android:id="@+id/test"
-                    android:layout_width="match_parent"
-
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/tw_font"
-                    android:text="Classes"
-                    android:textSize="20sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -59,19 +73,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </ScrollView>
+
                 <RelativeLayout
-                    android:layout_below="@id/scrollView"
                     android:id="@+id/text_rooms"
                     android:layout_width="match_parent"
-                    android:background="@drawable/white_bg"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_margin="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Groups"
-                        android:fontFamily="@font/tw_font"
-                        android:textSize="20sp"/>
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/scrollView"
+                    android:background="@drawable/white_bg">
+
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

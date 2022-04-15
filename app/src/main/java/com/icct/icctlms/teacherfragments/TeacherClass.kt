@@ -1,11 +1,11 @@
 package com.icct.icctlms.teacherfragments
 
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.*
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
+import android.os.Looper
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +17,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.icct.icctlms.Authentication.Teacher.TeacherMainActivity
 import com.icct.icctlms.R
 import com.icct.icctlms.RoomActivity
 import com.icct.icctlms.adapter.CreateClassAdapter
@@ -29,6 +28,7 @@ import com.icct.icctlms.adapter.GroupListAdapter
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RoomMembersData
+import com.icct.icctlms.databinding.FragmentTeacherClassBinding
 import com.icct.icctlms.gestures.SwipeGestures
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_home.*
@@ -40,7 +40,6 @@ class TeacherClass : Fragment() {
     private lateinit var classArrayList: ArrayList<CreateClassData>
     private lateinit var recyclerView: RecyclerView
     private lateinit var roomID : String
-    private lateinit var progressDialog : ProgressDialog
     private lateinit var groupArrayList : ArrayList<GroupListData>
     private lateinit var groupRecyclerView: RecyclerView
     private lateinit var subjectTitle : GroupListData
@@ -49,6 +48,9 @@ class TeacherClass : Fragment() {
     private lateinit var databaseClass : DatabaseReference
     private lateinit var uid : String
     private lateinit var dialog : Dialog
+    private lateinit var teacherNav : BottomNavigationView
+    private var _binding: FragmentTeacherClassBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,21 +58,23 @@ class TeacherClass : Fragment() {
 
 
 
-    ): View? {
+    ): View {
 
-        val rootView = inflater.inflate(R.layout.fragment_teacher_class, container, false)
-        recyclerView = rootView.findViewById(R.id.class_list)!!
-        groupRecyclerView = rootView.findViewById(R.id.group_list)
-        val auth = FirebaseAuth.getInstance()
+        _binding = FragmentTeacherClassBinding.inflate(inflater, container, false)
+
+        recyclerView = binding.classList
+        groupRecyclerView = binding.groupList
+        groupRecyclerView.visibility = View.GONE
         groupRecyclerView.setHasFixedSize(true)
         groupRecyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        classArrayList = arrayListOf<CreateClassData>()
-        groupArrayList = arrayListOf<GroupListData>()
+        classArrayList = arrayListOf()
+        groupArrayList = arrayListOf()
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
-
-
+        teacherNav = binding.teacherClassNav
+        nav()
+        progressDialogShow()
         databaseGroup = FirebaseDatabase.getInstance().getReference("Group").child(uid)
         executeGroup()
 
@@ -81,9 +85,29 @@ class TeacherClass : Fragment() {
         executeClass()
 
 
-        return rootView
+        return binding.root
 
 
+    }
+
+    private fun nav() {
+        teacherNav.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.classes_nav -> hideGroup()
+                R.id.group_nav -> hideClass()
+            }
+            true
+        }
+    }
+
+    private fun hideClass() {
+        recyclerView.visibility = View.GONE
+        groupRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun hideGroup() {
+        groupRecyclerView.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
     }
 
     private fun executeClass() {
@@ -95,10 +119,11 @@ class TeacherClass : Fragment() {
 
                     for (classSnapShot in snapshot.children){
                         classData = classSnapShot.getValue(CreateClassData::class.java)!!
-                        classArrayList.add(classData!!)
+                        classArrayList.add(classData)
                     }
                     val adapter = CreateClassAdapter(classArrayList)
                     recyclerView.adapter = adapter
+                    progressDialogHide()
 
                     val swipeGestures = object : SwipeGestures(this@TeacherClass.requireContext()){
 
@@ -168,6 +193,8 @@ class TeacherClass : Fragment() {
 
 
 
+                }else{
+                    progressDialogHide()
                 }
             }
 
@@ -183,47 +210,69 @@ class TeacherClass : Fragment() {
         databaseGroup.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     groupArrayList.clear()
 
-                    for (classSnapShot in snapshot.children){
+                    for (classSnapShot in snapshot.children) {
                         subjectTitle = classSnapShot.getValue(GroupListData::class.java)!!
-                        groupArrayList.add(subjectTitle!!)
+                        groupArrayList.add(subjectTitle)
                     }
                     val adapter = GroupListAdapter(groupArrayList)
                     groupRecyclerView.adapter = adapter
-                    val swipeGestures = object : SwipeGestures(this@TeacherClass.requireContext()){
+                    progressDialogHide()
+                    val swipeGestures = object : SwipeGestures(this@TeacherClass.requireContext()) {
 
                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                            val position : Int = viewHolder.adapterPosition
-                            when(direction){
+                            val position: Int = viewHolder.adapterPosition
+                            when (direction) {
                                 ItemTouchHelper.LEFT -> {
                                     MaterialAlertDialogBuilder(this@TeacherClass.requireContext())
                                         .setMessage("Are you certain that you want to delete this group?")
-                                        .setPositiveButton("Okay"){_,_ ->
+                                        .setPositiveButton("Okay") { _, _ ->
                                             progressDialogShow()
-                                            val roomCode = groupArrayList[position].subjectCode.toString()
-                                            val deleteGroupSelf = FirebaseDatabase.getInstance().getReference("Group").child(uid)
-                                            deleteGroupSelf.child(roomCode).removeValue().addOnSuccessListener {
-                                                val deleteGroupGlobal = FirebaseDatabase.getInstance().getReference("Public Group")
-                                                deleteGroupGlobal.child(roomCode).removeValue().addOnSuccessListener {
-                                                    val deleteGroupPost = FirebaseDatabase.getInstance().getReference("Group Post")
-                                                    deleteGroupPost.child("Room ID: $roomCode").removeValue().addOnSuccessListener {
+                                            val roomCode =
+                                                groupArrayList[position].subjectCode.toString()
+                                            val deleteGroupSelf =
+                                                FirebaseDatabase.getInstance().getReference("Group")
+                                                    .child(uid)
+                                            deleteGroupSelf.child(roomCode).removeValue()
+                                                .addOnSuccessListener {
+                                                    val deleteGroupGlobal =
+                                                        FirebaseDatabase.getInstance()
+                                                            .getReference("Public Group")
+                                                    deleteGroupGlobal.child(roomCode).removeValue()
+                                                        .addOnSuccessListener {
+                                                            val deleteGroupPost =
+                                                                FirebaseDatabase.getInstance()
+                                                                    .getReference("Group Post")
+                                                            deleteGroupPost.child("Room ID: $roomCode")
+                                                                .removeValue()
+                                                                .addOnSuccessListener {
 
-                                                        val databaseClass = FirebaseDatabase.getInstance().getReference("Public Group").child(roomCode)
-                                                            .child("Members")
-                                                        databaseClass.child(uid).removeValue()
+                                                                    val databaseClass =
+                                                                        FirebaseDatabase.getInstance()
+                                                                            .getReference("Public Group")
+                                                                            .child(roomCode)
+                                                                            .child("Members")
+                                                                    databaseClass.child(uid)
+                                                                        .removeValue()
 
-                                                        adapter.deleteItem(position)
-                                                        groupRecyclerView.adapter?.notifyItemRemoved(position)
-                                                        Toast.makeText(this@TeacherClass.requireContext(), "Group deleted successfully!", Toast.LENGTH_SHORT).show()
-                                                        progressDialogHide()
-                                                    }
+                                                                    adapter.deleteItem(position)
+                                                                    groupRecyclerView.adapter?.notifyItemRemoved(
+                                                                        position
+                                                                    )
+                                                                    Toast.makeText(
+                                                                        this@TeacherClass.requireContext(),
+                                                                        "Group deleted successfully!",
+                                                                        Toast.LENGTH_SHORT
+                                                                    ).show()
+                                                                    progressDialogHide()
+                                                                }
+                                                        }
                                                 }
-                                            }
 
 
-                                        }.setNegativeButton("Cancel"){_,_ ->
+                                        }.setNegativeButton("Cancel") { _, _ ->
                                             executeGroup()
                                             executeClass()
                                         }.show()
@@ -232,16 +281,16 @@ class TeacherClass : Fragment() {
                             }
 
 
-
                         }
                     }
                     val touchHelper = ItemTouchHelper(swipeGestures)
                     touchHelper.attachToRecyclerView(groupRecyclerView)
 
-                    adapter.setOnItemClickListener(object : GroupListAdapter.onItemClickListener{
+                    adapter.setOnItemClickListener(object : GroupListAdapter.onItemClickListener {
 
                         override fun onItemClick(position: Int) {
-                            val intent = Intent(this@TeacherClass.requireContext(), RoomActivity::class.java)
+                            val intent =
+                                Intent(this@TeacherClass.requireContext(), RoomActivity::class.java)
 
                             roomID = groupArrayList[position].roomID.toString()
                             intent.putExtra("roomID", groupArrayList[position].roomID)
@@ -252,12 +301,11 @@ class TeacherClass : Fragment() {
                         }
 
 
-
                     })
 
 
-
-
+                }else{
+                    progressDialogHide()
                 }
             }
 
@@ -281,10 +329,6 @@ class TeacherClass : Fragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -302,7 +346,7 @@ class TeacherClass : Fragment() {
         add_class_text.visibility = View.GONE
         add_room_text.visibility = View.GONE
 
-        var isAllFabVisible: Boolean = false
+        var isAllFabVisible = false
 
         add_btn.setOnClickListener{
             wall.setBackgroundResource(R.color.transparent_color)
@@ -311,11 +355,11 @@ class TeacherClass : Fragment() {
             wall.startAnimation(fadeIn)
             add_btn.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate))
             if (!isAllFabVisible){
-                Handler().postDelayed({
+                Handler(Looper.myLooper()!!).postDelayed({
                     add_room_text.visibility = View.VISIBLE
                     add_room.show()
                 },140)
-                Handler().postDelayed({
+                Handler(Looper.myLooper()!!).postDelayed({
                     add_class.show()
                     add_class_text.visibility = View.VISIBLE
                 },130)
@@ -346,47 +390,51 @@ class TeacherClass : Fragment() {
             val subjectCode = dialogLayout.findViewById<EditText>(R.id.create_subject_code)
             val copyBtn = dialogLayout.findViewById<TextView>(R.id.copy_btn)
             val roomId = randomID()
-            val autoCode = roomId
-            subjectCode.setText(autoCode)
+            subjectCode.setText(roomId)
 
 
                 MaterialAlertDialogBuilder(requireActivity())
                     .setView(dialogLayout)
-                    .setPositiveButton("Okay"){_, _ ->
+                    .setPositiveButton("CREATE"){_, _ ->
 
                         val title = subjectTitle.text.toString()
                         val code = subjectCode.text.toString()
                         copy(subjectCode)
                         val uid = auth.currentUser?.uid.toString()
                         val database = FirebaseDatabase.getInstance().getReference("Teachers")
-                        database.child(uid).get().addOnSuccessListener {
-                            if (it.exists()){
-                                progressDialogShow()
-                                name = it.child("name").value.toString()
-                                type = it.child("type").value.toString()
+                        when{
+                            TextUtils.isEmpty(title.trim {it <= ' '}) -> {
+                                toastError("Do not leave it blank.")
+                            }else ->{
+                            database.child(uid).get().addOnSuccessListener {
+                                if (it.exists()){
+                                    progressDialogShow()
+                                    name = it.child("name").value.toString()
+                                    type = it.child("type").value.toString()
 
-                                val data = RoomMembersData(name, type)
-                                val randomID = randomSecurityCode()
-                                val letter = title[0].toString().uppercase() + title[1].toString().uppercase()
-                                val createClass = CreateClassData(name, type, name, roomId, uid, title, code, letter)
-                                //database create class query firebase
-                                val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
-                                databasePublic.child(roomId).setValue(createClass)
-                                databaseClass.child(uid).child(roomId).setValue(createClass).addOnCompleteListener{
-                                    executeClass()
-                                    databasePublic.child(roomId).child("Members").child(uid).setValue(data)
-                                    wall.setBackgroundResource(R.color.zero)
-                                    wall.invalidate()
-                                    val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                                    wall.startAnimation(fadeOut)
-                                    add_class.hide()
-                                    add_room.hide()
-                                    add_class_text.visibility = View.GONE
-                                    add_room_text.visibility = View.GONE
-                                    progressDialogHide()
+                                    val data = RoomMembersData(name, type)
+                                    val letter = title[0].toString().uppercase() + title[1].toString().uppercase()
+                                    val createClass = CreateClassData(name, type, name, roomId, uid, title, code, letter)
+                                    //database create class query firebase
+                                    val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
+                                    databasePublic.child(roomId).setValue(createClass)
+                                    databaseClass.child(uid).child(roomId).setValue(createClass).addOnCompleteListener{
+                                        executeClass()
+                                        databasePublic.child(roomId).child("Members").child(uid).setValue(data)
+                                        wall.setBackgroundResource(R.color.zero)
+                                        wall.invalidate()
+                                        val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+                                        wall.startAnimation(fadeOut)
+                                        add_class.hide()
+                                        add_room.hide()
+                                        add_class_text.visibility = View.GONE
+                                        add_room_text.visibility = View.GONE
+                                        progressDialogHide()
+                                    }
                                 }
-                            }
 
+                            }
+                            }
                         }
 
 
@@ -409,44 +457,51 @@ class TeacherClass : Fragment() {
             val roomCode = dialogLayout.findViewById<EditText>(R.id.group_subject_code)
             val copyBtn = dialogLayout.findViewById<TextView>(R.id.copy_btn)
             val roomId = randomID()
-            val autoCode = roomId
-            roomCode.setText(autoCode)
+            roomCode.setText(roomId)
 
             MaterialAlertDialogBuilder(this.requireContext())
                 .setView(dialogLayout)
-                .setPositiveButton("Confirm"){_,_ ->
+                .setPositiveButton("Create"){_,_ ->
                     copy(roomCode)
                     val database = FirebaseDatabase.getInstance().getReference("Teachers")
-                    database.child(uid).get().addOnSuccessListener {
-                        if (it.exists()){
-                            progressDialogShow()
-                            name = it.child("name").value.toString()
-                            type = it.child("type").value.toString()
-                            val data = RoomMembersData(name, type)
-                            val randomID = randomSecurityCode()
-                            val finalSection = section.text.toString()
-                            val finalGroupName = groupName.text.toString()
-                            val securityCode = roomCode.text.toString()
-                            val letter = finalGroupName[0].toString().uppercase() + finalGroupName[1].toString().uppercase()
-                            val createGroup = GroupListData(name, type, finalSection, roomId, uid, finalGroupName, securityCode, letter)
-                            //database create class query firebase
-                            val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
-                            databasePublic.child(roomId).setValue(createGroup)
-                            databaseGroup.child(uid).child(roomId).setValue(createGroup).addOnCompleteListener{
-                                executeGroup()
-                                databasePublic.child(roomId).child("Members").child(uid).setValue(data)
-                                wall.setBackgroundResource(R.color.zero)
-                                wall.invalidate()
-                                val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                                wall.startAnimation(fadeOut)
-                                add_class.hide()
-                                add_room.hide()
-                                add_class_text.visibility = View.GONE
-                                add_room_text.visibility = View.GONE
-                                progressDialogHide()
-                            }
+                    when{
+                        TextUtils.isEmpty(groupName.text.toString().trim{it <= ' '}) ->{
+                            toastError("Please input group name.")
+                        }TextUtils.isEmpty(section.text.toString().trim {it <= ' '}) -> {
+                            toastError("Please input section name.")
                         }
+                        else -> {
+                        database.child(uid).get().addOnSuccessListener {
+                            if (it.exists()){
+                                progressDialogShow()
+                                name = it.child("name").value.toString()
+                                type = it.child("type").value.toString()
+                                val data = RoomMembersData(name, type)
+                                val finalSection = section.text.toString()
+                                val finalGroupName = groupName.text.toString()
+                                val securityCode = roomCode.text.toString()
+                                val letter = finalGroupName[0].toString().uppercase() + finalGroupName[1].toString().uppercase()
+                                val createGroup = GroupListData(name, type, finalSection, roomId, uid, finalGroupName, securityCode, letter)
+                                //database create class query firebase
+                                val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
+                                databasePublic.child(roomId).setValue(createGroup)
+                                databaseGroup.child(uid).child(roomId).setValue(createGroup).addOnCompleteListener{
+                                    executeGroup()
+                                    databasePublic.child(roomId).child("Members").child(uid).setValue(data)
+                                    wall.setBackgroundResource(R.color.zero)
+                                    wall.invalidate()
+                                    val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+                                    wall.startAnimation(fadeOut)
+                                    add_class.hide()
+                                    add_room.hide()
+                                    add_class_text.visibility = View.GONE
+                                    add_room_text.visibility = View.GONE
+                                    progressDialogHide()
+                                }
+                            }
 
+                        }
+                        }
                     }
                 }.setNegativeButton("Cancel"){_,_ ->
 
@@ -468,23 +523,25 @@ class TeacherClass : Fragment() {
         Toast.makeText(context, "Security code copied successfully.", Toast.LENGTH_SHORT).show()
 
     }
-
-    private fun  showDialog(title: String, message : String){
-        MaterialAlertDialogBuilder(this.requireContext())
-            .setTitle(title)
+    private  fun toastError(message: String){
+        MaterialAlertDialogBuilder(this@TeacherClass.requireContext())
+            .setTitle("Note")
             .setMessage(message)
-            .setPositiveButton("OK"){_,_ ->
+            .setPositiveButton("OKAY"){_,_ ->
 
-            }.show()
+            }
+            .show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun randomID(): String = List(16) {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")
 
-    private fun randomSecurityCode(): String = List(6) {
-        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
-    }.joinToString("")
 
 
 }

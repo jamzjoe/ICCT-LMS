@@ -56,7 +56,6 @@
             android:layout_below="@id/teacher_top_holder">
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/teacher_top_nav"
-                app:itemBackground="@drawable/main_nav_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background"

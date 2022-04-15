@@ -2,7 +2,9 @@ package com.icct.icctlms.fragments
 
 import android.app.Dialog
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -23,6 +26,8 @@ import com.icct.icctlms.adapter.StudentGroupAdapter
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RoomMembersData
+import com.icct.icctlms.databinding.FragmentClassBinding
+import com.icct.icctlms.databinding.FragmentHomeBinding
 import com.icct.icctlms.gestures.SwipeGestures
 import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
@@ -36,24 +41,33 @@ class Class : Fragment() {
         private lateinit var groupArrayList: ArrayList<GroupListData>
         private lateinit var dialog: Dialog
         private lateinit var uid : String
+         private var _binding: FragmentClassBinding? = null
         private lateinit var roomID : String
+        private lateinit var bottomNav : BottomNavigationView
+
+        private val binding get() = _binding!!
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-        ): View? {
+        ): View {
             // Inflate the layout for this fragment
-            val rootView = inflater.inflate(R.layout.fragment_class, container, false)
-            groupRecyclerView = rootView.findViewById(R.id.student_group_list)
+            _binding = FragmentClassBinding.inflate(inflater, container, false)
+            val root: View = binding.root
+            groupRecyclerView = binding.studentGroupList
             groupRecyclerView.setHasFixedSize(true)
-            groupRecyclerView.layoutManager = LinearLayoutManager(context)
+            groupRecyclerView.visibility = View.GONE
+            groupRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             groupArrayList = ArrayList()
+            bottomNav = binding.classNav
 
-            classRecyclerView = rootView.findViewById(R.id.student_class_list)
+            classRecyclerView = binding.studentClassList
             classRecyclerView.setHasFixedSize(true)
             classRecyclerView.layoutManager = LinearLayoutManager(context)
             classArrayList = ArrayList()
             val auth = FirebaseAuth.getInstance()
             uid = auth.currentUser?.uid.toString()
+
+            progressDialogShow()
 
             databaseReference = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
             executeGroup()
@@ -64,8 +78,10 @@ class Class : Fragment() {
             executeClass()
 
 
-            return rootView
+            return root
         }
+
+
 
     private fun executeClass() {
         joinClass.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -80,7 +96,12 @@ class Class : Fragment() {
                     }
                     val adapter = StudentClassAdapter(classArrayList)
                     classRecyclerView.adapter = adapter
-
+                    val count = adapter.itemCount.toString().trim()
+                    if (count == "0" ){
+                        binding.nullData.visibility = View.VISIBLE
+                    }else{
+                    }
+                    progressDialogHide()
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
 
                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -94,8 +115,9 @@ class Class : Fragment() {
                                             val deleteClassSelf = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
                                             deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
                                                 adapter.deleteItem(position)
-                                                groupRecyclerView.adapter?.notifyItemRemoved(position)
-                                                Toast.makeText(this@Class.requireContext(), "Selected group deleted successfully!", Toast.LENGTH_SHORT).show()
+                                                classRecyclerView.adapter?.notifyItemRemoved(position)
+                                                executeClass()
+                                                Toast.makeText(this@Class.requireContext(), "Selected class deleted successfully!", Toast.LENGTH_SHORT).show()
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeClass()
@@ -153,12 +175,13 @@ class Class : Fragment() {
 
 
 
+                }else{
+                    progressDialogHide()
                 }
             }
 
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                progressDialogHide()
             }
 
         })
@@ -180,6 +203,13 @@ class Class : Fragment() {
                     val adapter = StudentGroupAdapter(groupArrayList)
                     groupRecyclerView.adapter = adapter
 
+                    val count = adapter.itemCount.toString().trim()
+                    if (count == "0" ){
+                        binding.nullDataGroup.visibility = View.VISIBLE
+                    }else{
+                    }
+                    progressDialogHide()
+
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
 
                         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -195,6 +225,7 @@ class Class : Fragment() {
                                                 adapter.deleteItem(position)
                                                 groupRecyclerView.adapter?.notifyItemRemoved(position)
                                                 Toast.makeText(this@Class.requireContext(), "Selected group deleted successfully!", Toast.LENGTH_SHORT).show()
+                                                executeGroup()
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeGroup()
@@ -254,12 +285,14 @@ class Class : Fragment() {
 
 
 
+                }else{
+                    progressDialogHide()
                 }
             }
 
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                progressDialogHide()
             }
 
         })
@@ -274,8 +307,17 @@ class Class : Fragment() {
             }
             .show()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bottomNav.setOnItemSelectedListener {
+             when(it.itemId){
+                R.id.classes_nav -> hideGroup()
+                 R.id.group_nav -> hideClass()
+             }
+            true
+        }
 
         join_class.visibility = View.GONE
         join_room.visibility = View.GONE
@@ -324,51 +366,56 @@ class Class : Fragment() {
             MaterialAlertDialogBuilder(requireActivity())
                 .setMessage("Join Class")
                 .setView(dialogLayout)
-                .setPositiveButton("Okay"){_, _ ->
-                    databaseGroup.child(subjectCode.text.toString()).get().addOnSuccessListener {
-                        if (it.exists()) {
-                            val letter = it.child("letter").value.toString()
-                            val name = it.child("name").value.toString()
-                            val roomID = it.child("roomID").value.toString()
-                            val section = it.child("section").value.toString()
-                            val pass = it.child("subjectCode").value.toString()
-                            val subjectTitle = it.child("subjectTitle").value.toString()
-                            val type = it.child("type").value.toString()
-                            val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinClass")
+                .setPositiveButton("JOIN"){_, _ ->
+                    when {
+                        TextUtils.isEmpty(subjectCode.text.toString().trim {it <= ' '}) -> {
+                            toastError("Don't leave it blank!")
+
+                        }else -> {
+                        databaseGroup.child(subjectCode.text.toString()).get().addOnSuccessListener {
+                            if (it.exists()) {
+                                val letter = it.child("letter").value.toString()
+                                val name = it.child("name").value.toString()
+                                val roomID = it.child("roomID").value.toString()
+                                val section = it.child("section").value.toString()
+                                val pass = it.child("subjectCode").value.toString()
+                                val subjectTitle = it.child("subjectTitle").value.toString()
+                                val type = it.child("type").value.toString()
+                                val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinClass")
 
 
 
-                            val joinGroup = GroupListData(
-                                name,
-                                type,
-                                section,
-                                roomID,
-                                uid,
-                                subjectTitle,
-                                pass,
-                                letter
-                            )
-                            joinGroupUser.child(uid).child(roomID).setValue(joinGroup)
-                                .addOnCompleteListener {
-                                    executeClass()
-                                    student_class_wall.setBackgroundResource(R.color.zero)
-                                    join_class.hide()
-                                    join_room.hide()
-                                    join_class_text.visibility = View.GONE
-                                    join_room_text.visibility = View.GONE
+                                val joinGroup = GroupListData(
+                                    name,
+                                    type,
+                                    section,
+                                    roomID,
+                                    uid,
+                                    subjectTitle,
+                                    pass,
+                                    letter
+                                )
+                                joinGroupUser.child(uid).child(roomID).setValue(joinGroup)
+                                    .addOnCompleteListener {
+                                        executeClass()
+                                        student_class_wall.setBackgroundResource(R.color.zero)
+                                        join_class.hide()
+                                        join_room.hide()
+                                        join_class_text.visibility = View.GONE
+                                        join_room_text.visibility = View.GONE
 
-                                    join_btn.shrink()
-                                }
-                            val userID = auth.currentUser?.uid.toString()
-                            val currentUser = FirebaseDatabase.getInstance().getReference("Students")
-                            currentUser.child(userID).get().addOnSuccessListener {
-                                if (it.exists()){
-                                    val isAccept = "false"
-                                    val currentName = it.child("name").value.toString()
-                                    val currentType = it.child("type").value.toString()
-                                    val data = RoomMembersData(currentName, currentType, userID, isAccept)
-                                    val randomID = randomCode()
-                                    val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
+                                        join_btn.shrink()
+                                    }
+                                val userID = auth.currentUser?.uid.toString()
+                                val currentUser = FirebaseDatabase.getInstance().getReference("Students")
+                                currentUser.child(userID).get().addOnSuccessListener {
+                                    if (it.exists()){
+                                        val isAccept = "false"
+                                        val currentName = it.child("name").value.toString()
+                                        val currentType = it.child("type").value.toString()
+                                        val data = RoomMembersData(currentName, currentType, userID, isAccept)
+                                        val randomID = randomCode()
+                                        val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
                                         val accept = FirebaseDatabase.getInstance().getReference("Public Class")
                                         accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
                                             val request = FirebaseDatabase.getInstance().getReference("Public Class")
@@ -378,11 +425,14 @@ class Class : Fragment() {
 
 
 
+                                    }
                                 }
+                            } else {
+                                showPopUp("Class not found.")
                             }
-                        } else {
-                            showPopUp("Class not found.")
                         }
+                        }
+
                     }
                 }.setNegativeButton("Cancel"){_, _ ->
 
@@ -404,51 +454,58 @@ class Class : Fragment() {
                 .setMessage("Join Group")
                 .setView(dialogLayout)
                 .setPositiveButton("JOIN"){_, _ ->
-                    databaseGroup.child(groupCode.text.toString()).get().addOnSuccessListener { it ->
-                        if (it.exists()){
-                            val letter = it.child("letter").value.toString()
-                            val name = it.child("name").value.toString()
-                            val roomID = it.child("roomID").value.toString()
-                            val section = it.child("section").value.toString()
-                            val subjectCode = it.child("subjectCode").value.toString()
-                            val subjectTitle = it.child("subjectTitle").value.toString()
-                            val type = it.child("type").value.toString()
-                            val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinGroup")
+                    when{
+                        TextUtils.isEmpty(groupCode.text.toString().trim {it <= ' '}) -> {
+                            toastError("Do not leave it blank!")
+                        }else -> {
+
+                        databaseGroup.child(groupCode.text.toString()).get().addOnSuccessListener { it ->
+                            if (it.exists()){
+                                val letter = it.child("letter").value.toString()
+                                val name = it.child("name").value.toString()
+                                val roomID = it.child("roomID").value.toString()
+                                val section = it.child("section").value.toString()
+                                val subjectCode = it.child("subjectCode").value.toString()
+                                val subjectTitle = it.child("subjectTitle").value.toString()
+                                val type = it.child("type").value.toString()
+                                val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinGroup")
 
 
 
 
-                            val joinGroup = GroupListData(name, type, section, roomID, uid, subjectTitle, subjectCode, letter)
-                            joinGroupUser.child(uid).child(roomID).setValue(joinGroup).addOnCompleteListener{
-                                executeGroup()
-                                student_class_wall.setBackgroundResource(R.color.zero)
-                                join_class.hide()
-                                join_room.hide()
-                                join_class_text.visibility = View.GONE
-                                join_room_text.visibility = View.GONE
+                                val joinGroup = GroupListData(name, type, section, roomID, uid, subjectTitle, subjectCode, letter)
+                                joinGroupUser.child(uid).child(roomID).setValue(joinGroup).addOnCompleteListener{
+                                    executeGroup()
+                                    student_class_wall.setBackgroundResource(R.color.zero)
+                                    join_class.hide()
+                                    join_room.hide()
+                                    join_class_text.visibility = View.GONE
+                                    join_room_text.visibility = View.GONE
 
-                                join_btn.shrink()
-                            }
-                            val userID = auth.currentUser?.uid.toString()
-                            val currentUser = FirebaseDatabase.getInstance().getReference("Students")
-                            currentUser.child(userID).get().addOnSuccessListener {
-                                if (it.exists()){
-                                    val isAccept = "false"
-                                    val currentName = it.child("name").value.toString()
-                                    val currentType = it.child("type").value.toString()
-                                    val data = RoomMembersData(currentName, currentType, userID, isAccept)
-                                    val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
+                                    join_btn.shrink()
+                                }
+                                val userID = auth.currentUser?.uid.toString()
+                                val currentUser = FirebaseDatabase.getInstance().getReference("Students")
+                                currentUser.child(userID).get().addOnSuccessListener {
+                                    if (it.exists()){
+                                        val isAccept = "false"
+                                        val currentName = it.child("name").value.toString()
+                                        val currentType = it.child("type").value.toString()
+                                        val data = RoomMembersData(currentName, currentType, userID, isAccept)
+                                        val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
                                         val accept = FirebaseDatabase.getInstance().getReference("Public Group")
                                         accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
                                             val request = FirebaseDatabase.getInstance().getReference("Public Group")
                                             request.child(roomID).child("Request").child(uid).setValue(data)
                                         }
 
+                                    }
                                 }
+                            }else{
+                                showPopUp("Group not found.")
                             }
-                        }else{
-                            showPopUp("Group not found.")
                         }
+                    }
                     }
                 }.setNegativeButton("Cancel"){_, _ ->
 
@@ -458,6 +515,16 @@ class Class : Fragment() {
 
 
 
+    }
+
+    private fun hideClass() {
+        classRecyclerView.visibility = View.GONE
+        groupRecyclerView.visibility = View.VISIBLE
+    }
+
+    private fun hideGroup() {
+        groupRecyclerView.visibility = View.GONE
+        classRecyclerView.visibility = View.VISIBLE
     }
 
     private fun progressDialogShow(){
@@ -477,6 +544,11 @@ class Class : Fragment() {
 
             }
             .show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun randomCode(): String = List(6) {

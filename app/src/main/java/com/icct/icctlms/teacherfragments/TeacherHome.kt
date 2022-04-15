@@ -1,5 +1,6 @@
 package com.icct.icctlms.teacherfragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -39,6 +40,7 @@ class TeacherHome : Fragment() {
     private lateinit var text : AutoCompleteTextView
     private lateinit var databaseRoom : DatabaseReference
     private lateinit var dbrefClass : DatabaseReference
+    private lateinit var dialog : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +57,7 @@ class TeacherHome : Fragment() {
         postArrayList = arrayListOf()
         roomIDList = arrayListOf()
         roomIDArrayList = arrayListOf()
+        progressDialogShow()
 
 
 
@@ -65,6 +68,7 @@ class TeacherHome : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 roomIDList.clear()
                 if (snapshot.exists()){
+                    progressDialogHide()
                     roomIDList.clear()
                     for (each in snapshot.children){
 
@@ -78,6 +82,8 @@ class TeacherHome : Fragment() {
 
 
 
+                }else{
+                    progressDialogHide()
                 }
 
 
@@ -257,6 +263,17 @@ class TeacherHome : Fragment() {
                 isAllFabVisible = false
             }
         }
+    }
+
+    private fun progressDialogShow(){
+        dialog = Dialog(this.requireContext())
+        dialog.setContentView(R.layout.dialog_layout)
+        dialog.setTitle("Loading please wait")
+        dialog.setCancelable(false)
+        dialog.show()
+    }
+    private fun progressDialogHide(){
+        dialog.hide()
     }
 
 

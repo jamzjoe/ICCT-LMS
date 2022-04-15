@@ -11,6 +11,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
+import com.icct.icctlms.Authentication.Admin.AdminMain
 import com.icct.icctlms.Authentication.Admin.AdminMainActivity
 import com.icct.icctlms.Authentication.Login
 import com.icct.icctlms.Authentication.Parent.Parent
@@ -100,7 +101,7 @@ class Welcome : AppCompatActivity() {
                                 }
                                 else -> {
                                     Toast.makeText(this, "Admin access granted.", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(this, AdminMainActivity::class.java))
+                                    startActivity(Intent(this, AdminMain::class.java))
                                     finish()
                                 }
                             }

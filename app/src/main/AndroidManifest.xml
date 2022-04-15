@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:name=".Authentication.Admin.AdminMain"
+            android:exported="false"
+            android:label="@string/title_activity_admin_main"
+            android:theme="@style/Theme.ICCTLMS.NoActionBar" />
+        <activity
             android:name=".Authentication.Teacher.RoomMemberRequest"
             android:exported="false" />
         <activity

@@ -1,5 +1,6 @@
 package com.icct.icctlms.Authentication.Teacher
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
 import com.icct.icctlms.R
+import com.icct.icctlms.RoomActivity
 import com.icct.icctlms.adapter.MembersAdapter
 import com.icct.icctlms.data.CountData
 import com.icct.icctlms.data.RoomMembersData
@@ -76,8 +78,8 @@ class RoomMemberRequest : AppCompatActivity() {
                             val type = membersArrayList[position].type
                             val uid = membersArrayList[position].uid.toString()
                             MaterialAlertDialogBuilder(this@RoomMemberRequest)
-                                .setTitle("Kick Student")
-                                .setMessage("Are you sure you want to add in this room $studentName ?")
+                                .setTitle("Request")
+                                .setMessage("Are you sure you want to add $studentName in this room?")
                                 .setPositiveButton("ACCEPT"){_,_ ->
                                     val isAccept = "true"
                                     val data = RoomMembersData(studentName, type, uid, isAccept)
@@ -101,7 +103,7 @@ class RoomMemberRequest : AppCompatActivity() {
                                     deleteMember.child(uid).removeValue().addOnSuccessListener {
                                         val joinClass = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
                                         joinClass.child(roomID).removeValue().addOnSuccessListener {
-                                            Toast.makeText(this@RoomMemberRequest, "$studentName kicked successfully!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this@RoomMemberRequest, "$studentName ignored!", Toast.LENGTH_SHORT).show()
                                             executeClassMembers()
                                             adapter.deleteItem(position)
                                             recyclerView.adapter?.notifyItemRemoved(position)
@@ -173,7 +175,7 @@ class RoomMemberRequest : AppCompatActivity() {
                                         val joinClass = FirebaseDatabase.getInstance().getReference("JoinGroup")
                                             .child(uid)
                                         joinClass.child(roomID).removeValue().addOnSuccessListener {
-                                            Toast.makeText(this@RoomMemberRequest, "$studentName kicked successfully!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(this@RoomMemberRequest, "$studentName ignored!", Toast.LENGTH_SHORT).show()
                                             executeGroupMembers()
                                             adapter.deleteItem(position)
                                             recyclerView.adapter?.notifyItemRemoved(position)
@@ -195,4 +197,5 @@ class RoomMemberRequest : AppCompatActivity() {
 
         })
     }
+
 }

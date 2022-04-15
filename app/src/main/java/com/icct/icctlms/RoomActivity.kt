@@ -110,23 +110,45 @@ class RoomActivity : AppCompatActivity() {
     }
 
     private fun showCount() {
-        val membersCount = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
-        membersCount.child("Request").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    val count = snapshot.childrenCount
+        if(roomType == "Class"){
 
-                    memberCountText.text = count.toString()
-                    if(count > 0){
-                        alert_.visibility = View.VISIBLE
+            val membersCount = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+            membersCount.child("Request").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        val count = snapshot.childrenCount
+
+                        memberCountText.text = count.toString()
+                        if(count > 0){
+                            alert_.visibility = View.VISIBLE
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }else{
+
+            val membersCount = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
+            membersCount.child("Request").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        val count = snapshot.childrenCount
+
+                        memberCountText.text = count.toString()
+                        if(count > 0){
+                            alert_.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }
         }
 
 
