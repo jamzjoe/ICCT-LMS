@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <group android:checkableBehavior="single">
 
-    <item android:title="CLASS" android:id="@+id/classes_nav" />
-    <item android:title="GROUP" android:id="@+id/group_nav"/>
+    <item android:enabled="true" android:title="CLASS" android:id="@+id/classes_nav" />
+    <item  android:enabled="true" android:title="GROUP" android:id="@+id/group_nav"/>
 </group>
 </menu>

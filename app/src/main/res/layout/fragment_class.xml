@@ -10,24 +10,39 @@
     android:layout_centerHorizontal="true"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <com.google.android.material.card.MaterialCardView
-        android:layout_margin="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:id="@+id/class_nav"
-            app:itemActiveIndicatorStyle="@style/ThemeOverlay.Material3.NavigationView"
-            style="@style/Widget.Material3.NavigationRailView.ActiveIndicator"
-            android:textAlignment="center"
-            app:itemTextAppearanceActive="@style/TextAppearance.Material3.TitleLarge"
-            app:itemTextAppearanceInactive="@style/TextAppearance.Material3.TitleSmall"
-            app:itemTextColor="@color/black"
-            app:menu="@menu/classlist_nav"
-            app:itemIconSize="0dp"
-            android:layout_height="32dp"/>
-    </com.google.android.material.card.MaterialCardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:text="CLASS"
+            android:textSize="15sp"
+            android:id="@+id/class_btn"
+            style="@style/Widget.Material3.Button"
+            android:elevation="0dp"
+            android:backgroundTint="@color/transparent"
+            android:textColor="@color/black"
+            android:layout_marginStart="200dp"
+            android:layout_width="200dp"
+            android:layout_height="50dp"  />
+<androidx.legacy.widget.Space
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/grp_btn"
+            android:textSize="15sp"
+            style="@style/Widget.Material3.Button"
+            android:text="GROUP"
+            android:backgroundTint="@color/transparent"
+            android:textColor="@color/black"
+            android:layout_marginEnd="200dp"
+            android:layout_width="200dp"
+            android:layout_height="50dp" />
+    </LinearLayout>
 </RelativeLayout>
     <RelativeLayout
         android:layout_below="@id/custom_nav"
@@ -86,7 +101,7 @@
     <RelativeLayout
         android:id="@+id/student_class_wall"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/join_btn"

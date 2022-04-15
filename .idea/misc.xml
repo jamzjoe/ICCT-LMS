@@ -7,6 +7,8 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/avd_done.xml" value="0.2916666666666667" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/back.xml" value="0.24444444444444444" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/backpack.xml" value="0.2351851851851852" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/bottom_nav_bg.xml" value="0.2962962962962963" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/bottom_rectangle.xml" value="0.2962962962962963" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/check.xml" value="0.2351851851851852" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/class_nav_selector.xml" value="0.30185185185185187" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/classroom.xml" value="0.2351851851851852" />
@@ -42,9 +44,12 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/white_bg.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/drawable/window.xml" value="0.22407407407407406" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/font/tw.xml" value="0.2916666666666667" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout-v28/bottom_selector.xml" value="0.2694746376811594" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout-v28/classes_item.xml" value="0.26145833333333335" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout-v28/indicator.xml" value="0.2694746376811594" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin.xml" value="0.21920289855072464" />
-        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin_main.xml" value="0.33" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin_login.xml" value="0.26313405797101447" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin_main.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_admin_main2.xml" value="0.2921195652173913" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_class.xml" value="0.21" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_nesws_and_updates.xml" value="0.29846014492753625" />
@@ -79,6 +84,8 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/announcement_item.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/announcement_update_layout.xml" value="0.29257246376811596" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/app_bar_admin_main.xml" value="0.2921195652173913" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/bottom_underlined.xml" value="0.2694746376811594" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/bttom_underlined.xml" value="0.2694746376811594" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/choose_list.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/classes_item.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/content_admin_main.xml" value="0.25" />

@@ -72,8 +72,7 @@ class TeacherClass : Fragment() {
         classArrayList = arrayListOf()
         groupArrayList = arrayListOf()
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        teacherNav = binding.teacherClassNav
-        nav()
+
         progressDialogShow()
         databaseGroup = FirebaseDatabase.getInstance().getReference("Group").child(uid)
         executeGroup()
@@ -85,20 +84,12 @@ class TeacherClass : Fragment() {
         executeClass()
 
 
+        binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
         return binding.root
 
 
     }
 
-    private fun nav() {
-        teacherNav.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.classes_nav -> hideGroup()
-                R.id.group_nav -> hideClass()
-            }
-            true
-        }
-    }
 
     private fun hideClass() {
         recyclerView.visibility = View.GONE
@@ -333,6 +324,16 @@ class TeacherClass : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.grpBtn.setOnClickListener{
+            hideClass()
+            binding.classBtn.setBackgroundResource(R.color.transparent_color)
+            binding.grpBtn.setBackgroundResource(R.drawable.bottom_rec)
+        }
+        binding.classBtn.setOnClickListener{
+            hideGroup()
+            binding.grpBtn.setBackgroundResource(R.color.transparent_color)
+            binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
+        }
 
         auth = FirebaseAuth.getInstance()
         val uid = auth.currentUser?.uid.toString()

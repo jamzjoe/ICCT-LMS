@@ -18,6 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.icct.icctlms.Authentication.Admin.ui.home.HomeViewModel
 import com.icct.icctlms.Authentication.Teacher.TeacherMainActivity
 import com.icct.icctlms.R
 import com.icct.icctlms.StudentRoomActivity
@@ -41,9 +42,9 @@ class Class : Fragment() {
         private lateinit var groupArrayList: ArrayList<GroupListData>
         private lateinit var dialog: Dialog
         private lateinit var uid : String
-         private var _binding: FragmentClassBinding? = null
         private lateinit var roomID : String
         private lateinit var bottomNav : BottomNavigationView
+        private var _binding: FragmentClassBinding? = null
 
         private val binding get() = _binding!!
         override fun onCreateView(
@@ -58,7 +59,6 @@ class Class : Fragment() {
             groupRecyclerView.visibility = View.GONE
             groupRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             groupArrayList = ArrayList()
-            bottomNav = binding.classNav
 
             classRecyclerView = binding.studentClassList
             classRecyclerView.setHasFixedSize(true)
@@ -76,8 +76,7 @@ class Class : Fragment() {
             //join class
             joinClass = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
             executeClass()
-
-
+            binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
             return root
         }
 
@@ -96,11 +95,8 @@ class Class : Fragment() {
                     }
                     val adapter = StudentClassAdapter(classArrayList)
                     classRecyclerView.adapter = adapter
-                    val count = adapter.itemCount.toString().trim()
-                    if (count == "0" ){
-                        binding.nullData.visibility = View.VISIBLE
-                    }else{
-                    }
+                    val count = adapter.itemCount
+                    Toast.makeText(this@Class.requireContext(), "$count", Toast.LENGTH_SHORT).show()
                     progressDialogHide()
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
 
@@ -203,11 +199,7 @@ class Class : Fragment() {
                     val adapter = StudentGroupAdapter(groupArrayList)
                     groupRecyclerView.adapter = adapter
 
-                    val count = adapter.itemCount.toString().trim()
-                    if (count == "0" ){
-                        binding.nullDataGroup.visibility = View.VISIBLE
-                    }else{
-                    }
+                    val count = adapter.itemCount
                     progressDialogHide()
 
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
@@ -311,14 +303,26 @@ class Class : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomNav.setOnItemSelectedListener {
-             when(it.itemId){
-                R.id.classes_nav -> hideGroup()
-                 R.id.group_nav -> hideClass()
-             }
-            true
-        }
+//        bottomNav.setOnItemSelectedListener {
+//             when(it.itemId){
+//                R.id.classes_nav -> {
+//                    hideGroup()
+//                }
+//                 R.id.group_nav -> hideClass()
+//             }
+//            true
+//        }
 
+        binding.grpBtn.setOnClickListener{
+            hideClass()
+            binding.classBtn.setBackgroundResource(R.color.transparent_color)
+            binding.grpBtn.setBackgroundResource(R.drawable.bottom_rec)
+        }
+        binding.classBtn.setOnClickListener{
+            hideGroup()
+            binding.grpBtn.setBackgroundResource(R.color.transparent_color)
+            binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
+        }
         join_class.visibility = View.GONE
         join_room.visibility = View.GONE
         join_class_text.visibility = View.GONE

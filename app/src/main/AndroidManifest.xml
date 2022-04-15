@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:name=".ui.login.AdminLogin"
+            android:exported="false"
+            android:label="@string/title_activity_admin_login" />
+        <activity
             android:name=".Authentication.Admin.AdminMain"
             android:exported="false"
             android:label="@string/title_activity_admin_main"

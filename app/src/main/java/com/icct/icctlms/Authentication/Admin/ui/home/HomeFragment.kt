@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.icct.icctlms.Welcome
 import com.icct.icctlms.databinding.FragmentHomeBinding
 import com.icct.icctlms.newsAndUpdates.CreateNewsAndUpdates
 import kotlinx.android.synthetic.main.fragment_home.*

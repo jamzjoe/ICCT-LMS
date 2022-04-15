@@ -12,12 +12,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
 import com.icct.icctlms.Authentication.Admin.AdminMain
-import com.icct.icctlms.Authentication.Admin.AdminMainActivity
 import com.icct.icctlms.Authentication.Login
 import com.icct.icctlms.Authentication.Parent.Parent
 import com.icct.icctlms.Authentication.Teacher.TeacherLogin
 import kotlinx.android.synthetic.main.activity_welcome.*
-import kotlinx.android.synthetic.main.alert_admin__login.*
 
 class Welcome : AppCompatActivity() {
     private lateinit var adminLoginLayout : View
@@ -67,18 +65,19 @@ class Welcome : AppCompatActivity() {
 
     private fun adminGrant() {
         val createAdmin = FirebaseDatabase.getInstance().getReference("Admin")
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Admin Access")
+            .setView(adminLoginLayout)
+            .setOnCancelListener{
+                val parent : ViewGroup = adminLoginLayout.parent as ViewGroup
+                parent.removeView(adminLoginLayout)
+            }
+            .show()
         createAdmin.get().addOnSuccessListener {
             if (it.exists()){
                 val username = it.child("Username").value.toString()
                 val password = it.child("Password").value.toString()
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("Admin Access")
-                    .setView(adminLoginLayout)
-                    .setOnCancelListener{
-                        val parent : ViewGroup = adminLoginLayout.parent as ViewGroup
-                        parent.removeView(adminLoginLayout)
-                    }
-                    .show()
+
 
                 adminSubmit.setOnClickListener{
                     when{
