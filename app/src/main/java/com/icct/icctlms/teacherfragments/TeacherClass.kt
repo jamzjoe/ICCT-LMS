@@ -28,8 +28,10 @@ import com.icct.icctlms.adapter.GroupListAdapter
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RoomMembersData
+import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentTeacherClassBinding
 import com.icct.icctlms.gestures.SwipeGestures
+import kotlinx.android.synthetic.main.activity_teacher_main.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_home.*
 
@@ -61,7 +63,6 @@ class TeacherClass : Fragment() {
     ): View {
 
         _binding = FragmentTeacherClassBinding.inflate(inflater, container, false)
-
         recyclerView = binding.classList
         groupRecyclerView = binding.groupList
         groupRecyclerView.visibility = View.GONE
@@ -153,7 +154,11 @@ class TeacherClass : Fragment() {
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeGroup()
                                             executeClass()
-                                        }.show()
+                                        }.setOnCancelListener(){
+                                            executeClass()
+                                            executeGroup()
+                                        }
+                                        .show()
 
                                 }
                             }
@@ -266,7 +271,11 @@ class TeacherClass : Fragment() {
                                         }.setNegativeButton("Cancel") { _, _ ->
                                             executeGroup()
                                             executeClass()
-                                        }.show()
+                                        }.setOnCancelListener(){
+                                            executeGroup()
+                                            executeClass()
+                                        }
+                                        .show()
 
                                 }
                             }
@@ -401,7 +410,6 @@ class TeacherClass : Fragment() {
                         val title = subjectTitle.text.toString()
                         val code = subjectCode.text.toString()
                         copy(subjectCode)
-                        val uid = auth.currentUser?.uid.toString()
                         val database = FirebaseDatabase.getInstance().getReference("Teachers")
                         when{
                             TextUtils.isEmpty(title.trim {it <= ' '}) -> {
@@ -431,6 +439,12 @@ class TeacherClass : Fragment() {
                                         add_class_text.visibility = View.GONE
                                         add_room_text.visibility = View.GONE
                                         progressDialogHide()
+
+                                        val newNotification = Notification()
+                                        val me = ""
+                                        val description = "You successfully created the class named $title."
+                                        newNotification.notification(uid, me, description, randomID())
+
                                     }
                                 }
 
@@ -498,6 +512,12 @@ class TeacherClass : Fragment() {
                                     add_class_text.visibility = View.GONE
                                     add_room_text.visibility = View.GONE
                                     progressDialogHide()
+
+                                    val newNotification = Notification()
+                                    val me = ""
+                                    val description = "You successfully created the group named $finalGroupName, section $finalSection."
+                                    newNotification.notification(uid, me, description, randomID())
+
                                 }
                             }
 
@@ -538,7 +558,6 @@ class TeacherClass : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
     private fun randomID(): String = List(16) {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")

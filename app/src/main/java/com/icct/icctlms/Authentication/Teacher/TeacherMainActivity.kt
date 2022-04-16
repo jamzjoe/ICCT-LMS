@@ -13,12 +13,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -46,6 +46,7 @@ class TeacherMainActivity : AppCompatActivity() {
     private lateinit var uid: String
     private lateinit var storageReference: StorageReference
     private var backPressed  = 0L
+    private lateinit var nav : BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,7 @@ class TeacherMainActivity : AppCompatActivity() {
         //fragments
         replaceFragment(homeFragment)
 
+        nav = findViewById(R.id.teacher_top_nav)
 
         teacher_searchBar.setOnClickListener{
             teacher_searchBar.isIconified = false
@@ -70,6 +72,7 @@ class TeacherMainActivity : AppCompatActivity() {
         //database read user info
         auth = FirebaseAuth.getInstance()
         val uid = auth.currentUser?.uid
+        badgeNumber()
         database = FirebaseDatabase.getInstance().getReference("Teachers")
         if (uid != null) {
             database.child(uid).get().addOnSuccessListener {
@@ -121,15 +124,33 @@ class TeacherMainActivity : AppCompatActivity() {
         //top nav
         teacher_top_nav.setOnNavigationItemSelectedListener {
             when (it.itemId){
-                R.id.teacher_top_dashboard -> replaceFragment(homeFragment)
-                R.id.teacher_top_notif -> replaceFragment(notificationFragment)
-                R.id.teacher_top_messages -> replaceFragment(messageFragment)
-                R.id.teacher_top_myclass -> replaceFragment(classFragment)
-                R.id.teacher_top_planner -> replaceFragment(plannerFragment)
+                R.id.teacher_top_dashboard -> {
+                    replaceFragment(homeFragment)
+                    badgeNumber()
+                }
+                R.id.teacher_top_notif -> {
+                    replaceFragment(notificationFragment)
+                    badgeNumber()
+                }
+                R.id.teacher_top_messages -> {
+                    replaceFragment(messageFragment)
+                    badgeNumber()
+                }
+                R.id.teacher_top_myclass -> {
+                    replaceFragment(classFragment)
+                    badgeNumber()
+                }
+                R.id.teacher_top_planner -> {
+                    replaceFragment(plannerFragment)
+                    badgeNumber()
+                }
 
             }
             true
         }
+
+
+
         //drawer
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -152,6 +173,30 @@ class TeacherMainActivity : AppCompatActivity() {
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse("https://github.com/JangManWol-source/ICCT-LMS")
         startActivity(i)
+    }
+
+    private fun badgeNumber (){
+        //badge
+        val notificationReference = FirebaseDatabase.getInstance().getReference("Notifications").child(uid.toString())
+        notificationReference.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val count = snapshot.childrenCount
+                    val teacherNotifBadge = teacher_top_nav.getOrCreateBadge(R.id.teacher_top_notif)
+                    teacherNotifBadge.isVisible = true
+
+                }else{
+                    val badge = nav.getBadge(R.id.teacher_top_notif)
+                    badge?.clearNumber()
+                    badge?.isVisible = false
+                    badgeNumber()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     private fun openWeb() {

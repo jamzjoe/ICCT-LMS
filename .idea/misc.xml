@@ -116,7 +116,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_class.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_home.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_message.xml" value="0.1" />
-        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_notification.xml" value="0.286231884057971" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_notification.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_planner.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teachers_room_folders.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teachers_room_members.xml" value="0.25" />
@@ -127,6 +127,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/nav_header.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/nav_header_admin_main.xml" value="0.2921195652173913" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/nav_layout.xml" value="0.2866847826086957" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/notification_layout.xml" value="0.26313405797101447" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/post_list.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/post_view.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/room_members_item.xml" value="0.33" />
