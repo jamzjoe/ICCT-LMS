@@ -36,6 +36,7 @@ class NotificationAdapter(private val notificationList: ArrayList<NotificationDa
         
         holder.description.text = currentItem.description
         holder.subject.text = currentItem.senderName
+        holder.date.text = currentItem.dateTime
 
     }
 
@@ -45,7 +46,8 @@ class NotificationAdapter(private val notificationList: ArrayList<NotificationDa
 
     class MyViewHolder(notificationView: View, onItemClickListener: onItemClickListener) : RecyclerView.ViewHolder(notificationView){
 val subject: TextView = notificationView.findViewById(R.id.notif_subject)
-val description: TextView = notificationView.findViewById(R.id.notif_desc)        
+val description: TextView = notificationView.findViewById(R.id.notif_desc)
+val date : TextView = notificationView.findViewById(R.id.notification_date)
         init {
             itemView.setOnClickListener{
                 onItemClickListener.onItemClick(adapterPosition)

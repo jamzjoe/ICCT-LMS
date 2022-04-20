@@ -224,6 +224,7 @@ class RoomActivity : AppCompatActivity() {
            val intent = Intent(this, RoomMemberRequest::class.java)
            intent.putExtra("member_room_id", roomID)
            intent.putExtra("member_room_type", roomType)
+           intent.putExtra("room_name", roomName)
             startActivity(intent)
         }
         settings_post.setOnClickListener {

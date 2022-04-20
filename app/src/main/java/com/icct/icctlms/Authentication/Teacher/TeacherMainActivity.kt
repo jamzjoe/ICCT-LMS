@@ -184,7 +184,7 @@ class TeacherMainActivity : AppCompatActivity() {
                     val count = snapshot.childrenCount
                     val teacherNotifBadge = teacher_top_nav.getOrCreateBadge(R.id.teacher_top_notif)
                     teacherNotifBadge.isVisible = true
-
+                    badgeNumber()
                 }else{
                     val badge = nav.getBadge(R.id.teacher_top_notif)
                     badge?.clearNumber()

@@ -15,8 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -31,9 +29,9 @@ import android.util.Base64
 import android.util.Log
 import java.io.ByteArrayOutputStream
 import android.content.SharedPreferences
-
-
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_teacher_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,12 +49,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var uid: String
     private lateinit var storageReference: StorageReference
     private var backPressed  = 0L
+    private lateinit var nav : BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //fragments
-        replaceFragment(homeFragment)
 
+        uid = Firebase.auth.currentUser?.uid.toString()
+        //fragments
+        nav = findViewById(R.id.top_nav)
+        badgeNumber()
+        replaceFragment(homeFragment)
 
         searchBar.setOnClickListener{
             searchBar.isIconified = false
@@ -156,6 +158,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun badgeNumber() {
+        val notificationReference = FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid.toString())
+        notificationReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val count = snapshot.childrenCount
+                    val teacherNotifBadge = nav.getOrCreateBadge(R.id.top_notif)
+                    teacherNotifBadge.isVisible = true
+                    badgeNumber()
+
+                }else{
+                    val badge = nav.getBadge(R.id.top_notif)
+                    badge?.clearNumber()
+                    badge?.isVisible = false
+                    badgeNumber()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
 
 
     private fun deleteAccount() {

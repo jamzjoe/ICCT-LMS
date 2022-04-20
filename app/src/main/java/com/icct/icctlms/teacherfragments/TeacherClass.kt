@@ -2,6 +2,7 @@ package com.icct.icctlms.teacherfragments
 
 import android.app.Dialog
 import android.content.*
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +15,8 @@ import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +35,15 @@ import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentTeacherClassBinding
 import com.icct.icctlms.gestures.SwipeGestures
 import kotlinx.android.synthetic.main.activity_teacher_main.*
+import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_home.*
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TeacherClass : Fragment() {
@@ -53,6 +63,11 @@ class TeacherClass : Fragment() {
     private lateinit var teacherNav : BottomNavigationView
     private var _binding: FragmentTeacherClassBinding? = null
     private val binding get() = _binding!!
+    private lateinit var sortKey : String
+    private lateinit var today : Calendar
+    private lateinit var date : String
+    private lateinit var hour : String
+    private lateinit var finalHour : String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +81,7 @@ class TeacherClass : Fragment() {
         recyclerView = binding.classList
         groupRecyclerView = binding.groupList
         groupRecyclerView.visibility = View.GONE
+        binding.groupThats.visibility = View.GONE
         groupRecyclerView.setHasFixedSize(true)
         groupRecyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
@@ -74,11 +90,35 @@ class TeacherClass : Fragment() {
         groupArrayList = arrayListOf()
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
+
+        //convert hour to text
+        val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        hour = LocalTime.now().toString()
+        val time = LocalTime.now()
+        finalHour = time.format(DateTimeFormatter.ofPattern("hh:mm a"))
+
+
+        //convert month to text
+        today = Calendar.getInstance()
+        val day = today.get(Calendar.DAY_OF_MONTH)
+        val monthList = arrayOf("January", "February",
+            "March", "April", "May", "June", "July",
+            "August", "September", "October", "November",
+            "December")
+        val month = monthList[today.get(Calendar.MONTH)]
+        val trimMonth = month.subSequence(0, 3)
+        date = "$trimMonth $day at $finalHour"
+
+
         progressDialogShow()
         databaseGroup = FirebaseDatabase.getInstance().getReference("Group").child(uid)
         executeGroup()
 
-
+        sortKey = now.toMillis().toString()
         //retrieve class data snapshot
 
         databaseClass = FirebaseDatabase.getInstance().getReference("Class").child(uid)
@@ -95,11 +135,19 @@ class TeacherClass : Fragment() {
     private fun hideClass() {
         recyclerView.visibility = View.GONE
         groupRecyclerView.visibility = View.VISIBLE
+        binding.groupThats.visibility = View.VISIBLE
+
+        binding.classThats.visibility = View.GONE
+
     }
 
     private fun hideGroup() {
         groupRecyclerView.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
+        binding.classThats.visibility = View.VISIBLE
+
+        binding.groupThats.visibility = View.GONE
+
     }
 
     private fun executeClass() {
@@ -443,7 +491,7 @@ class TeacherClass : Fragment() {
                                         val newNotification = Notification()
                                         val me = ""
                                         val description = "You successfully created the class named $title."
-                                        newNotification.notification(uid, me, description, randomID())
+                                        newNotification.notification(uid, me, description, randomID(), date, sortKey)
 
                                     }
                                 }
@@ -516,7 +564,7 @@ class TeacherClass : Fragment() {
                                     val newNotification = Notification()
                                     val me = ""
                                     val description = "You successfully created the group named $finalGroupName, section $finalSection."
-                                    newNotification.notification(uid, me, description, randomID())
+                                    newNotification.notification(uid, me, description, randomID(), date, sortKey)
 
                                 }
                             }
@@ -562,6 +610,6 @@ class TeacherClass : Fragment() {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")
 
-
-
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun LocalDateTime.toMillis(zone: ZoneId = ZoneId.systemDefault()) = atZone(zone)?.toInstant()?.toEpochMilli()
 }

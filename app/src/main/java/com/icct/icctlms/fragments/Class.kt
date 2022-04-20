@@ -3,6 +3,7 @@ package com.icct.icctlms.fragments
 import android.app.Dialog
 import android.content.Intent
 import android.opengl.Visibility
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,11 +29,18 @@ import com.icct.icctlms.adapter.StudentGroupAdapter
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RoomMembersData
+import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentClassBinding
 import com.icct.icctlms.databinding.FragmentHomeBinding
 import com.icct.icctlms.gestures.SwipeGestures
 import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Class : Fragment() {
     private lateinit var joinClass : DatabaseReference
@@ -45,6 +54,12 @@ class Class : Fragment() {
         private lateinit var roomID : String
         private lateinit var bottomNav : BottomNavigationView
         private var _binding: FragmentClassBinding? = null
+        private lateinit var hour : String
+        private lateinit var finalHour : String
+        private lateinit var today : Calendar
+        private lateinit var sortKey : String
+        private lateinit var date : String
+        private lateinit var dateReviewed : String
 
         private val binding get() = _binding!!
         override fun onCreateView(
@@ -77,6 +92,30 @@ class Class : Fragment() {
             joinClass = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
             executeClass()
             binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
+
+            //convert hour to text
+            val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime.now()
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            hour = LocalTime.now().toString()
+            val time = LocalTime.now()
+            finalHour = time.format(DateTimeFormatter.ofPattern("hh:mm a"))
+
+            //convert month to text
+            today = Calendar.getInstance()
+            val day = today.get(Calendar.DAY_OF_MONTH)
+            val monthList = arrayOf("January", "February",
+                "March", "April", "May", "June", "July",
+                "August", "September", "October", "November",
+                "December")
+            val month = monthList[today.get(Calendar.MONTH)]
+            val trimMonth = month.subSequence(0, 3)
+            date = "$trimMonth $day at $finalHour"
+
+            //use this key to sort arraylist
+            sortKey = now.toMillis().toString()
             return root
         }
 
@@ -96,7 +135,6 @@ class Class : Fragment() {
                     val adapter = StudentClassAdapter(classArrayList)
                     classRecyclerView.adapter = adapter
                     val count = adapter.itemCount
-                    Toast.makeText(this@Class.requireContext(), "$count", Toast.LENGTH_SHORT).show()
                     progressDialogHide()
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
 
@@ -117,6 +155,9 @@ class Class : Fragment() {
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeClass()
+                                        }.setOnCancelListener(){
+                                            executeClass()
+                                            executeGroup()
                                         }.show()
 
                                 }
@@ -221,6 +262,9 @@ class Class : Fragment() {
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeGroup()
+                                        }.setOnCancelListener {
+                                            executeGroup()
+                                            executeClass()
                                         }.show()
 
                                 }
@@ -424,6 +468,26 @@ class Class : Fragment() {
                                         accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
                                             val request = FirebaseDatabase.getInstance().getReference("Public Class")
                                             request.child(roomID).child("Request").child(uid).setValue(data)
+
+
+                                            val newNotification = Notification()
+                                            val me = ""
+                                            val description = "$currentName wants to join the class named $subjectTitle."
+                                            newNotification.notification(uid, me, description, randomCode(), date, sortKey)
+                                            val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+                                            getTeacherUID.get().addOnSuccessListener {
+                                                if (it.exists()) {
+                                                    val newUID = it.child("uid").value.toString()
+                                                    newNotification.notification(
+                                                        newUID,
+                                                        me,
+                                                        description,
+                                                        randomCode(),
+                                                        date,
+                                                        sortKey
+                                                    )
+                                                }
+                                            }
                                         }
 
 
@@ -501,6 +565,19 @@ class Class : Fragment() {
                                         accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
                                             val request = FirebaseDatabase.getInstance().getReference("Public Group")
                                             request.child(roomID).child("Request").child(uid).setValue(data)
+
+
+
+                                            val newNotification = Notification()
+                                            val me = ""
+                                            val description = "$currentName wants to join the group named $subjectTitle."
+                                            val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
+                                            getTeacherUID.get().addOnSuccessListener {
+                                                if(it.exists()){
+                                                    val newUID = it.child("uid").value.toString()
+                                                    newNotification.notification(newUID, me, description, randomCode(), date, sortKey)
+                                                }
+                                            }
                                         }
 
                                     }
@@ -555,6 +632,8 @@ class Class : Fragment() {
         _binding = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun LocalDateTime.toMillis(zone: ZoneId = ZoneId.systemDefault()) = atZone(zone)?.toInstant()?.toEpochMilli()
     private fun randomCode(): String = List(6) {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")
