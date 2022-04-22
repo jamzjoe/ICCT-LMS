@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -420,7 +421,7 @@ class Class : Fragment() {
                             toastError("Don't leave it blank!")
 
                         }else -> {
-                        databaseGroup.child(subjectCode.text.toString()).get().addOnSuccessListener {
+                        databaseGroup.child(subjectCode.text.toString()).get().addOnSuccessListener { it ->
                             if (it.exists()) {
                                 val letter = it.child("letter").value.toString()
                                 val name = it.child("name").value.toString()
@@ -431,29 +432,42 @@ class Class : Fragment() {
                                 val type = it.child("type").value.toString()
                                 val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinClass")
 
+                                val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Class")
+                                    .child(roomID)
+                                getTeacherUID.get().addOnSuccessListener {
+                                    val teacherUID = (when {
+                                        it.exists() -> {
+                                            it.child("uid").value.toString()
+                                        }
+                                        else -> {
+                                            null
+                                        }
+                                    }).toString()
 
+                                    val joinGroup = GroupListData(
+                                        name,
+                                        type,
+                                        section,
+                                        roomID,
+                                        teacherUID,
+                                        subjectTitle,
+                                        pass,
+                                        letter
+                                    )
+                                    joinGroupUser.child(uid).child(roomID).setValue(joinGroup)
+                                        .addOnCompleteListener {
+                                            executeClass()
+                                            student_class_wall.setBackgroundResource(R.color.zero)
+                                            join_class.hide()
+                                            join_room.hide()
+                                            join_class_text.visibility = View.GONE
+                                            join_room_text.visibility = View.GONE
 
-                                val joinGroup = GroupListData(
-                                    name,
-                                    type,
-                                    section,
-                                    roomID,
-                                    uid,
-                                    subjectTitle,
-                                    pass,
-                                    letter
-                                )
-                                joinGroupUser.child(uid).child(roomID).setValue(joinGroup)
-                                    .addOnCompleteListener {
-                                        executeClass()
-                                        student_class_wall.setBackgroundResource(R.color.zero)
-                                        join_class.hide()
-                                        join_room.hide()
-                                        join_class_text.visibility = View.GONE
-                                        join_room_text.visibility = View.GONE
+                                            join_btn.shrink()
+                                        }
+                                }
 
-                                        join_btn.shrink()
-                                    }
+                               
                                 val userID = auth.currentUser?.uid.toString()
                                 val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                                 currentUser.child(userID).get().addOnSuccessListener {
@@ -538,20 +552,33 @@ class Class : Fragment() {
                                 val type = it.child("type").value.toString()
                                 val joinGroupUser = FirebaseDatabase.getInstance().getReference("JoinGroup")
 
+                                val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Group")
+                                    .child(roomID)
+                                getTeacherUID.get().addOnSuccessListener {
+                                    val teacherUID = (when {
+                                        it.exists() -> {
+                                            it.child("uid").value.toString()
+                                        }
+                                        else -> {
+                                            null
+                                        }
+                                    }).toString()
 
+                                    val joinGroup = GroupListData(name, type, section, roomID, teacherUID, subjectTitle, subjectCode, letter)
+                                    joinGroupUser.child(uid).child(roomID).setValue(joinGroup).addOnCompleteListener{
+                                        executeGroup()
+                                        student_class_wall.setBackgroundResource(R.color.zero)
+                                        join_class.hide()
+                                        join_room.hide()
+                                        join_class_text.visibility = View.GONE
+                                        join_room_text.visibility = View.GONE
 
-
-                                val joinGroup = GroupListData(name, type, section, roomID, uid, subjectTitle, subjectCode, letter)
-                                joinGroupUser.child(uid).child(roomID).setValue(joinGroup).addOnCompleteListener{
-                                    executeGroup()
-                                    student_class_wall.setBackgroundResource(R.color.zero)
-                                    join_class.hide()
-                                    join_room.hide()
-                                    join_class_text.visibility = View.GONE
-                                    join_room_text.visibility = View.GONE
-
-                                    join_btn.shrink()
+                                        join_btn.shrink()
+                                    }
                                 }
+
+
+                               
                                 val userID = auth.currentUser?.uid.toString()
                                 val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                                 currentUser.child(userID).get().addOnSuccessListener {

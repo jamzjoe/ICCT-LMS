@@ -67,9 +67,22 @@ class Notification {
         }
     }
 
+    fun deleteAllReviewed(uid: String) {
+        val deleteReviewed = FirebaseDatabase.getInstance().getReference("Reviewed").child(uid)
+        deleteReviewed.removeValue().addOnSuccessListener {
+
+        }
+    }
+
+
     fun deleteUnread(uid: String, notificationID: String) {
         val deleteUnread = FirebaseDatabase.getInstance().getReference("Notifications").child(uid)
         deleteUnread.child(notificationID).removeValue().addOnSuccessListener {
+        }
+    }
+    fun deleteAllUnread(uid: String) {
+        val deleteUnread = FirebaseDatabase.getInstance().getReference("Notifications").child(uid)
+        deleteUnread.removeValue().addOnSuccessListener {
         }
     }
 

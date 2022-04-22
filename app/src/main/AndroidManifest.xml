@@ -11,9 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
-            android:name=".ui.login.AdminLogin"
-            android:exported="false"
-            android:label="@string/title_activity_admin_login" />
+            android:name=".messages.TeacherMessageRoom"
+            android:exported="false" />
+        <activity
+            android:name=".messages.StudentMessageRoom"
+            android:exported="false" />
+        <activity
+            android:name=".HelpCenter"
+            android:exported="false" />
         <activity
             android:name=".Authentication.Admin.AdminMain"
             android:exported="false"
@@ -24,12 +29,6 @@
             android:exported="false" />
         <activity
             android:name=".SchoolAnnouncement"
-            android:exported="false" />
-        <activity
-            android:name=".Authentication.Admin.AdminMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".newsAndUpdates.LMSWeb"
             android:exported="false" />
         <activity
             android:name=".newsAndUpdates.CreateNewsAndUpdates"
@@ -65,11 +64,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".UpdateProfile.UpdateStudentProfile"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".Authentication.Admin.Admin"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

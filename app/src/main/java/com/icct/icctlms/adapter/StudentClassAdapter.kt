@@ -8,8 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.icct.icctlms.R
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.RoomPostData
@@ -44,9 +43,36 @@ class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : R
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = classList[position]
-        holder.title.text = currentItem.subjectTitle
-        holder.section.text = currentItem.section
-        holder.letter.text = currentItem.letter
+        val roomID = classList[position].roomID.toString()
+        val getRoomMembers = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+        getRoomMembers.child("Members").addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val count = snapshot.childrenCount
+                    var plural = ""
+                    plural = if (count > 1){
+                        "$count members"
+                    }else{
+                        "$count member"
+                    }
+
+                    holder.title.text = currentItem.subjectTitle
+                    holder.section.text = currentItem.section
+                    holder.letter.text = currentItem.letter
+                    holder.count.text = plural
+                }else{
+                    holder.title.text = currentItem.subjectTitle
+                    holder.section.text = currentItem.section
+                    holder.letter.text = currentItem.letter
+                    holder.count.visibility = View.GONE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+
     }
 
     override fun getItemCount(): Int {
@@ -58,6 +84,7 @@ class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : R
             val title : TextView = itemView.findViewById(R.id.txt_title)
     val section : TextView = itemView.findViewById(R.id.create_class_section)
     val letter : TextView = itemView.findViewById(R.id.two_letter)
+    val count : TextView = itemView.findViewById(R.id.room_count_members)
 //fourth
         init {
 itemView.setOnClickListener{

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,6 +26,7 @@ import com.icct.icctlms.database.CurrentUser
 import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentTeacherNotificationBinding
 import com.icct.icctlms.gestures.SwipeGestures
+import kotlinx.android.synthetic.main.fragment_teacher_notification.*
 import kotlinx.android.synthetic.main.room_members_item.*
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -51,6 +53,8 @@ class TeacherNotification : Fragment() {
     private lateinit var date : String
     private lateinit var sortKey : String
     private lateinit var dateReviewed : String
+    private lateinit var deleteRev : ImageView
+    private lateinit var deleteRead : ImageView
 
     private lateinit var reviewedRecyclerView: RecyclerView
 
@@ -69,10 +73,11 @@ class TeacherNotification : Fragment() {
         reviewedRecyclerView.setHasFixedSize(true)
         reviewedRecyclerView.layoutManager = LinearLayoutManager(context)
 
+        deleteRead = binding.deleteRead
+        deleteRev = binding.deleteRev
         notificationArrayList = arrayListOf()
         reviewedArrayList = arrayListOf()
         uid = Firebase.auth.currentUser?.uid.toString()
-
 
 
         //convert hour to text
@@ -103,6 +108,8 @@ class TeacherNotification : Fragment() {
         getReviewed = FirebaseDatabase.getInstance().getReference("Reviewed").child(uid)
       executeNotification()
         executeReviewed()
+
+        deleteAll()
         binding.refresh.setOnClickListener{
             startActivity(activity?.intent)
             activity?.finish()
@@ -111,7 +118,47 @@ class TeacherNotification : Fragment() {
         return binding.root
     }
 
-            private fun executeReviewed() {
+    private fun deleteAll() {
+        deleteRead.setOnClickListener{
+            progressDialogShow()
+            MaterialAlertDialogBuilder(this.requireContext())
+                .setMessage("Are you sure you want to delete all unread notifications?")
+                .setPositiveButton("DELETE"){_, _ ->
+                    val deleteAllUnread = Notification()
+                    deleteAllUnread.deleteAllUnread(uid)
+                    progressDialogHide()
+                    executeReviewed()
+                    executeNotification()
+                }.setNegativeButton("Cancel"){_,_ ->
+                    progressDialogHide()
+                }.setOnCancelListener{
+                    progressDialogHide()
+                }
+
+                .show()
+        }
+        deleteRev.setOnClickListener{
+            progressDialogShow()
+                MaterialAlertDialogBuilder(this.requireContext())
+                    .setMessage("Are you sure you want to delete all reviewed notifications?")
+                    .setPositiveButton("DELETE"){_, _ ->
+                        val deleteAllReviewed = Notification()
+                        deleteAllReviewed.deleteAllReviewed(uid)
+                        progressDialogHide()
+                        executeReviewed()
+                        executeNotification()
+                    }.setNegativeButton("Cancel"){_,_ ->
+                        progressDialogHide()
+                    }.setOnCancelListener{
+                        progressDialogHide()
+                    }
+
+                    .show()
+        }
+    }
+
+
+    private fun executeReviewed() {
                 getReviewed.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 

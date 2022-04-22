@@ -55,6 +55,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_nesws_and_updates.xml" value="0.29846014492753625" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_create_teacher_post.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_forgot_password.xml" value="0.25" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_help_center.xml" value="0.22282608695652173" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_lmsweb.xml" value="0.29846014492753625" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_main.xml" value="0.19831223628691982" />
@@ -66,9 +67,11 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_room_post_message.xml" value="0.23595505617977527" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_school_announcement.xml" value="0.2980072463768116" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_splash_screen.xml" value="0.25" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_student_message_room.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_student_room.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_teacher_login.xml" value="0.2" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_teacher_main.xml" value="0.21920289855072464" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_teacher_message_room.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_teacher_register.xml" value="0.21920289855072464" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_test.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/activity_update_student_profile.xml" value="0.25" />
@@ -86,8 +89,9 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/app_bar_admin_main.xml" value="0.2921195652173913" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/bottom_underlined.xml" value="0.2694746376811594" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/bttom_underlined.xml" value="0.2694746376811594" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/chat_message_item.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/choose_list.xml" value="0.30520833333333336" />
-        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/classes_item.xml" value="0.22" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/classes_item.xml" value="0.5" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/content_admin_main.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/create_class_float.xml" value="0.29322916666666665" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/delete_layout.xml" value="0.33" />
@@ -115,7 +119,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_student_room_post.xml" value="0.2" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_class.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_home.xml" value="0.22" />
-        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_message.xml" value="0.1" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_message.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_notification.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teacher_planner.xml" value="0.22" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/fragment_teachers_room_folders.xml" value="0.25" />
@@ -130,6 +134,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/notification_layout.xml" value="0.26313405797101447" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/post_list.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/post_view.xml" value="0.22" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/recipient_list_item.xml" value="0.25" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/room_members_item.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/room_members_layout.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCTLMS/app/src/main/res/layout/room_post_layout.xml" value="0.25" />

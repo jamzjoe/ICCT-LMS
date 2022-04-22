@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.icct.icctlms.R
 import com.icct.icctlms.data.NotificationData
@@ -37,6 +38,7 @@ class NotificationAdapter(private val notificationList: ArrayList<NotificationDa
         holder.description.text = currentItem.description
         holder.subject.text = currentItem.senderName
         holder.date.text = currentItem.dateTime
+
 
     }
 

@@ -5,16 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".teacherfragments.TeacherMessage">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-        <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <RelativeLayout
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TEACHER MESSAGE"
-            android:fontFamily="@font/tw_font"
-            android:textSize="20sp"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:fontFamily="@font/headings"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Messages"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/cardView"
+        android:layout_width="match_parent"
+        android:id="@+id/teacher_recipient_list"
+        tools:listitem="@layout/recipient_list_item"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

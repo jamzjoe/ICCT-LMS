@@ -74,8 +74,7 @@ class StudentRoomActivity : AppCompatActivity() {
         hour = LocalTime.now().toString()
         finalHour = hour.format(DateTimeFormatter.ofPattern(pattern))
 
-
-
+        announce()
         replaceFragment(roomPost)
         navClick()
         attendanceLink()
@@ -88,6 +87,9 @@ class StudentRoomActivity : AppCompatActivity() {
         settingsOnClick()
 
 
+    }
+
+    private fun announce() {
     }
 
     private fun settingsOnClick() {

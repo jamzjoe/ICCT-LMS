@@ -83,9 +83,18 @@
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/delete_read"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_delete"
+                    tools:ignore="RtlHardcoded" />
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
         <RelativeLayout
+            android:maxHeight="200dp"
             android:layout_below="@id/unread_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -126,6 +135,14 @@
                     android:text="Reviewed"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/delete_rev"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_delete"
+                    tools:ignore="RtlHardcoded" />
             </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
         <RelativeLayout
@@ -137,7 +154,10 @@
                 android:id="@+id/notification_reviewed_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
                 tools:listitem="@layout/notification_layout" />
         </RelativeLayout>
     </RelativeLayout>

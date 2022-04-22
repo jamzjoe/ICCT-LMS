@@ -8,10 +8,11 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:src="@drawable/joingroup"/>
+            android:layout_height="120dp"
+            android:src="@drawable/joingroup" />
     </RelativeLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/subjectcodeContainer"
