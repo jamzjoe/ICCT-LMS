@@ -1,8 +1,10 @@
 package com.icct.icctlms.messages
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +15,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.icct.icctlms.Authentication.Teacher.TeacherMainActivity
+import com.icct.icctlms.MainActivity
 import com.icct.icctlms.R
 import com.icct.icctlms.adapter.StudentMessageAdapter
 import com.icct.icctlms.data.MessageData
@@ -76,15 +80,18 @@ class TeacherMessageRoom : AppCompatActivity() {
         chatArrayList = arrayListOf()
         sendMessage()
         executeMessage()
-
-
+        val back = findViewById<ImageView>(R.id.back_message)
+        back.setOnClickListener{
+            startActivity(Intent(this, TeacherMainActivity::class.java))
+            finish()
+        }
     }
 
     private fun executeMessage() {
         val getTeacherReceive = FirebaseDatabase.getInstance().getReference("Chat").child("TeacherReceived")
             .child(uid)
             .child(studentUID)
-        getTeacherReceive.addListenerForSingleValueEvent(object : ValueEventListener {
+        getTeacherReceive.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     chatArrayList.clear()

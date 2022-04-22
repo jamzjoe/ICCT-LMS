@@ -10,7 +10,6 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         app:cardElevation="10dp">
 
         <RelativeLayout
@@ -38,12 +37,11 @@
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/message_et_holder"
         android:layout_below="@id/card"
-        android:layout_marginBottom="70dp"
         tools:listitem="@layout/chat_message_item" />
 
     <RelativeLayout
@@ -54,7 +52,6 @@
 
         <androidx.cardview.widget.CardView
             app:cardElevation="10dp"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout
@@ -68,14 +65,13 @@
                     android:layout_toStartOf="@id/send_message">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        app:boxCornerRadiusTopEnd="20dp"
-                        android:layout_margin="8dp"
+                        android:layout_margin="5dp"
                         app:boxCornerRadiusBottomStart="20dp"
                         app:boxCornerRadiusBottomEnd="20dp"
                         app:boxCornerRadiusTopStart="20dp"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp">
+                        android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/message_et"
@@ -96,7 +92,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/sub_headings"
                     android:src="@drawable/send_btn"
@@ -107,11 +103,12 @@
         </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
+
     <TextView
         android:id="@+id/empty_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Empty Message"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 </RelativeLayout>

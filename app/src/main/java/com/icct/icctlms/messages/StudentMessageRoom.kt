@@ -1,5 +1,6 @@
 package com.icct.icctlms.messages
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.icct.icctlms.MainActivity
 import com.icct.icctlms.R
 import com.icct.icctlms.adapter.StudentMessageAdapter
 import com.icct.icctlms.components.toast
@@ -85,7 +87,10 @@ class StudentMessageRoom : AppCompatActivity() {
         val month = monthList[today.get(Calendar.MONTH)]
         val trimMonth = month.subSequence(0, 3)
         date = "$trimMonth $day at $finalHour"
-
+        back_message.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 
 
@@ -95,7 +100,7 @@ class StudentMessageRoom : AppCompatActivity() {
             .child("StudentSend")
                 .child(uid)
                     .child(teacherUID)
-        getMessageDataBase.addListenerForSingleValueEvent(object : ValueEventListener {
+        getMessageDataBase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     chatArrayList.clear()

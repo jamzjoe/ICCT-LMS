@@ -10,7 +10,6 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         app:cardElevation="10dp">
 
         <RelativeLayout
@@ -38,15 +37,15 @@
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
         android:id="@+id/teacher_chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/message_et_holder"
         android:layout_below="@id/card"
-        android:layout_marginBottom="70dp"
         tools:listitem="@layout/chat_message_item" />
 
     <RelativeLayout
+        android:elevation="10dp"
         android:id="@+id/message_et_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,7 +54,6 @@
       <com.google.android.material.card.MaterialCardView
           android:layout_width="wrap_content"
           app:cardElevation="10dp"
-          android:layout_marginTop="10dp"
           android:layout_height="wrap_content">
           <RelativeLayout
               android:layout_width="wrap_content"
@@ -68,14 +66,13 @@
                   android:layout_toStartOf="@id/teacher_send_message">
 
                   <com.google.android.material.textfield.TextInputLayout
-                      app:boxCornerRadiusTopEnd="20dp"
                       android:layout_margin="8dp"
                       app:boxCornerRadiusBottomStart="20dp"
                       app:boxCornerRadiusBottomEnd="20dp"
                       app:boxCornerRadiusTopStart="20dp"
                       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                       android:layout_width="match_parent"
-                      android:layout_height="50dp">
+                      android:layout_height="wrap_content">
 
                       <com.google.android.material.textfield.TextInputEditText
                           android:id="@+id/teacher_message_et"
@@ -93,9 +90,8 @@
                   android:src="@drawable/send_btn"
                   android:layout_alignParentEnd="true"
                   android:layout_centerVertical="true"
-                  android:layout_marginStart="5dp"
                   android:layout_marginTop="5dp"
-                  android:layout_marginEnd="5dp"
+                  android:layout_marginEnd="10dp"
                   android:layout_marginBottom="5dp"
                   android:fontFamily="@font/sub_headings"
                   android:text="SEND"
