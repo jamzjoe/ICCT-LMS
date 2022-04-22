@@ -73,7 +73,9 @@ class TeacherMessageRoom : AppCompatActivity() {
 
         chatRecyclerView = findViewById(R.id.teacher_chat_recycler_view)
         chatRecyclerView.setHasFixedSize(true)
-        chatRecyclerView.layoutManager = LinearLayoutManager(this)
+        chatRecyclerView.layoutManager = LinearLayoutManager(this).apply {
+
+        }
 
 
         student_top_name.text = studentName
@@ -106,7 +108,7 @@ class TeacherMessageRoom : AppCompatActivity() {
                         it.sortKey
                     }
                     chatRecyclerView.adapter = adapter
-
+                    chatRecyclerView.scrollToPosition(adapter.itemCount-1)
                     //adapter click listener
                     adapter.setOnItemClickListener(object : StudentMessageAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {

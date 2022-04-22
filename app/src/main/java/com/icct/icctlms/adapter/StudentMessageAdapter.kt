@@ -4,6 +4,7 @@ import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -40,6 +41,7 @@ class StudentMessageAdapter(private val messageList: ArrayList<MessageData>) : R
         if (type == "sender"){
             //view visible when type is sender
                 //set sender message to sender message
+
             holder.senderMessage.visibility = View.VISIBLE
             holder.senderMessage.text = currentItem.message
 
@@ -76,8 +78,12 @@ class StudentMessageAdapter(private val messageList: ArrayList<MessageData>) : R
     class MyViewHolder(messageView: View, onItemClickListener: onItemClickListener) : RecyclerView.ViewHolder(messageView){
         val receiverMessage: TextView = messageView.findViewById(R.id.receiver_message_text_view)
         val senderMessage: TextView = messageView.findViewById(R.id.sender_message_text_view)
-        val senderProfile : ImageView = messageView.findViewById(R.id.sender_message_profile)
-        val receiverProfile : ImageView = messageView.findViewById(R.id.receiver_message_profile)
+        val senderProfile : FrameLayout = messageView.findViewById(R.id.sender_message_profile)
+        val receiverProfile : FrameLayout = messageView.findViewById(R.id.receiver_message_profile)
+
+        val rightInitial : TextView = messageView.findViewById(R.id.right_initial)
+        val leftInitial : TextView = messageView.findViewById(R.id.left_initial)
+
 
         val rightDate : TextView = messageView.findViewById(R.id.right_date)
 

@@ -4,48 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".messages.StudentMessageRoom">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="10dp">
+   <LinearLayout
+       android:id="@+id/card"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <com.google.android.material.card.MaterialCardView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:cardElevation="10dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+           <RelativeLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/back_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/k_back" />
+               <ImageView
+                   android:id="@+id/back_message"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerVertical="true"
+                   android:layout_gravity="center_vertical"
+                   android:layout_marginStart="10dp"
+                   android:src="@drawable/k_back" />
 
-            <TextView
-                android:id="@+id/teacher_top_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_toEndOf="@id/back_message"
-                android:fontFamily="@font/headings"
-                android:text="TeacherName" />
-        </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
+               <TextView
+                   android:id="@+id/teacher_top_name"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="20dp"
+                   android:layout_toEndOf="@id/back_message"
+                   android:fontFamily="@font/headings"
+                   android:text="TeacherName" />
+           </RelativeLayout>
+       </com.google.android.material.card.MaterialCardView>
+   </LinearLayout>
 
+<LinearLayout
+    android:layout_above="@id/message_et_holder"
+    android:layout_below="@id/card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <androidx.recyclerview.widget.RecyclerView
+        app:reverseLayout="false"
+        app:stackFromEnd="true"
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/message_et_holder"
-        android:layout_below="@id/card"
+        android:layout_height="match_parent"
         tools:listitem="@layout/chat_message_item" />
 
+</LinearLayout>
+<LinearLayout
+    android:layout_alignParentBottom="true"
+    android:id="@+id/message_et_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <RelativeLayout
-        android:id="@+id/message_et_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
@@ -103,6 +118,7 @@
         </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
+</LinearLayout>
 
     <TextView
         android:id="@+id/empty_message"

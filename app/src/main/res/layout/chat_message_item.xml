@@ -22,13 +22,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageView
-
-                    android:layout_alignBottom="@id/card_message_holder"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                <FrameLayout
                     android:id="@+id/receiver_message_profile"
-                    android:src="@drawable/profile"/>
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignBottom="@id/card_message_holder">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/left_color"
+                        android:src="@color/background">
+                    </de.hdodenhof.circleimageview.CircleImageView>
+                    <TextView
+                        android:text="A"
+                        android:layout_gravity="center"
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/left_initial"/>
+                </FrameLayout>
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_message_holder"
                     android:layout_toEndOf="@id/receiver_message_profile"
@@ -76,14 +88,26 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content">
 
-           <ImageView
-               android:layout_centerVertical="true"
-               android:layout_toEndOf="@id/card_message"
-               android:layout_width="35dp"
-               android:layout_height="35dp"
-               android:layout_alignBottom="@id/card_message"
+           <FrameLayout
                android:id="@+id/sender_message_profile"
-               android:src="@drawable/profile"/>
+               android:layout_toEndOf="@id/card_message"
+               android:layout_alignBottom="@id/card_message"
+               android:layout_width="30dp"
+               android:layout_height="30dp">
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:id="@+id/right_color"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:src="@color/button_color"/>
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="B"
+                   android:layout_gravity="center"
+                   android:textColor="#fff"
+                   android:id="@+id/right_initial"/>
+           </FrameLayout>
+
            <androidx.cardview.widget.CardView
                app:cardCornerRadius="20dp"
                android:backgroundTint="#005DB3"

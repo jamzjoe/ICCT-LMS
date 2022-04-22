@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,7 +24,6 @@ import com.icct.icctlms.adapter.StudentMessageAdapter
 import com.icct.icctlms.components.toast
 import com.icct.icctlms.data.MessageData
 import com.icct.icctlms.data.UserData
-import com.icct.icctlms.databinding.ActivityStudentMessageRoomBinding
 import kotlinx.android.synthetic.main.activity_student_message_room.*
 import kotlinx.android.synthetic.main.room_members_item.*
 import java.time.LocalDateTime
@@ -46,6 +46,8 @@ class StudentMessageRoom : AppCompatActivity() {
     private lateinit var teacherName : String
     private lateinit var teacherUID : String
     private lateinit var roomID : String
+    private lateinit var adapter : StudentMessageAdapter
+    private lateinit var mManager : LinearLayoutManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_message_room)
@@ -60,7 +62,10 @@ class StudentMessageRoom : AppCompatActivity() {
         uid = Firebase.auth.currentUser?.uid.toString()
         chatRecyclerView = findViewById(R.id.chat_recycler_view)
         chatRecyclerView.setHasFixedSize(true)
-        chatRecyclerView.layoutManager = LinearLayoutManager(this)
+        mManager = LinearLayoutManager(this)
+        chatRecyclerView.layoutManager = LinearLayoutManager(this).apply {
+        }
+
 
         chatArrayList = arrayListOf()
         sendMessage()
@@ -110,15 +115,27 @@ class StudentMessageRoom : AppCompatActivity() {
                         val members = postSnapShot.getValue(MessageData::class.java)
                         chatArrayList.add(members!!)
                     }
-                    val adapter = StudentMessageAdapter(chatArrayList)
+                    adapter = StudentMessageAdapter(chatArrayList)
                     chatArrayList.sortBy {
                         it.sortKey
                     }
                     chatRecyclerView.adapter = adapter
+                    chatRecyclerView.scrollToPosition(adapter.itemCount-1)
+
+//                    adapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+//                        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                            mManager.smoothScrollToPosition(
+//                                chatRecyclerView,
+//                                null,
+//                                adapter.itemCount
+//                            )
+//                        }
+//                    })
                     val count = adapter.itemCount
                     if (count > 0){
                         empty_message.visibility = View.GONE
                     }
+
 
                     //adapter click listener
                     adapter.setOnItemClickListener(object : StudentMessageAdapter.onItemClickListener{
@@ -168,7 +185,6 @@ class StudentMessageRoom : AppCompatActivity() {
                         .child(teacherUID)
             sentToDatabase.child(randomCode()).setValue(data).addOnSuccessListener {
                 Toast.makeText(this, "Sent successfully!", Toast.LENGTH_SHORT).show()
-                executeMessage()
                 message_et.text?.clear()
                 val teacherData = MessageData(
                     type = "receiver",
