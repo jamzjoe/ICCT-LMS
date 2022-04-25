@@ -13,8 +13,9 @@
        android:layout_height="wrap_content">
        <com.google.android.material.card.MaterialCardView
            android:layout_width="match_parent"
+           app:cardUseCompatPadding="true"
            android:layout_height="wrap_content"
-           app:cardElevation="10dp">
+           app:cardElevation="2dp">
 
            <RelativeLayout
                android:layout_width="wrap_content"
@@ -65,7 +66,8 @@
         android:layout_alignParentBottom="true">
 
         <androidx.cardview.widget.CardView
-            app:cardElevation="10dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <RelativeLayout

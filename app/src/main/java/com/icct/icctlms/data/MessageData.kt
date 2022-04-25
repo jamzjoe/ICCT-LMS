@@ -10,5 +10,6 @@ class MessageData (
     val uid: String ?= null,
     val teacherUID: String ?= null,
     val roomID: String ?= null,
-val colors: String ?= null
+val colors: String ?= null,
+    val userType: String ?= null
 )

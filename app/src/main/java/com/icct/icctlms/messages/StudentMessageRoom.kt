@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -57,7 +58,6 @@ class StudentMessageRoom : AppCompatActivity() {
         roomID = intent.getStringExtra("room_id").toString()
         teacherName = tName.toString()
         teacherUID = tUID.toString()
-
         teacher_top_name.text = teacherName
         uid = Firebase.auth.currentUser?.uid.toString()
         chatRecyclerView = findViewById(R.id.chat_recycler_view)
@@ -104,8 +104,8 @@ class StudentMessageRoom : AppCompatActivity() {
     private fun executeMessage() {
         val getMessageDataBase = FirebaseDatabase.getInstance().getReference("Chat")
             .child("StudentSend")
-                .child(uid)
-                    .child(teacherUID)
+            .child(uid)
+            .child(teacherUID)
         getMessageDataBase.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -165,6 +165,7 @@ class StudentMessageRoom : AppCompatActivity() {
                 if (it.exists()){
                     val color = it.child("colors").value.toString()
                     val name = it.child("name").value.toString()
+                    val type = it.child("type").value.toString()
 
                     val data = MessageData(
                         type = "sender",
@@ -176,7 +177,8 @@ class StudentMessageRoom : AppCompatActivity() {
                         uid = uid,
                         teacherUID = teacherUID,
                         roomID = roomID,
-                        colors = color
+                        colors = color,
+                        userType = type
                     )
                     val sentToDatabase = FirebaseDatabase.getInstance().getReference("Chat")
                         .child("StudentSend")
@@ -195,7 +197,8 @@ class StudentMessageRoom : AppCompatActivity() {
                             uid = uid,
                             teacherUID = teacherUID,
                             roomID = roomID,
-                            colors = color
+                            colors = color,
+                            userType = type
                         )
                         val createTeacherView = FirebaseDatabase.getInstance().getReference("Chat")
                             .child("TeacherReceived")

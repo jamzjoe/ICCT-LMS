@@ -236,6 +236,7 @@ class RoomActivity : AppCompatActivity() {
             }
             alertDialogBuilder.setPositiveButton("Done") { _, _ ->
                 var data = State()
+                showCount()
                 if (roomType == "Class") {
                     val parent : ViewGroup = settings.parent as ViewGroup
                     parent.removeView(settings)

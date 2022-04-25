@@ -8,9 +8,10 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
+        app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="10dp">
+        app:cardElevation="2dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -54,33 +55,38 @@
 
       <com.google.android.material.card.MaterialCardView
           android:layout_width="wrap_content"
-          app:cardElevation="10dp"
+          app:cardElevation="2dp"
+          app:cardUseCompatPadding="true"
           android:layout_height="wrap_content">
           <RelativeLayout
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
+
               <RelativeLayout
                   android:id="@+id/et_holder"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  android:layout_margin="5dp"
+                  android:layout_marginStart="5dp"
+                  android:layout_marginTop="5dp"
+                  android:layout_marginEnd="5dp"
+                  android:layout_marginBottom="5dp"
                   android:layout_toStartOf="@id/teacher_send_message">
 
                   <com.google.android.material.textfield.TextInputLayout
-                      android:layout_margin="8dp"
-                      app:boxCornerRadiusBottomStart="20dp"
-                      app:boxCornerRadiusBottomEnd="20dp"
-                      app:boxCornerRadiusTopStart="20dp"
                       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                       android:layout_width="match_parent"
-                      android:layout_height="wrap_content">
+                      android:layout_height="wrap_content"
+                      android:layout_margin="8dp"
+                      app:boxCornerRadiusBottomEnd="20dp"
+                      app:boxCornerRadiusBottomStart="20dp"
+                      app:boxCornerRadiusTopStart="20dp">
 
                       <com.google.android.material.textfield.TextInputEditText
                           android:id="@+id/teacher_message_et"
-                          android:textSize="15sp"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
-                          android:hint="Type a message..." />
+                          android:hint="Type a message..."
+                          android:textSize="15sp" />
                   </com.google.android.material.textfield.TextInputLayout>
               </RelativeLayout>
 

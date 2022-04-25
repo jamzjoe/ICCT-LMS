@@ -11,9 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICCTLMS">
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".messages.TeacherMessageRoom"
             android:exported="false" />
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".messages.StudentMessageRoom"
             android:exported="false" />
         <activity

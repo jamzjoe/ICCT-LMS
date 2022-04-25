@@ -46,9 +46,12 @@ class StudentMessageAdapter(private val messageList: ArrayList<MessageData>) : R
         val myColor = currentItem.colors
         val decode = Color.parseColor(myColor)
         val name = currentItem.senderName
+        val senderName = currentItem.receiverName
+        val userType = currentItem.userType
+        val senderInfo = "$senderName ($userType)"
         if (type == "sender"){
             //view visible when type is sender
-                //set sender message to sender message
+            //set sender message to sender message
 
             holder.senderMessage.visibility = View.VISIBLE
             holder.senderMessage.text = currentItem.message
@@ -73,7 +76,7 @@ class StudentMessageAdapter(private val messageList: ArrayList<MessageData>) : R
             holder.receiverProfile.visibility = View.VISIBLE
 
             holder.leftDate.visibility = View.VISIBLE
-            holder.leftDate.text = currentItem.dateTime
+            holder.leftDate.text = senderInfo
             holder.rightDate.visibility = View.GONE
             holder.leftInitial.text = currentItem.receiverName!![0].toString()
             holder.leftColor.backgroundTintList = ColorStateList.valueOf(decode)

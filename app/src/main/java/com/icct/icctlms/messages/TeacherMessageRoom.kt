@@ -147,7 +147,7 @@ class TeacherMessageRoom : AppCompatActivity() {
                 if (it.exists()){
                     val name = it.child("name").value.toString()
                     val color = it.child("colors").value.toString()
-
+                    val type = it.child("type").value.toString()
 
                     val data = MessageData(
                         type = "receiver",
@@ -159,7 +159,8 @@ class TeacherMessageRoom : AppCompatActivity() {
                         uid = studentUID,
                         teacherUID = uid,
                         roomID = "",
-                        colors = color
+                        colors = color,
+                        userType = type
                     )
                     val sentToDatabase = FirebaseDatabase.getInstance().getReference("Chat")
                         .child("StudentSend")
@@ -179,7 +180,8 @@ class TeacherMessageRoom : AppCompatActivity() {
                             uid = studentUID,
                             uid,
                             roomID = "",
-                            colors = color
+                            colors = color,
+                            userType = type
                         )
                         val createTeacherView = FirebaseDatabase.getInstance().getReference("Chat")
                             .child("TeacherReceived")
