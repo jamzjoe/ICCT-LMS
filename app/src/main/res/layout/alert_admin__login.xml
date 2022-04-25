@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/admin_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_admin_pic" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/et_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/admin_banner">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            app:startIconDrawable="@drawable/person"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/admin_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            app:startIconDrawable="@drawable/security"
+            app:passwordToggleEnabled="true"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username"
+            android:layout_margin="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/admin_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:password="true"
+                android:hint="Password"
+                android:inputType="textVisiblePassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </RelativeLayout>
+    <com.google.android.material.button.MaterialButton
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/et_holder"
+        android:layout_height="wrap_content"
+        android:text="GRANT ACCESS"
+        android:textColor="@color/white"
+        android:fontFamily="@font/headings"
+        android:textStyle="bold"
+        android:id="@+id/admin_submit"
+        android:textSize="12sp"/>
+</RelativeLayout>
+
+</RelativeLayout>

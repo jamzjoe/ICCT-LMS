@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "380971236979",
+    "project_id": "icct-lms-d3700",
+    "storage_bucket": "icct-lms-d3700.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380971236979:android:66522f623bd3db24657406",
+        "android_client_info": {
+          "package_name": "com.icct.icctlms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "380971236979-vdtd0h2051ibvmga0ofv45hibb08t6t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA29hmBrKwkNYu2NMa0u7EHJf9z24Xv2vQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380971236979-vdtd0h2051ibvmga0ofv45hibb08t6t2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

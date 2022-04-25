@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Authentication.Register">
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true">
+    <FrameLayout
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp">
+
+        <FrameLayout
+            android:background="@drawable/window"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/regemailContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="50dp"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@android:color/holo_red_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/mail">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/reg_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Email address"
+                        android:inputType="textEmailAddress"
+                        android:lines="1" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/regnameContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@android:color/holo_red_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/person">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/reg_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Username"
+                        android:inputType="text|textPersonName"
+                        android:lines="1" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/regpassContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:passwordToggleEnabled="true"
+                    app:helperText="Required*"
+                    app:helperTextTextColor="@android:color/holo_red_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/security">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/reg_pass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Password"
+                        android:password="true"
+                        android:lines="1" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/regconfirmContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="50dp"
+                    app:helperText="Required*"
+                    app:passwordToggleEnabled="true"
+                    app:helperTextTextColor="@android:color/holo_red_dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:startIconDrawable="@drawable/security">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/reg_confirm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Comfirm Password"
+                        android:inputType="textVisiblePassword"
+                        android:password="true"
+                        android:lines="1" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="25dp">
+
+                    <CheckBox
+                        android:id="@+id/checkTerms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I agree to the "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terms and Condition."
+                        android:textStyle="bold"
+                        android:textColor="#0000FE"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/logo_plain" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom |center_horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reg_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#DA1212"
+                app:cornerRadius="20dp"
+                android:textColor="@color/white"
+                android:shadowColor="@color/black"
+                android:text="REGISTER" />
+        </FrameLayout>
+    </FrameLayout>
+</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="STUDENT REGISTER"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/tw_font"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+
+
+
+
+            </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:id="@+id/txt_login"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click here."
+            android:textColor="@color/button_color"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

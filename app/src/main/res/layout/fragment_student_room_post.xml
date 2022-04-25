@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".room.StudentRoomPost">
+
+    <androidx.cardview.widget.CardView
+        app:cardElevation="8dp"
+        android:id="@+id/card_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/profile_holder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:visibility="gone"
+                    android:id="@+id/room_post_pic"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/profile" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/et_holder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/profile_holder">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:helperTextTextColor="@android:color/holo_red_dark">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:hint="Post something..."
+                        android:inputType="textMultiLine"
+                        android:maxLines="10"
+                        android:minLines="2"
+                        android:padding="10dp"
+                        android:scrollbars="vertical" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <RelativeLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/etContainer">
+
+                    <Button
+                        android:id="@+id/room_submit"
+                        android:layout_width="70dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/background"
+                        android:text="post"
+                        android:textColor="@color/white"
+                        android:textFontWeight="1"
+                        android:textSize="10sp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/back_create"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/room_submit"
+                        android:src="@drawable/back"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/room_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/etContainer"
+                    android:layout_alignParentEnd="true"
+                    android:backgroundTint="@color/background"
+                    android:text="create post"
+                    android:textColor="@color/white"
+                    android:textFontWeight="1"
+                    android:textSize="10sp" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_toEndOf="@id/et_holder"
+                android:id="@+id/button_holder"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+    <RelativeLayout
+        android:layout_below="@id/card_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/student_room_post_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/room_post_layout" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/student_wall"/>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/student_post_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#FAD02C"
+        android:src="@drawable/add"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:icon="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/message_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@id/student_post_btn"
+        android:layout_alignParentEnd="true">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/student_post_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#FAD02C"
+            android:contentDescription="TODO"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_post" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginEnd="10dp"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/background"
+            android:layout_width="wrap_content"
+            android:layout_toStartOf="@id/student_post_message"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/white"
+                android:fontFamily="@font/tw_font"
+                android:layout_margin="5dp"
+                android:id="@+id/student_post_message_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="Create Post" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

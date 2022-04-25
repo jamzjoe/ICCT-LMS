@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".StudentRoomActivity">
+
+
+    <RelativeLayout
+        android:elevation="10dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/room_name_holder"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/background">
+            <ImageView
+                android:layout_marginStart="20dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_settings"
+                android:layout_centerVertical="true"
+                android:id="@+id/student_settings"/>
+            <ImageView
+                android:layout_toEndOf="@id/student_settings"
+                android:id="@+id/student_help_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_question" />
+
+
+            <ImageView
+                android:id="@+id/student_btn_att"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toStartOf="@id/student_btn_zoom"
+                android:background="@drawable/nav_change_bg"
+                android:src="@drawable/ic_attendance" />
+
+            <ImageView
+                android:id="@+id/student_btn_zoom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/nav_change_bg"
+                android:src="@drawable/ic_zoom" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/banner"
+        android:layout_below="@id/room_name_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_holder"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/background"
+            app:cardCornerRadius="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp">
+
+                <TextView
+                    android:id="@+id/student_room_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/tw_font"
+                    android:text="ROOM NAME"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/student_section_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/student_room_name"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="30dp"
+                    android:fontFamily="@font/tw_font"
+                    android:text="Section"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/nav_design" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/room_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/banner"
+        android:layout_marginBottom="50dp" />
+
+    <RelativeLayout
+        android:id="@+id/nav_holder"
+        android:layout_alignBottom="@id/room_fragment_container"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            app:itemTextColor="@color/white"
+            android:background="@color/background"
+            app:itemIconTint="@color/white"
+            android:layout_width="match_parent"
+            app:itemBackground="@drawable/nav_change_bg"
+            android:id="@+id/room_top_nav"
+            android:layout_height="wrap_content"
+            app:menu="@menu/room_top_nav"/>
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

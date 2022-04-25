@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/teacher_profile_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/teacher_profile_pic"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/profile" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/check"
+
+                    android:layout_gravity="right | bottom"/>
+            </FrameLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/teacher_profile_holder"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/teacher_prof_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/tw_font"
+                android:hint="Name"
+                android:textColor="#FFFFFFFF"
+                android:textColorHint="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/teacher_btn_copy"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/teacher_prof_name"
+                android:src="@drawable/copy" />
+
+            <TextView
+                android:textSize="10sp"
+                android:id="@+id/teacher_prof_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_prof_name"
+                android:hint="Email"
+                android:textColor="#FFFFFFFF"
+                android:textColorHint="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:textSize="10sp"
+                android:id="@+id/teacher_prof_school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_prof_email"
+                android:hint="School"
+                android:textColor="#FFFFFFFF"
+                android:textColorHint="@color/white"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_marginTop="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/teacher_prof_school"
+                >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/teacher_edit_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/edit"
+                    android:backgroundTint="@color/white" />
+
+                <TextView
+                    android:id="@+id/teacher_prof_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toEndOf="@id/teacher_edit_icon"
+                    android:hint="Edit profile"
+                    android:textColor="#FFFFFFFF"
+                    android:textColorHint="@color/white"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

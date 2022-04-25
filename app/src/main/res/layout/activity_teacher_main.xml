@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/teacher_drawer_layout"
+    android:background="@color/background"
+    tools:context=".Authentication.Teacher.TeacherMainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/teacher_top_holder"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/background">
+
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/teacher_top_logo"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@drawable/logo_white_text"
+                android:visibility="visible" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/teacher_top_profile_pic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="25dp"
+                android:src="@drawable/profile" />
+
+            <ImageView
+
+                android:id="@+id/teacher_hamburger"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="25dp"
+                android:background="@drawable/menu" />
+
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:background="@color/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/teacher_top_holder">
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/teacher_top_nav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                app:menu="@menu/teacher_top_nav"
+                app:itemTextColor="@color/white"
+                app:itemIconTint="@color/white"/>
+            <RelativeLayout
+                android:layout_below="@id/teacher_top_nav"
+                android:id="@+id/teacher_search_holder"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp">
+                <androidx.appcompat.widget.SearchView
+                    app:iconifiedByDefault="false"
+                    app:queryHint="Search here..."
+                    android:background="@drawable/window"
+                    style="@style/Widget.AppCompat.SearchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/teacher_searchBar" />
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/teacher_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/teacher_search_holder"
+                android:background="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        app:headerLayout="@layout/teacher_nav_header"
+        app:menu="@menu/teacher_nav_menu"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:id="@+id/teacher_nav_view"
+        android:layout_height="match_parent"/>
+</androidx.drawerlayout.widget.DrawerLayout>

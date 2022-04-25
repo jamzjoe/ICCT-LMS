@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".teacherfragments.TeacherClass">
+   <RelativeLayout
+       android:id="@+id/nav_holder"
+       android:layout_centerHorizontal="true"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:orientation="horizontal">
+
+           <com.google.android.material.button.MaterialButton
+               android:text="CLASS"
+               android:textSize="15sp"
+               android:id="@+id/class_btn"
+               style="@style/Widget.Material3.Button"
+               android:elevation="0dp"
+               android:backgroundTint="@color/transparent"
+               android:textColor="@color/black"
+               android:layout_marginStart="200dp"
+               android:layout_width="200dp"
+               android:layout_height="50dp"  />
+           <androidx.legacy.widget.Space
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"/>
+           <com.google.android.material.button.MaterialButton
+               android:id="@+id/grp_btn"
+               android:textSize="15sp"
+               style="@style/Widget.Material3.Button"
+               android:text="GROUP"
+               android:backgroundTint="@color/transparent"
+               android:textColor="@color/black"
+               android:layout_marginEnd="200dp"
+               android:layout_width="200dp"
+               android:layout_height="50dp" />
+       </LinearLayout>
+   </RelativeLayout>
+
+    <ScrollView
+        android:layout_below="@id/nav_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <RelativeLayout
+                android:id="@+id/text_classes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_bg">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_classes">
+                <TextView
+                    android:id="@+id/no_data"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No class yet"
+                    android:fontFamily="@font/tw_font"
+                    android:textSize="20sp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+
+                <RelativeLayout
+                    android:layout_below="@id/group_list"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ScrollView
+                        android:id="@+id/scrollView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/class_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </ScrollView>
+                    <TextView
+                        android:layout_below="@id/scrollView"
+                        android:gravity="center_horizontal"
+                        android:id="@+id/class_thats"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/headings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="That's all for now."/>
+
+                </RelativeLayout>
+
+                    <RelativeLayout
+                    android:id="@+id/text_rooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/white_bg">
+
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/group_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_rooms" />
+
+                <RelativeLayout
+                    android:layout_below="@id/group_list"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:fontFamily="@font/headings"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/group_thats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="That's all for now." />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/fab_color"
+        android:src="@drawable/add"
+        app:fabSize="normal"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:icon="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/wall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <RelativeLayout
+        android:id="@+id/class_holder"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_above="@id/add_btn"
+        android:layout_alignParentEnd="true">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/fab_color"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/myclass" />
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="5dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@color/background"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/add_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:fontFamily="@font/tw_font"
+                android:textColor="@color/white"
+                android:layout_margin="6dp"
+                android:id="@+id/add_class_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:text="Create Class" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/room_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/class_holder"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="@color/fab_color"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/classroom" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/add_room"
+            android:backgroundTint="@color/background"
+            app:cardCornerRadius="5dp">
+
+            <TextView
+                android:id="@+id/add_room_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/tw_font"
+                android:text="Create Group"
+                android:textColor="@color/white" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

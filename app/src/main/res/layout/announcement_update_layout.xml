@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/update_et_title_holder"
+        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:id="@+id/update_et_title"
+            android:hint="Update Title"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+<com.google.android.material.textfield.TextInputLayout
+    android:layout_below="@id/update_et_title_holder"
+    android:id="@+id/update_et_holder"
+    style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:id="@+id/update_et"
+        android:hint="Update Description"
+        android:layout_height="wrap_content"/>
+</com.google.android.material.textfield.TextInputLayout>
+
+</RelativeLayout>
