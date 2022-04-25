@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -21,6 +24,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.adapter.StudentMessageAdapter
 import com.icct.icctlms.data.MessageData
 import com.icct.icctlms.data.UserData
+import com.icct.icctlms.databinding.ActivityTeacherMessageRoomBinding
 import kotlinx.android.synthetic.main.activity_student_message_room.*
 import kotlinx.android.synthetic.main.activity_teacher_message_room.*
 import kotlinx.android.synthetic.main.post_list.*
@@ -42,10 +46,12 @@ class TeacherMessageRoom : AppCompatActivity() {
     private lateinit var today : Calendar
     private lateinit var date : String
     private lateinit var sortKey : String
+    private lateinit var binding: ActivityTeacherMessageRoomBinding
     private lateinit var now : LocalDateTime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_teacher_message_room)
+        binding = ActivityTeacherMessageRoomBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         //convert hour to text
         now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime.now()
@@ -71,18 +77,18 @@ class TeacherMessageRoom : AppCompatActivity() {
         studentName = intent.getStringExtra("student_name").toString()
         studentUID = intent.getStringExtra("student_uid").toString()
 
-        chatRecyclerView = findViewById(R.id.teacher_chat_recycler_view)
+        chatRecyclerView = binding.teacherChatRecyclerView
         chatRecyclerView.setHasFixedSize(true)
         chatRecyclerView.layoutManager = LinearLayoutManager(this).apply {
             stackFromEnd = true
         }
 
 
-        student_top_name.text = studentName
+        binding.studentTopName.text = studentName
         chatArrayList = arrayListOf()
         sendMessage()
         executeMessage()
-        val back = findViewById<ImageView>(R.id.back_message)
+        val back = binding.backMessage
         back.setOnClickListener{
             startActivity(Intent(this, TeacherMainActivity::class.java))
             finish()
@@ -109,6 +115,11 @@ class TeacherMessageRoom : AppCompatActivity() {
                     }
                     chatRecyclerView.adapter = adapter
                     chatRecyclerView.scrollToPosition(adapter.itemCount-1)
+
+                    val count = adapter.itemCount
+                    if (count > 0){
+                        walang_laman.visibility = View.GONE
+                    }
                     //adapter click listener
                     adapter.setOnItemClickListener(object : StudentMessageAdapter.onItemClickListener{
                         override fun onItemClick(position: Int) {
@@ -130,85 +141,94 @@ class TeacherMessageRoom : AppCompatActivity() {
     }
 
     private fun sendMessage() {
-        teacher_send_message.setOnClickListener{
-            val message = teacher_message_et.text.toString().trim()
-//convert hour to text
-            val ngayon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime.now()
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
-            //use this key to sort arraylist
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                sortKey = ngayon.toMillis().toString()
-            }
-            val getTeacherInfo = FirebaseDatabase.getInstance().getReference("Teachers").child(uid)
-            getTeacherInfo.get().addOnSuccessListener {
-                if (it.exists()){
-                    val name = it.child("name").value.toString()
-                    val color = it.child("colors").value.toString()
-                    val type = it.child("type").value.toString()
 
-                    val data = MessageData(
-                        type = "receiver",
-                        dateTime = date,
-                        senderName = "",
-                        receiverName = name,
-                        sortKey = sortKey,
-                        message = message,
-                        uid = studentUID,
-                        teacherUID = uid,
-                        roomID = "",
-                        colors = color,
-                        userType = type
-                    )
-                    val sentToDatabase = FirebaseDatabase.getInstance().getReference("Chat")
-                        .child("StudentSend")
-                        .child(studentUID)
-                        .child(uid)
-                    sentToDatabase.child(randomCode()).setValue(data).addOnSuccessListener {
-                        Toast.makeText(this, "Sent successfully!", Toast.LENGTH_SHORT).show()
-                        executeMessage()
-                        teacher_message_et.text?.clear()
-                        val teacherData = MessageData(
-                            type = "sender",
+        teacher_send_message.setOnClickListener{
+
+            when{
+                TextUtils.isEmpty(binding.teacherMessageEt.text.toString().trim{ it <= ' '}) -> {
+                    Snackbar.make(binding.root, "Cannot send empty message.", Snackbar.LENGTH_SHORT).show()
+                }else -> {
+
+                val message = binding.teacherMessageEt.text.toString().trim()
+//convert hour to text
+                val ngayon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    LocalDateTime.now()
+                } else {
+                    TODO("VERSION.SDK_INT < O")
+                }
+                //use this key to sort arraylist
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    sortKey = ngayon.toMillis().toString()
+                }
+                val getTeacherInfo = FirebaseDatabase.getInstance().getReference("Teachers").child(uid)
+                getTeacherInfo.get().addOnSuccessListener {
+                    if (it.exists()){
+                        val name = it.child("name").value.toString()
+                        val color = it.child("colors").value.toString()
+                        val type = it.child("type").value.toString()
+
+                        val data = MessageData(
+                            type = "receiver",
                             dateTime = date,
-                            senderName = name,
-                            receiverName = "",
+                            senderName = "",
+                            receiverName = name,
                             sortKey = sortKey,
                             message = message,
                             uid = studentUID,
-                            uid,
+                            teacherUID = uid,
                             roomID = "",
                             colors = color,
                             userType = type
                         )
-                        val createTeacherView = FirebaseDatabase.getInstance().getReference("Chat")
-                            .child("TeacherReceived")
-                            .child(uid)
+                        val sentToDatabase = FirebaseDatabase.getInstance().getReference("Chat")
+                            .child("StudentSend")
                             .child(studentUID)
-                        createTeacherView.child(randomCode()).setValue(teacherData).addOnSuccessListener {
-                            val getStudentInfo = FirebaseDatabase.getInstance().getReference("Students")
-                                .child(studentUID).get().addOnSuccessListener {
-                                    if (it.exists()){
-                                        val userID = it.child("account_id").value.toString()
-                                        val email = it.child("email").value.toString()
-                                        val name = it.child("name").value.toString()
-                                        val school = it.child("school").value.toString()
-                                        val type = "Student"
+                            .child(uid)
+                        sentToDatabase.child(randomCode()).setValue(data).addOnSuccessListener {
+                            Toast.makeText(this, "Sent successfully!", Toast.LENGTH_SHORT).show()
+                            executeMessage()
+                            teacher_message_et.text?.clear()
+                            val teacherData = MessageData(
+                                type = "sender",
+                                dateTime = date,
+                                senderName = name,
+                                receiverName = "",
+                                sortKey = sortKey,
+                                message = message,
+                                uid = studentUID,
+                                uid,
+                                roomID = "",
+                                colors = color,
+                                userType = type
+                            )
+                            val createTeacherView = FirebaseDatabase.getInstance().getReference("Chat")
+                                .child("TeacherReceived")
+                                .child(uid)
+                                .child(studentUID)
+                            createTeacherView.child(randomCode()).setValue(teacherData).addOnSuccessListener {
+                                val getStudentInfo = FirebaseDatabase.getInstance().getReference("Students")
+                                    .child(studentUID).get().addOnSuccessListener {
+                                        if (it.exists()){
+                                            val userID = it.child("account_id").value.toString()
+                                            val email = it.child("email").value.toString()
+                                            val name = it.child("name").value.toString()
+                                            val school = it.child("school").value.toString()
+                                            val type = "Student"
 
-                                        val userInfo = UserData(
-                                            account_id = userID,
-                                            email = email,
-                                            name = name,
-                                            school = school,
-                                            type = type
-                                        )
+                                            val userInfo = UserData(
+                                                account_id = userID,
+                                                email = email,
+                                                name = name,
+                                                school = school,
+                                                type = type
+                                            )
+                                        }
                                     }
-                                }
-                        }
+                            }
 
+                        }
                     }
+                }
                 }
             }
         }

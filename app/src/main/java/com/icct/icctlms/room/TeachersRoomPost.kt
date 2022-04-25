@@ -94,8 +94,6 @@ class TeachersRoomPost : Fragment() {
         hour = LocalTime.now().toString()
         finalHour = time.format(DateTimeFormatter.ofPattern(pattern))
 
-        Toast.makeText(this.requireContext(), roomType, Toast.LENGTH_SHORT).show()
-
 
         executePost()
         

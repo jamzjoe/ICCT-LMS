@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".messages.TeacherMessageRoom">
-
+<TextView
+    android:id="@+id/walang_laman"
+    android:textStyle="bold"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:text="Empty Message"/>
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         app:cardUseCompatPadding="true"
@@ -105,5 +111,6 @@
                   android:textColor="@color/white" />
           </RelativeLayout>
       </com.google.android.material.card.MaterialCardView></RelativeLayout>
+
 
 </RelativeLayout>

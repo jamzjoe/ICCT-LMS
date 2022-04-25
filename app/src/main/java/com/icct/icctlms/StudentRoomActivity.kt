@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.webkit.URLUtil
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -53,6 +54,7 @@ class StudentRoomActivity : AppCompatActivity() {
     private lateinit var hour : String
     private lateinit var roomType : String
     private lateinit var dialog : Dialog
+    private lateinit var roomTypeText : TextView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +68,8 @@ class StudentRoomActivity : AppCompatActivity() {
         type = intent.getStringExtra("student_type").toString()
         name = intent.getStringExtra("student_name").toString()
         roomType = intent.getStringExtra("student_room_type").toString()
-
+        roomTypeText = findViewById(R.id.roomType)
+        roomTypeText.text = roomType
         pattern = "hh:mm a"
         val now = LocalDateTime.now()
         sortKey = now.toMillis().toString()
@@ -80,7 +83,6 @@ class StudentRoomActivity : AppCompatActivity() {
         attendanceLink()
         zoomLink()
         replaceText()
-        showMessage(roomID)
         transferDataToFragments()
         needHelp()
         clickBannerToCopyRoomID()

@@ -19,17 +19,32 @@
             android:layout_height="50dp">
 
             <RelativeLayout
-                android:layout_toEndOf="@id/teacher_help_button"
+                android:layout_toEndOf="@id/help_holder"
                 android:layout_width="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/settings_post"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+
+                <RelativeLayout
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_settings" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/settings_post"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_settings" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Settings"
+                        android:layout_below="@id/settings_post"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:visibility="gone"
                     android:id="@+id/alert_"
@@ -38,43 +53,100 @@
                     android:layout_height="10dp"
                     android:src="@color/button_color"/>
             </RelativeLayout>
-            <ImageView
-                android:id="@+id/teacher_help_button"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+
+         <RelativeLayout
+             android:id="@+id/help_holder"
+             android:layout_centerVertical="true"
+             android:layout_marginStart="10dp"
+             android:layout_toEndOf="@id/links_holder"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
+             <ImageView
+                 android:id="@+id/teacher_help_button"
+                 android:layout_width="20dp"
+                 android:layout_height="20dp"
+                 android:layout_centerHorizontal="true"
+                 android:src="@drawable/ic_question" />
+             <TextView
+                 android:layout_below="@id/teacher_help_button"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textSize="10sp"
+                 android:text="Help"
+                 android:textColor="@color/white"
+                 android:layout_centerHorizontal="true"/>
+         </RelativeLayout>
+
+           <RelativeLayout
+               android:id="@+id/links_holder"
+               android:layout_centerVertical="true"
+               android:layout_marginStart="20dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:id="@+id/elips"
+                   android:layout_width="20dp"
+                   android:layout_height="20dp"
+                   android:layout_centerHorizontal="true"
+                   android:src="@drawable/add" />
+               <TextView
+                   android:layout_below="@id/elips"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Links"
+                   android:textColor="@color/white"
+                   android:textSize="10sp"
+                   android:layout_centerHorizontal="true"/>
+           </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/elips"
-                android:src="@drawable/ic_question" />
+                android:layout_toStartOf="@id/zoom_holder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/teacher_btn_att"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/nav_change_bg"
+                    android:src="@drawable/ic_attendance" />
+                <TextView
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:layout_below="@id/teacher_btn_att"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attendace"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/elips"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/add" />
-
-            <ImageView
-                android:id="@+id/teacher_btn_att"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_toStartOf="@id/teacher_btn_zoom"
-                android:background="@drawable/nav_change_bg"
-                android:src="@drawable/ic_attendance" />
-
-            <ImageView
-                android:id="@+id/teacher_btn_zoom"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+            <RelativeLayout
+                android:id="@+id/zoom_holder"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/nav_change_bg"
-                android:src="@drawable/ic_zoom" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/teacher_btn_zoom"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/nav_change_bg"
+                    android:src="@drawable/ic_zoom" />
+                <TextView
+                    android:layout_below="@id/teacher_btn_zoom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meeting"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
 
 
 
