@@ -13,7 +13,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.RoomPostData
 class CreateClassAdapter(private val classList: ArrayList<CreateClassData>) : RecyclerView.Adapter<CreateClassAdapter.MyViewHolder>(){
-//third
+    //third
     private lateinit var mListener: onItemClickListener
     private var position: Int = 0
 
@@ -21,7 +21,7 @@ class CreateClassAdapter(private val classList: ArrayList<CreateClassData>) : Re
     interface onItemClickListener{
         fun onItemClick(position: Int)
     }
-//first
+    //first
     fun setOnItemClickListener(listener: onItemClickListener){
         mListener = listener
 
@@ -42,6 +42,10 @@ class CreateClassAdapter(private val classList: ArrayList<CreateClassData>) : Re
 
     override fun onBindViewHolder(holder: CreateClassAdapter.MyViewHolder, position: Int) {
         val currentItem = classList[position]
+        val type = classList[position].type
+        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+
+
         val roomID = classList[position].roomID.toString()
         val getRoomMembers = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
         getRoomMembers.child("Members").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -78,17 +82,18 @@ class CreateClassAdapter(private val classList: ArrayList<CreateClassData>) : Re
         return classList.size
     }
 
-//5. add parameter listener
+    //5. add parameter listener
     class MyViewHolder(itemView : View, listener : onItemClickListener) : RecyclerView.ViewHolder(itemView){
-            val title : TextView = itemView.findViewById(R.id.txt_title)
-    val section : TextView = itemView.findViewById(R.id.create_class_section)
-    val letter : TextView = itemView.findViewById(R.id.two_letter)
-    val count : TextView = itemView.findViewById(R.id.room_count_members)
-//fourth
+        val title : TextView = itemView.findViewById(R.id.txt_title)
+        val section : TextView = itemView.findViewById(R.id.create_class_section)
+        val letter : TextView = itemView.findViewById(R.id.two_letter)
+        val count : TextView = itemView.findViewById(R.id.room_count_members)
+        val pending : TextView = itemView.findViewById(R.id.pending_text)
+        //fourth
         init {
-itemView.setOnClickListener{
-    listener.onItemClick(adapterPosition)
-}
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
         }
 
     }

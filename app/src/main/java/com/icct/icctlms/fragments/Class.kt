@@ -46,79 +46,79 @@ import kotlin.collections.ArrayList
 class Class : Fragment() {
     private lateinit var joinClass : DatabaseReference
     private lateinit var databaseReference : DatabaseReference
-        private lateinit var groupRecyclerView: RecyclerView
-        private lateinit var classRecyclerView : RecyclerView
-        private lateinit var classArrayList : ArrayList<CreateClassData>
-        private lateinit var groupArrayList: ArrayList<GroupListData>
-        private lateinit var dialog: Dialog
-        private lateinit var uid : String
-        private lateinit var roomID : String
-        private lateinit var bottomNav : BottomNavigationView
-        private var _binding: FragmentClassBinding? = null
-        private lateinit var hour : String
-        private lateinit var finalHour : String
-        private lateinit var today : Calendar
-        private lateinit var sortKey : String
-        private lateinit var date : String
-        private lateinit var dateReviewed : String
+    private lateinit var groupRecyclerView: RecyclerView
+    private lateinit var classRecyclerView : RecyclerView
+    private lateinit var classArrayList : ArrayList<CreateClassData>
+    private lateinit var groupArrayList: ArrayList<GroupListData>
+    private lateinit var dialog: Dialog
+    private lateinit var uid : String
+    private lateinit var roomID : String
+    private lateinit var bottomNav : BottomNavigationView
+    private var _binding: FragmentClassBinding? = null
+    private lateinit var hour : String
+    private lateinit var finalHour : String
+    private lateinit var today : Calendar
+    private lateinit var sortKey : String
+    private lateinit var date : String
+    private lateinit var dateReviewed : String
 
-        private val binding get() = _binding!!
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-            // Inflate the layout for this fragment
-            _binding = FragmentClassBinding.inflate(inflater, container, false)
-            val root: View = binding.root
-            groupRecyclerView = binding.studentGroupList
-            groupRecyclerView.setHasFixedSize(true)
-            groupRecyclerView.visibility = View.GONE
-            groupRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            groupArrayList = ArrayList()
+    private val binding get() = _binding!!
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = FragmentClassBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+        groupRecyclerView = binding.studentGroupList
+        groupRecyclerView.setHasFixedSize(true)
+        groupRecyclerView.visibility = View.GONE
+        groupRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        groupArrayList = ArrayList()
 
-            classRecyclerView = binding.studentClassList
-            classRecyclerView.setHasFixedSize(true)
-            classRecyclerView.layoutManager = LinearLayoutManager(context)
-            classArrayList = ArrayList()
-            val auth = FirebaseAuth.getInstance()
-            uid = auth.currentUser?.uid.toString()
+        classRecyclerView = binding.studentClassList
+        classRecyclerView.setHasFixedSize(true)
+        classRecyclerView.layoutManager = LinearLayoutManager(context)
+        classArrayList = ArrayList()
+        val auth = FirebaseAuth.getInstance()
+        uid = auth.currentUser?.uid.toString()
 
-            progressDialogShow()
+        progressDialogShow()
 
-            databaseReference = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
-            executeGroup()
+        databaseReference = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
+        executeGroup()
 
 
-            //join class
-            joinClass = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
-            executeClass()
-            binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
+        //join class
+        joinClass = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
+        executeClass()
+        binding.classBtn.setBackgroundResource(R.drawable.bottom_rec)
 
-            //convert hour to text
-            val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime.now()
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
-            hour = LocalTime.now().toString()
-            val time = LocalTime.now()
-            finalHour = time.format(DateTimeFormatter.ofPattern("hh:mm a"))
-
-            //convert month to text
-            today = Calendar.getInstance()
-            val day = today.get(Calendar.DAY_OF_MONTH)
-            val monthList = arrayOf("January", "February",
-                "March", "April", "May", "June", "July",
-                "August", "September", "October", "November",
-                "December")
-            val month = monthList[today.get(Calendar.MONTH)]
-            val trimMonth = month.subSequence(0, 3)
-            date = "$trimMonth $day at $finalHour"
-
-            //use this key to sort arraylist
-            sortKey = now.toMillis().toString()
-            return root
+        //convert hour to text
+        val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        } else {
+            TODO("VERSION.SDK_INT < O")
         }
+        hour = LocalTime.now().toString()
+        val time = LocalTime.now()
+        finalHour = time.format(DateTimeFormatter.ofPattern("hh:mm a"))
+
+        //convert month to text
+        today = Calendar.getInstance()
+        val day = today.get(Calendar.DAY_OF_MONTH)
+        val monthList = arrayOf("January", "February",
+            "March", "April", "May", "June", "July",
+            "August", "September", "October", "November",
+            "December")
+        val month = monthList[today.get(Calendar.MONTH)]
+        val trimMonth = month.subSequence(0, 3)
+        date = "$trimMonth $day at $finalHour"
+
+        //use this key to sort arraylist
+        sortKey = now.toMillis().toString()
+        return root
+    }
 
 
 
@@ -147,12 +147,22 @@ class Class : Fragment() {
                                         .setMessage("Are you certain that you want to delete this group?")
                                         .setPositiveButton("Okay"){_,_ ->
                                             val roomID = classArrayList[position].roomID.toString()
+                                            //delete student class view
                                             val deleteClassSelf = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
                                             deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
                                                 adapter.deleteItem(position)
                                                 classRecyclerView.adapter?.notifyItemRemoved(position)
                                                 executeClass()
-                                                Toast.makeText(this@Class.requireContext(), "Selected class deleted successfully!", Toast.LENGTH_SHORT).show()
+                                                //delete self in Accept
+                                                val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
+                                                        "Class").child(roomID).child("Accept").child(uid)
+                                                deleteSelf.removeValue()
+
+                                                //delete member in this room
+                                                val deleteMember = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Members")
+                                                deleteMember.child(uid).removeValue().addOnSuccessListener {
+                                                    Toast.makeText(this@Class.requireContext(), "Selected class deleted successfully!", Toast.LENGTH_SHORT).show()
+                                                }
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeClass()
@@ -258,8 +268,17 @@ class Class : Fragment() {
                                             deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
                                                 adapter.deleteItem(position)
                                                 groupRecyclerView.adapter?.notifyItemRemoved(position)
-                                                Toast.makeText(this@Class.requireContext(), "Selected group deleted successfully!", Toast.LENGTH_SHORT).show()
+
                                                 executeGroup()
+                                                val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
+                                                        "Group").child(roomID).child("Accept").child(uid)
+                                                deleteSelf.removeValue()
+                                                //delete member in this room
+                                                val deleteMember = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Members")
+                                                deleteMember.child(uid).removeValue().addOnSuccessListener{
+                                                    Toast.makeText(this@Class.requireContext(), "Selected group deleted successfully!", Toast.LENGTH_SHORT).show()
+                                                }
+
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeGroup()
@@ -348,15 +367,6 @@ class Class : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        bottomNav.setOnItemSelectedListener {
-//             when(it.itemId){
-//                R.id.classes_nav -> {
-//                    hideGroup()
-//                }
-//                 R.id.group_nav -> hideClass()
-//             }
-//            true
-//        }
 
         binding.grpBtn.setOnClickListener{
             hideClass()
@@ -462,47 +472,52 @@ class Class : Fragment() {
                                             join_room.hide()
                                             join_class_text.visibility = View.GONE
                                             join_room_text.visibility = View.GONE
-
                                             join_btn.shrink()
                                         }
                                 }
 
-                               
+
                                 val userID = auth.currentUser?.uid.toString()
                                 val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                                 currentUser.child(userID).get().addOnSuccessListener {
                                     if (it.exists()){
-                                        val isAccept = "false"
                                         val currentName = it.child("name").value.toString()
                                         val currentType = it.child("type").value.toString()
-                                        val data = RoomMembersData(currentName, currentType, userID, isAccept)
-                                        val randomID = randomCode()
-                                        val databasePublic = FirebaseDatabase.getInstance().getReference("Public Class")
                                         val accept = FirebaseDatabase.getInstance().getReference("Public Class")
-                                        accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
-                                            val request = FirebaseDatabase.getInstance().getReference("Public Class")
-                                            request.child(roomID).child("Request").child(uid).setValue(data)
+                                        accept.child(roomID).child("Accept").child(userID).get()
+                                            .addOnSuccessListener {
+                                                if (it.exists()){
+                                                    toastError("This room is already added.")
+                                                }else{
+                                                    val data = RoomMembersData(currentName, currentType,
+                                                        userID, "false")
+
+                                                    accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
+                                                        val request = FirebaseDatabase.getInstance().getReference("Public Class")
+                                                        request.child(roomID).child("Request").child(uid).setValue(data)
 
 
-                                            val newNotification = Notification()
-                                            val me = ""
-                                            val description = "$currentName wants to join the class named $subjectTitle."
-                                            newNotification.notification(uid, me, description, randomCode(), date, sortKey)
-                                            val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
-                                            getTeacherUID.get().addOnSuccessListener {
-                                                if (it.exists()) {
-                                                    val newUID = it.child("uid").value.toString()
-                                                    newNotification.notification(
-                                                        newUID,
-                                                        me,
-                                                        description,
-                                                        randomCode(),
-                                                        date,
-                                                        sortKey
-                                                    )
+                                                        val newNotification = Notification()
+                                                        val me = ""
+                                                        val description = "$currentName wants to join the class named $subjectTitle."
+                                                        newNotification.notification(uid, me, description, randomCode(), date, sortKey)
+                                                        val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+                                                        getTeacherUID.get().addOnSuccessListener {
+                                                            if (it.exists()) {
+                                                                val newUID = it.child("uid").value.toString()
+                                                                newNotification.notification(
+                                                                    newUID,
+                                                                    me,
+                                                                    description,
+                                                                    randomCode(),
+                                                                    date,
+                                                                    sortKey
+                                                                )
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
-                                        }
 
 
 
@@ -513,7 +528,7 @@ class Class : Fragment() {
                                 showPopUp("Class not found.")
                             }
                         }
-                        }
+                    }
 
                     }
                 }.setNegativeButton("Cancel"){_, _ ->
@@ -578,34 +593,56 @@ class Class : Fragment() {
                                 }
 
 
-                               
+                                //group
                                 val userID = auth.currentUser?.uid.toString()
                                 val currentUser = FirebaseDatabase.getInstance().getReference("Students")
                                 currentUser.child(userID).get().addOnSuccessListener {
                                     if (it.exists()){
-                                        val isAccept = "false"
                                         val currentName = it.child("name").value.toString()
                                         val currentType = it.child("type").value.toString()
-                                        val data = RoomMembersData(currentName, currentType, userID, isAccept)
-                                        val databasePublic = FirebaseDatabase.getInstance().getReference("Public Group")
                                         val accept = FirebaseDatabase.getInstance().getReference("Public Group")
-                                        accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
-                                            val request = FirebaseDatabase.getInstance().getReference("Public Group")
-                                            request.child(roomID).child("Request").child(uid).setValue(data)
+                                        accept.child(roomID).child("Accept").child(userID).get()
+                                            .addOnSuccessListener {
+                                                if (it.exists()){
+                                                    toastError("This room is already added.")
+                                                }else{
+                                                    val data = RoomMembersData(currentName, currentType,
+                                                        userID, "false")
+
+                                                    accept.child(roomID).child("Accept").child(uid).setValue(data).addOnSuccessListener {
+                                                        val request = FirebaseDatabase
+                                                            .getInstance().getReference("Public " +
+                                                                    "Group")
+                                                        request.child(roomID).child("Request").child(uid).setValue(data)
 
 
-
-                                            val newNotification = Notification()
-                                            val me = ""
-                                            val description = "$currentName wants to join the group named $subjectTitle."
-                                            val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
-                                            getTeacherUID.get().addOnSuccessListener {
-                                                if(it.exists()){
-                                                    val newUID = it.child("uid").value.toString()
-                                                    newNotification.notification(newUID, me, description, randomCode(), date, sortKey)
+                                                        val newNotification = Notification()
+                                                        val me = ""
+                                                        val description =
+                                                            "$currentName wants to join the group named $subjectTitle."
+                                                        newNotification.notification(uid, me, description, randomCode(), date, sortKey)
+                                                        val getTeacherUID = FirebaseDatabase
+                                                            .getInstance().getReference("Public " +
+                                                                    "Group").child(roomID)
+                                                        getTeacherUID.get().addOnSuccessListener {
+                                                            if (it.exists()) {
+                                                                val newUID = it.child("uid").value.toString()
+                                                                newNotification.notification(
+                                                                    newUID,
+                                                                    me,
+                                                                    description,
+                                                                    randomCode(),
+                                                                    date,
+                                                                    sortKey
+                                                                )
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
-                                        }
+
+
+
 
                                     }
                                 }

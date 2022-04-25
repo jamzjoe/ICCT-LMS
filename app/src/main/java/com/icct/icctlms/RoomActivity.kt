@@ -149,7 +149,7 @@ class RoomActivity : AppCompatActivity() {
                 }
             })
         }
-        }
+    }
 
 
     private fun deleteRoom() {
@@ -220,11 +220,11 @@ class RoomActivity : AppCompatActivity() {
 
 
     private fun setSettings() {
-       memberRequest.setOnClickListener{
-           val intent = Intent(this, RoomMemberRequest::class.java)
-           intent.putExtra("member_room_id", roomID)
-           intent.putExtra("member_room_type", roomType)
-           intent.putExtra("room_name", roomName)
+        memberRequest.setOnClickListener{
+            val intent = Intent(this, RoomMemberRequest::class.java)
+            intent.putExtra("member_room_id", roomID)
+            intent.putExtra("member_room_type", roomType)
+            intent.putExtra("room_name", roomName)
             startActivity(intent)
         }
         settings_post.setOnClickListener {
@@ -239,21 +239,21 @@ class RoomActivity : AppCompatActivity() {
                 if (roomType == "Class") {
                     val parent : ViewGroup = settings.parent as ViewGroup
                     parent.removeView(settings)
-                        if (switch.isChecked) {
-                            trueState()
-                        } else {
-                            firstState()
-                        }
+                    if (switch.isChecked) {
+                        trueState()
+                    } else {
+                        firstState()
+                    }
 
 
                 } else if (roomType == "Group") {
                     val parent : ViewGroup = settings.parent as ViewGroup
                     parent.removeView(settings)
-                        if (switch.isChecked) {
-                            trueState()
-                        } else{
-                            firstState()
-                        }
+                    if (switch.isChecked) {
+                        trueState()
+                    } else{
+                        firstState()
+                    }
 
 
                 }
@@ -264,39 +264,39 @@ class RoomActivity : AppCompatActivity() {
                 MaterialAlertDialogBuilder(this)
                     .setMessage("Are you sure you want to delete this room?")
                     .setPositiveButton("CONFIRM") { _, _ ->
-                       if (roomType == "Class"){
-                           val deleteClassSelf =
-                               FirebaseDatabase.getInstance().getReference("Class").child(uid)
-                           deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
-                               val deleteClassGlobal =
-                                   FirebaseDatabase.getInstance().getReference("Public Class")
-                               deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
-                                   val deleteClassPost =
-                                       FirebaseDatabase.getInstance().getReference("Class Post")
-                                   deleteClassPost.child("Room ID: $roomID").removeValue()
-                                       .addOnSuccessListener {
-                                           Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
-                                           startActivity(Intent(this, TeacherMainActivity::class.java))
-                                       }
-                               }
-                           }
-                       }else{
-                           val deleteClassSelf =
-                               FirebaseDatabase.getInstance().getReference("Group").child(uid)
-                           deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
-                               val deleteClassGlobal =
-                                   FirebaseDatabase.getInstance().getReference("Public Group")
-                               deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
-                                   val deleteClassPost =
-                                       FirebaseDatabase.getInstance().getReference("Group Post")
-                                   deleteClassPost.child("Room ID: $roomID").removeValue()
-                                       .addOnSuccessListener {
-                                           Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
-                                           startActivity(Intent(this, TeacherMainActivity::class.java))
-                                       }
-                               }
-                           }
-                       }
+                        if (roomType == "Class"){
+                            val deleteClassSelf =
+                                FirebaseDatabase.getInstance().getReference("Class").child(uid)
+                            deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                                val deleteClassGlobal =
+                                    FirebaseDatabase.getInstance().getReference("Public Class")
+                                deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
+                                    val deleteClassPost =
+                                        FirebaseDatabase.getInstance().getReference("Class Post")
+                                    deleteClassPost.child("Room ID: $roomID").removeValue()
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
+                                            startActivity(Intent(this, TeacherMainActivity::class.java))
+                                        }
+                                }
+                            }
+                        }else{
+                            val deleteClassSelf =
+                                FirebaseDatabase.getInstance().getReference("Group").child(uid)
+                            deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                                val deleteClassGlobal =
+                                    FirebaseDatabase.getInstance().getReference("Public Group")
+                                deleteClassGlobal.child(roomID).removeValue().addOnSuccessListener {
+                                    val deleteClassPost =
+                                        FirebaseDatabase.getInstance().getReference("Group Post")
+                                    deleteClassPost.child("Room ID: $roomID").removeValue()
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
+                                            startActivity(Intent(this, TeacherMainActivity::class.java))
+                                        }
+                                }
+                            }
+                        }
                     }
                     .setNegativeButton("CANCEL"){_,_ ->
                         val parent : ViewGroup = settings.parent as ViewGroup
@@ -328,19 +328,19 @@ class RoomActivity : AppCompatActivity() {
                             Toast.makeText(this, "No link attach, add link first.", Toast.LENGTH_SHORT).show()
                         }else{
                             MaterialAlertDialogBuilder(this)
-                            .setTitle("NOTE")
-                            .setMessage("Are you certain you want to continue to the attendance sheet?")
-                            .setPositiveButton("OK"){_,_ ->
-                                if (URLUtil.isValidUrl(link.trim())){
-                                    val i = Intent(Intent.ACTION_VIEW)
-                                    i.data = Uri.parse(link)
-                                    startActivity(i)
-                                }else{
-                                    showDialog("", "$link is not a valid URL")
-                                }
-                            }.setNegativeButton("Cancel"){_,_ ->
+                                .setTitle("NOTE")
+                                .setMessage("Are you certain you want to continue to the attendance sheet?")
+                                .setPositiveButton("OK"){_,_ ->
+                                    if (URLUtil.isValidUrl(link.trim())){
+                                        val i = Intent(Intent.ACTION_VIEW)
+                                        i.data = Uri.parse(link)
+                                        startActivity(i)
+                                    }else{
+                                        showDialog("", "$link is not a valid URL")
+                                    }
+                                }.setNegativeButton("Cancel"){_,_ ->
 
-                            }.show()
+                                }.show()
                         }
                     }else{
                         showDialog("", "Before you go any further, copy and paste your attendance link into the add button.")

@@ -99,7 +99,7 @@ class StudentRoomActivity : AppCompatActivity() {
     }
 
     private fun showPopUpSettings(view : View) {
-val popUp = PopupMenu(this, view)
+        val popUp = PopupMenu(this, view)
         popUp.inflate(R.menu.settings_menu)
 
         popUp.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
@@ -121,11 +121,34 @@ val popUp = PopupMenu(this, view)
             .setPositiveButton("SURE"){_,_ ->
                 //database delete
                 //start intent
-                val deleteClassSelf = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
-                deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
-                    Toast.makeText(this, "Leave successfully!", Toast.LENGTH_SHORT).show()
-                    finish()
-                    startActivity(Intent(this, MainActivity::class.java))
+
+                if (roomType == "Class"){
+                    val deleteClassSelf = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
+                    deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                        val deleteMember = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Members")
+                        deleteMember.child(uid).removeValue().addOnSuccessListener {
+                            Toast.makeText(this, "Leave successfully!", Toast.LENGTH_SHORT).show()
+                            finish()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
+                                    "Class").child(roomID).child("Accept").child(uid)
+                            deleteSelf.removeValue()
+                        }
+                    }
+                }else if(roomType == "Group"){
+
+                    val deleteClassSelf = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
+                    deleteClassSelf.child(roomID).removeValue().addOnSuccessListener {
+                        val deleteMember = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Members")
+                        deleteMember.child(uid).removeValue().addOnSuccessListener {
+                            Toast.makeText(this, "Leave successfully!", Toast.LENGTH_SHORT).show()
+                            finish()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
+                                    "Group").child(roomID).child("Accept").child(uid)
+                            deleteSelf.removeValue()
+                        }
+                    }
                 }
 
             }
@@ -144,67 +167,67 @@ val popUp = PopupMenu(this, view)
 
 
     private fun attendanceLink() {
-       student_btn_att.setOnClickListener{
-           if (roomType == "Class"){
-               databaseReference = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
-               databaseReference.child("Links").get().addOnSuccessListener {
-                   if (it.exists()){
-                       link = it.child("attendanceLink").value.toString()
-                       if (link.isEmpty()){
-                           showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-                       }else{
-                           MaterialAlertDialogBuilder(this)
-                               .setTitle("NOTE")
-                               .setMessage("Are you certain you want to continue to the attendance sheet?")
-                               .setPositiveButton("OK"){_,_ ->
-                                   if (URLUtil.isValidUrl(link.trim())){
-                                       val i = Intent(Intent.ACTION_VIEW)
-                                       i.data = Uri.parse(link)
-                                       startActivity(i)
-                                   }else{
-                                       showDialog("", "$link is not a valid URL")
-                                   }
-                               }.setNegativeButton("Cancel"){_,_ ->
+        student_btn_att.setOnClickListener{
+            if (roomType == "Class"){
+                databaseReference = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+                databaseReference.child("Links").get().addOnSuccessListener {
+                    if (it.exists()){
+                        link = it.child("attendanceLink").value.toString()
+                        if (link.isEmpty()){
+                            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                        }else{
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("NOTE")
+                                .setMessage("Are you certain you want to continue to the attendance sheet?")
+                                .setPositiveButton("OK"){_,_ ->
+                                    if (URLUtil.isValidUrl(link.trim())){
+                                        val i = Intent(Intent.ACTION_VIEW)
+                                        i.data = Uri.parse(link)
+                                        startActivity(i)
+                                    }else{
+                                        showDialog("", "$link is not a valid URL")
+                                    }
+                                }.setNegativeButton("Cancel"){_,_ ->
 
-                               }.show()
-                       }
-                   }else{
-                       showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-                   }
-               }.addOnFailureListener{
+                                }.show()
+                        }
+                    }else{
+                        showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                    }
+                }.addOnFailureListener{
 
-               }
-           }else if (roomType == "Group"){
-               val databaseGroup = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
-               databaseGroup.child("Links").get().addOnSuccessListener {
-                   if (it.exists()){
-                       link = it.child("attendanceLink").value.toString()
-                       if (link.isEmpty()){
-                           showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-                       }else{
-                           MaterialAlertDialogBuilder(this)
-                               .setTitle("NOTE")
-                               .setMessage("Are you certain you want to continue to the attendance sheet?")
-                               .setPositiveButton("OK"){_,_ ->
-                                   if (URLUtil.isValidUrl(link.trim())){
-                                       val i = Intent(Intent.ACTION_VIEW)
-                                       i.data = Uri.parse(link)
-                                       startActivity(i)
-                                   }else{
-                                       showDialog("", "$link is not a valid URL")
-                                   }
-                               }.setNegativeButton("Cancel"){_,_ ->
+                }
+            }else if (roomType == "Group"){
+                val databaseGroup = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
+                databaseGroup.child("Links").get().addOnSuccessListener {
+                    if (it.exists()){
+                        link = it.child("attendanceLink").value.toString()
+                        if (link.isEmpty()){
+                            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                        }else{
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("NOTE")
+                                .setMessage("Are you certain you want to continue to the attendance sheet?")
+                                .setPositiveButton("OK"){_,_ ->
+                                    if (URLUtil.isValidUrl(link.trim())){
+                                        val i = Intent(Intent.ACTION_VIEW)
+                                        i.data = Uri.parse(link)
+                                        startActivity(i)
+                                    }else{
+                                        showDialog("", "$link is not a valid URL")
+                                    }
+                                }.setNegativeButton("Cancel"){_,_ ->
 
-                               }.show()
-                       }
-                   }else{
-                       showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-                   }
-               }.addOnFailureListener{
+                                }.show()
+                        }
+                    }else{
+                        showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                    }
+                }.addOnFailureListener{
 
-               }
-           }
-           }
+                }
+            }
+        }
 
 
 
@@ -230,65 +253,65 @@ val popUp = PopupMenu(this, view)
 
     private fun zoomLink() {
         student_btn_zoom.setOnClickListener{
-if (roomType == "Class"){
-    databaseReference = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
-    databaseReference.child("Links").get().addOnSuccessListener {
-        if (it.exists()){
-            link = it.child("zoomLink").value.toString()
-            if (link.isEmpty()){
-                showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-            }else{
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("NOTE")
-                    .setMessage("Are you certain you want to continue to the virtual meeting?")
-                    .setPositiveButton("OK"){_,_ ->
-                        if (URLUtil.isValidUrl(link.trim())){
-                            val i = Intent(Intent.ACTION_VIEW)
-                            i.data = Uri.parse(link)
-                            startActivity(i)
+            if (roomType == "Class"){
+                databaseReference = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+                databaseReference.child("Links").get().addOnSuccessListener {
+                    if (it.exists()){
+                        link = it.child("zoomLink").value.toString()
+                        if (link.isEmpty()){
+                            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
                         }else{
-                            showDialog("", "$link is not a valid URL")
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("NOTE")
+                                .setMessage("Are you certain you want to continue to the virtual meeting?")
+                                .setPositiveButton("OK"){_,_ ->
+                                    if (URLUtil.isValidUrl(link.trim())){
+                                        val i = Intent(Intent.ACTION_VIEW)
+                                        i.data = Uri.parse(link)
+                                        startActivity(i)
+                                    }else{
+                                        showDialog("", "$link is not a valid URL")
+                                    }
+                                }.setNegativeButton("Cancel"){_,_ ->
+
+                                }.show()
                         }
-                    }.setNegativeButton("Cancel"){_,_ ->
+                    }else{
+                        showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                    }
+                }.addOnFailureListener{
 
-                    }.show()
-            }
-        }else{
-            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-        }
-    }.addOnFailureListener{
-
-    }
-}else if (roomType == "Group"){
-    databaseReference = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
-    databaseReference.child("Links").get().addOnSuccessListener {
-        if (it.exists()){
-            link = it.child("zoomLink").value.toString()
-            if (link.isEmpty()){
-                showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-            }else{
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("NOTE")
-                    .setMessage("Are you certain you want to continue to the virtual meeting?")
-                    .setPositiveButton("OK"){_,_ ->
-                        if (URLUtil.isValidUrl(link.trim())){
-                            val i = Intent(Intent.ACTION_VIEW)
-                            i.data = Uri.parse(link)
-                            startActivity(i)
+                }
+            }else if (roomType == "Group"){
+                databaseReference = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID)
+                databaseReference.child("Links").get().addOnSuccessListener {
+                    if (it.exists()){
+                        link = it.child("zoomLink").value.toString()
+                        if (link.isEmpty()){
+                            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
                         }else{
-                            showDialog("", "$link is not a valid URL")
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("NOTE")
+                                .setMessage("Are you certain you want to continue to the virtual meeting?")
+                                .setPositiveButton("OK"){_,_ ->
+                                    if (URLUtil.isValidUrl(link.trim())){
+                                        val i = Intent(Intent.ACTION_VIEW)
+                                        i.data = Uri.parse(link)
+                                        startActivity(i)
+                                    }else{
+                                        showDialog("", "$link is not a valid URL")
+                                    }
+                                }.setNegativeButton("Cancel"){_,_ ->
+
+                                }.show()
                         }
-                    }.setNegativeButton("Cancel"){_,_ ->
+                    }else{
+                        showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
+                    }
+                }.addOnFailureListener{
 
-                    }.show()
+                }
             }
-        }else{
-            showDialog("Reminder", "Please wait till your instructor adds a link to this room if there isn't one already attached.")
-        }
-    }.addOnFailureListener{
-
-    }
-}
 
 
 

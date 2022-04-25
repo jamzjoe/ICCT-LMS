@@ -8,12 +8,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.icct.icctlms.R
 import com.icct.icctlms.data.CreateClassData
 import com.icct.icctlms.data.RoomPostData
 class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : RecyclerView.Adapter<StudentClassAdapter.MyViewHolder>(){
-//third
+    //third
     private lateinit var mListener: onItemClickListener
     private var position: Int = 0
 
@@ -21,7 +23,7 @@ class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : R
     interface onItemClickListener{
         fun onItemClick(position: Int)
     }
-//first
+    //first
     fun setOnItemClickListener(listener: onItemClickListener){
         mListener = listener
 
@@ -45,6 +47,19 @@ class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : R
         val currentItem = classList[position]
         val roomID = classList[position].roomID.toString()
         val getRoomMembers = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
+        val uid = Firebase.auth.currentUser?.uid.toString()
+        val getPending = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Accept")
+            .child(uid)
+        getPending.get().addOnSuccessListener{
+            if (it.exists()){
+                val pending = it.child("accept").value.toString()
+                if (pending != "true"){
+                    holder.pending.text = "Pending"
+                }else{
+                    holder.pending.visibility = View.GONE
+                }
+            }
+        }
         getRoomMembers.child("Members").addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
@@ -79,17 +94,18 @@ class StudentClassAdapter(private val classList: ArrayList<CreateClassData>) : R
         return classList.size
     }
 
-//5. add parameter listener
+    //5. add parameter listener
     class MyViewHolder(itemView : View, listener : onItemClickListener) : RecyclerView.ViewHolder(itemView){
-            val title : TextView = itemView.findViewById(R.id.txt_title)
-    val section : TextView = itemView.findViewById(R.id.create_class_section)
-    val letter : TextView = itemView.findViewById(R.id.two_letter)
-    val count : TextView = itemView.findViewById(R.id.room_count_members)
-//fourth
+        val title : TextView = itemView.findViewById(R.id.txt_title)
+        val section : TextView = itemView.findViewById(R.id.create_class_section)
+        val letter : TextView = itemView.findViewById(R.id.two_letter)
+        val count : TextView = itemView.findViewById(R.id.room_count_members)
+        val pending : TextView = itemView.findViewById(R.id.pending_text)
+        //fourth
         init {
-itemView.setOnClickListener{
-    listener.onItemClick(adapterPosition)
-}
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
         }
 
     }
