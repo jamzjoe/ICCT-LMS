@@ -109,7 +109,7 @@ class Class : Fragment() {
         val monthList = arrayOf("January", "February",
             "March", "April", "May", "June", "July",
             "August", "September", "October", "November",
-            "December ")
+            "December")
         val month = monthList[today.get(Calendar.MONTH)]
         val trimMonth = month.subSequence(0, 3)
         date = "$trimMonth $day at $finalHour"
