@@ -198,7 +198,28 @@
                 android:text="Create Post" />
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/room_no_data_view"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_no_data" />
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Yay! No post yet."
+            android:layout_below="@id/logo"
+            android:layout_margin="2dp"
+            android:gravity="center"/>
+    </RelativeLayout>
 
 
 

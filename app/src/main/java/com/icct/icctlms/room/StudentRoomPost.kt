@@ -155,6 +155,9 @@ class StudentRoomPost : Fragment() {
                             it.sortKey
                         }
                         recyclerView.adapter = adapter
+                        if (adapter.itemCount > 0){
+                            room_no_data_view.visibility = View.GONE
+                        }
                         val swipeGestures = object : SwipeGestures(this@StudentRoomPost.requireContext()){
 
                             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -241,6 +244,9 @@ class StudentRoomPost : Fragment() {
                             it.sortKey
                         }
                         recyclerView.adapter = adapter
+                        if (adapter.itemCount > 0){
+                            room_no_data_view.visibility = View.GONE
+                        }
                         val swipeGestures = object : SwipeGestures(this@StudentRoomPost.requireContext()){
 
                             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

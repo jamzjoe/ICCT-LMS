@@ -119,6 +119,9 @@ class TeachersRoomPost : Fragment() {
                             it.sortKey
                         }
                         recyclerView.adapter = adapter
+                        if (adapter.itemCount > 0){
+                            teacher_no_data_view.visibility = View.GONE
+                        }
 
 
 
@@ -199,6 +202,9 @@ class TeachersRoomPost : Fragment() {
                             it.sortKey
                         }
                         recyclerView.adapter = adapter
+                        if (adapter.itemCount > 0){
+                            teacher_no_data_view.visibility = View.GONE
+                        }
 
 
 

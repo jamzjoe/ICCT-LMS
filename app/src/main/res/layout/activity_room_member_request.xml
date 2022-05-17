@@ -53,14 +53,23 @@
             tools:listitem="@layout/room_members_item" />
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/no_members"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:id="@+id/logo"
+            android:src="@drawable/ic_members"
+            android:layout_centerHorizontal="true"/>
         <TextView
+            android:layout_below="@id/logo"
+            android:id="@+id/no_request"
+            android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="NO MEMBER REQUEST"
-            android:textStyle="bold"
-            android:id="@+id/no_request"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 </RelativeLayout>

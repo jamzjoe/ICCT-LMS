@@ -56,11 +56,11 @@ class Notification : Fragment() {
         unreadRecyclerView = binding.studentNotificationRec
         unreadRecyclerView.setHasFixedSize(true)
         unreadRecyclerView.layoutManager = LinearLayoutManager(context)
-        
+
         readRecyclerView = binding.studentNotificationReviewedRecyclerview
         readRecyclerView.setHasFixedSize(true)
         readRecyclerView.layoutManager = LinearLayoutManager(context)
-        
+
         readArrayList = arrayListOf()
         unreadArrayList = arrayListOf()
 
@@ -91,10 +91,10 @@ class Notification : Fragment() {
         //use this key to sort arraylist
         sortKey = now.toMillis().toString()
         // Inflate the layout for this fragment
-        
+
         getUnread = FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid)
         getRead = FirebaseDatabase.getInstance().getReference("Reviewed").child("Student").child(uid)
-        
+
         executeRead()
         executeUnread()
         progressDialogShow()

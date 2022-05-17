@@ -52,7 +52,7 @@ class TeacherHome : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         postArrayList = arrayListOf()
-
+        viewTimeLine()
         progressDialogShow()
         timeline()
         viewTimeLine()
@@ -79,7 +79,7 @@ class TeacherHome : Fragment() {
     }
     private fun viewTimeLine() {
         val teacherTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid)
-        teacherTimeLine.addValueEventListener(object : ValueEventListener{
+        teacherTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     postArrayList.clear()
@@ -110,7 +110,7 @@ class TeacherHome : Fragment() {
     private fun timeline() {
         //retrieve class room post
         val getRoomID = FirebaseDatabase.getInstance().getReference("Class").child(uid)
-        getRoomID.addValueEventListener(object : ValueEventListener {
+        getRoomID.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     progressDialogHide()
@@ -123,6 +123,7 @@ class TeacherHome : Fragment() {
                         postToStudentTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
+                                    viewTimeLine()
                                     for (each in snapshot.children){
                                         val date = each.child("date").value.toString()
                                         val hours = each.child("hours").value.toString()
@@ -170,7 +171,7 @@ class TeacherHome : Fragment() {
 
         //retrieve group room post
         val getGroupID = FirebaseDatabase.getInstance().getReference("Group").child(uid)
-        getGroupID.addValueEventListener(object : ValueEventListener {
+        getGroupID.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     progressDialogHide()
@@ -182,6 +183,7 @@ class TeacherHome : Fragment() {
                         teacherTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
+                                    viewTimeLine()
                                     for (each in snapshot.children){
                                         val date = each.child("date").value.toString()
                                         val hours = each.child("hours").value.toString()

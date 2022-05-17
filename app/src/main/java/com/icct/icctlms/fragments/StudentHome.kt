@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.icct.icctlms.R
 import com.icct.icctlms.adapter.GroupRoomPostAdapter
@@ -36,6 +33,7 @@ class StudentHome : Fragment() {
     private lateinit var adapter : TeacherPostAdapter
     private lateinit var uid : String
     private lateinit var dialog : Dialog
+    private lateinit var studentTimeLine : DatabaseReference
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,11 +46,24 @@ class StudentHome : Fragment() {
         timeLineRecyclerView.setHasFixedSize(true)
         timeLineRecyclerView.layoutManager = LinearLayoutManager(context)
         uid = Firebase.auth.currentUser?.uid.toString()
+
+        studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
+
+        viewTimeLine()
+
         dialog.progressDialogShow(this.requireContext(), "Loading all post, please wait...")
         timeline()
 
-        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
-        studentTimeLine.addValueEventListener(object : ValueEventListener{
+        viewTimeLine()
+
+
+
+
+        return binding.root
+    }
+
+    private fun viewTimeLine() {
+        studentTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     postArrayList.clear()
@@ -78,11 +89,6 @@ class StudentHome : Fragment() {
                 TODO("Not yet implemented")
             }
         })
-
-
-
-
-        return binding.root
     }
 
     private fun timeline() {
@@ -91,6 +97,7 @@ class StudentHome : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
                     dialog.progressDialogHide()
+
                     postArrayList.clear()
                     for (each in snapshot.children){
                         val roomID = each.child("roomID").value.toString()
@@ -100,6 +107,7 @@ class StudentHome : Fragment() {
                         postToStudentTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
+                                    viewTimeLine()
                                     for (each in snapshot.children){
                                         val date = each.child("date").value.toString()
                                         val hours = each.child("hours").value.toString()
@@ -160,6 +168,7 @@ class StudentHome : Fragment() {
                         groupTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
+                                    viewTimeLine()
                                     for (each in snapshot.children){
                                         val date = each.child("date").value.toString()
                                         val hours = each.child("hours").value.toString()

@@ -58,11 +58,7 @@ class RoomMemberRequest : AppCompatActivity() {
 
         databaseGroup = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Request")
         databaseClass = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Request")
-        if(roomType == "Group"){
-            executeGroupMembers()
-        }else if(roomType == "Class"){
-            executeClassMembers()
-        }
+        condition()
 
         //convert hour to text
         val now = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -89,6 +85,14 @@ class RoomMemberRequest : AppCompatActivity() {
         sortKey = now.toMillis().toString()
     }
 
+    private fun condition() {
+        if(roomType == "Group"){
+            executeGroupMembers()
+        }else if(roomType == "Class"){
+            executeClassMembers()
+        }
+    }
+
     private fun executeClassMembers() {
         databaseClass.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -110,6 +114,9 @@ class RoomMemberRequest : AppCompatActivity() {
                         it.name
                     }
                     recyclerView.adapter = adapter
+                    if(adapter.itemCount > 0){
+                        no_members.visibility = View.GONE
+                    }
 
                     count = adapter.itemCount
                     noData(count)
@@ -128,6 +135,7 @@ class RoomMemberRequest : AppCompatActivity() {
                                 .setTitle("Request")
                                 .setMessage("Are you sure you want to add $studentName in this room?")
                                 .setPositiveButton("ACCEPT"){_,_ ->
+                                    condition()
                                     val isAccept = "true"
                                     val data = RoomMembersData(studentName, type, studentUID, isAccept)
                                     val addMember = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Members")
@@ -211,6 +219,9 @@ class RoomMemberRequest : AppCompatActivity() {
                         it.name
                     }
                     recyclerView.adapter = adapter
+                    if(adapter.itemCount > 0){
+                        no_members.visibility = View.GONE
+                    }
 
                     //adapter click listener
                     adapter.setOnItemClickListener(object : MembersAdapter.onItemClickListener{
