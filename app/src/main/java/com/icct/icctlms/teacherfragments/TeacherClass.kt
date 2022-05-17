@@ -306,6 +306,7 @@ class TeacherClass : Fragment() {
                                                                             .child("Members")
                                                                     databaseClass.child(uid)
                                                                         .removeValue()
+                                                                    deleteTimeline()
 
                                                                     adapter.deleteItem(position)
                                                                     groupRecyclerView.adapter?.notifyItemRemoved(

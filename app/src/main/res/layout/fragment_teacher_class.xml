@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content" />
 
                     <RelativeLayout
-                        android:id="@+id/group_thats"
+                        android:id="@+id/class_thats"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/class_list"
@@ -117,10 +117,10 @@
                         android:id="@+id/group_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/group_thats" />
+                        android:layout_below="@id/class_thats" />
 
                     <RelativeLayout
-                        android:id="@+id/class_thats"
+                        android:id="@+id/group_thats"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/group_list"

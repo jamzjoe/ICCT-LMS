@@ -79,7 +79,7 @@ class TeacherHome : Fragment() {
     }
     private fun viewTimeLine() {
         val teacherTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid)
-        teacherTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
+        teacherTimeLine.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     postArrayList.clear()

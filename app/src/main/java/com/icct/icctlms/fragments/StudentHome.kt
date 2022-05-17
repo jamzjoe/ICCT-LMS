@@ -52,7 +52,7 @@ class StudentHome : Fragment() {
         timeline()
 
         val studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
-        studentTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
+        studentTimeLine.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     postArrayList.clear()
