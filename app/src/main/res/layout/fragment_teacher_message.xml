@@ -28,5 +28,25 @@
         android:id="@+id/teacher_recipient_list"
         tools:listitem="@layout/recipient_list_item"
         android:layout_height="wrap_content"/>
-
+    <RelativeLayout
+        android:id="@+id/no_message_view"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/ic_no_recipient"/>
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Yay! No recipient yet..."
+            android:layout_below="@id/logo"
+            android:layout_margin="2dp"
+            android:gravity="center"/>
+    </RelativeLayout>
 </RelativeLayout>

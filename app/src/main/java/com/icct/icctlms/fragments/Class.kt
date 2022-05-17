@@ -32,7 +32,6 @@ import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RoomMembersData
 import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentClassBinding
-import com.icct.icctlms.databinding.FragmentHomeBinding
 import com.icct.icctlms.gestures.SwipeGestures
 import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
@@ -72,10 +71,10 @@ class Class : Fragment() {
         val root: View = binding.root
         groupRecyclerView = binding.studentGroupList
         groupRecyclerView.setHasFixedSize(true)
+        binding.groupThats.visibility = View.GONE
         groupRecyclerView.visibility = View.GONE
         groupRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         groupArrayList = ArrayList()
-
         classRecyclerView = binding.studentClassList
         classRecyclerView.setHasFixedSize(true)
         classRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -135,7 +134,6 @@ class Class : Fragment() {
                     }
                     val adapter = StudentClassAdapter(classArrayList)
                     classRecyclerView.adapter = adapter
-                    val count = adapter.itemCount
                     progressDialogHide()
                     val swipeGestures = object : SwipeGestures(this@Class.requireContext()){
 
@@ -157,12 +155,15 @@ class Class : Fragment() {
                                                 val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
                                                         "Class").child(roomID).child("Accept").child(uid)
                                                 deleteSelf.removeValue()
-
+                                                deleteTimeline()
                                                 //delete member in this room
                                                 val deleteMember = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID).child("Members")
                                                 deleteMember.child(uid).removeValue().addOnSuccessListener {
+
                                                     Toast.makeText(this@Class.requireContext(), "Selected class deleted successfully!", Toast.LENGTH_SHORT).show()
                                                 }
+
+
                                             }
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeClass()
@@ -235,6 +236,11 @@ class Class : Fragment() {
         })
     }
 
+    private fun deleteTimeline() {
+        val deleteStudentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
+        deleteStudentTimeLine.removeValue()
+    }
+
     private fun executeGroup() {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -273,6 +279,7 @@ class Class : Fragment() {
                                                 val deleteSelf = FirebaseDatabase.getInstance().getReference("Public " +
                                                         "Group").child(roomID).child("Accept").child(uid)
                                                 deleteSelf.removeValue()
+                                                deleteTimeline()
                                                 //delete member in this room
                                                 val deleteMember = FirebaseDatabase.getInstance().getReference("Public Group").child(roomID).child("Members")
                                                 deleteMember.child(uid).removeValue().addOnSuccessListener{
@@ -665,11 +672,19 @@ class Class : Fragment() {
     private fun hideClass() {
         classRecyclerView.visibility = View.GONE
         groupRecyclerView.visibility = View.VISIBLE
+
+        binding.groupThats.visibility = View.VISIBLE
+
+        binding.classThats.visibility = View.GONE
     }
 
     private fun hideGroup() {
         groupRecyclerView.visibility = View.GONE
         classRecyclerView.visibility = View.VISIBLE
+
+        binding.groupThats.visibility = View.GONE
+
+        binding.classThats.visibility = View.VISIBLE
     }
 
     private fun progressDialogShow(){

@@ -19,6 +19,7 @@ import com.icct.icctlms.data.GroupListData
 import com.icct.icctlms.data.RecipientData
 import com.icct.icctlms.databinding.FragmentMessageBinding
 import com.icct.icctlms.messages.StudentMessageRoom
+import kotlinx.android.synthetic.main.fragment_message.*
 import kotlin.collections.ArrayList
 
 class Message : Fragment() {
@@ -32,6 +33,7 @@ class Message : Fragment() {
     private lateinit var getJoinClassTeachers : DatabaseReference
     private lateinit var getJoinGroupTeachers : DatabaseReference
     private lateinit var dialog: Dialog
+    private lateinit var adapter: RecipientAdapter
 
 
     override fun onCreateView(
@@ -56,6 +58,7 @@ class Message : Fragment() {
         executeClassRecipient()
         getJoinGroupTeachers = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
         executeGroupRecipient()
+
         return binding.root
         // Inflate the layout for this fragment
     }
@@ -76,6 +79,9 @@ class Message : Fragment() {
                         it.name
                     }
                     recipientRecyclerView.adapter = adapter
+                    if (adapter.itemCount > 0){
+                        no_message_view.visibility = View.GONE
+                    }
                     progressDialogHide()
                     //adapter click listener
                     adapter.setOnItemClickListener(object : RecipientAdapter.onItemClickListener{
@@ -120,6 +126,9 @@ class Message : Fragment() {
                         it.name
                     }
                     recipientRecyclerView2.adapter = adapter
+                    if (adapter.itemCount > 0){
+                        no_message_view.visibility = View.GONE
+                    }
                     progressDialogHide()
                     //adapter click listener
                     adapter.setOnItemClickListener(object : RecipientAdapter.onItemClickListener{

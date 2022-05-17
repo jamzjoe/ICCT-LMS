@@ -68,6 +68,9 @@ class TeacherMessage : Fragment() {
                         it.name
                     }
                     teacherRecipientRecyclerView.adapter = adapter
+                    if (adapter.itemCount > 0){
+                        binding.noMessageView.visibility = View.GONE
+                    }
                     progressDialogHide()
 
                     //adapter click listener

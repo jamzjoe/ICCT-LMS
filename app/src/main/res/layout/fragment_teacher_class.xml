@@ -78,29 +78,72 @@
 
 
                 <RelativeLayout
-                    android:layout_below="@id/group_list"
-                    android:layout_centerHorizontal="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ScrollView
-                        android:id="@+id/scrollView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/class_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </ScrollView>
-                    <TextView
-                        android:layout_below="@id/scrollView"
-                        android:gravity="center_horizontal"
-                        android:id="@+id/class_thats"
-                        android:layout_marginTop="20dp"
-                        android:fontFamily="@font/headings"
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/class_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <RelativeLayout
+                        android:id="@+id/group_thats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/class_list"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageView
+                            android:id="@+id/logo"
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/ic_no_class" />
+
+                        <TextView
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/logo"
+                            android:fontFamily="@font/headings"
+                            android:text="That's all for now." />
+
+
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/group_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="That's all for now."/>
+                        android:layout_below="@id/group_thats" />
+
+                    <RelativeLayout
+                        android:id="@+id/class_thats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/group_list"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageView
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/logo2"
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/ic_no_class" />
+
+                        <TextView
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/logo2"
+                            android:fontFamily="@font/headings"
+                            android:text="That's all for now." />
+
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
@@ -112,28 +155,8 @@
 
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/group_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/text_rooms" />
-
-                <RelativeLayout
-                    android:layout_below="@id/group_list"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:fontFamily="@font/headings"
-                        android:layout_marginTop="20dp"
-                        android:id="@+id/group_thats"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="That's all for now." />
 
 
-                </RelativeLayout>
             </RelativeLayout>
 
 

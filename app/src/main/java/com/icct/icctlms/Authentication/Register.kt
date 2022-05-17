@@ -1,23 +1,16 @@
 package com.icct.icctlms.Authentication
 
 import android.app.Dialog
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-import com.icct.icctlms.MainActivity
 import com.icct.icctlms.R
-import com.icct.icctlms.Welcome
 import com.icct.icctlms.data.StudentProfile
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.nav_header.*
@@ -26,7 +19,7 @@ class Register : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var dialog: Dialog
     private lateinit var databaseReference: DatabaseReference
-    private lateinit var colors : Array<String>
+    private lateinit var colors: Array<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -43,12 +36,13 @@ class Register : AppCompatActivity() {
         val school = arrayOf(
             "ICCT San Mateo Campus",
             "ICCT Cainta Main Campus",
-            "ICCT Sumulong",
+            "ICCT Sumulong Campus",
             "ICCT Antipolo Campus",
             "ICCT Angono Campus",
             "ICCT Binangonan Campus",
             "ICCT Cogeo Campus",
-            "ICCT Taytay Campus")
+            "ICCT Taytay Campus"
+        )
         colors = arrayOf(
             "#ca9bf7",
             "#cb99c9",
@@ -69,20 +63,20 @@ class Register : AppCompatActivity() {
             .setSingleChoiceItems(school, selectedItemIndex) { dialog, which ->
                 selectedItemIndex = which
                 selectedSchool = school[which]
-            }.setPositiveButton("Ok"){dialog, which ->
+            }.setPositiveButton("Ok") { dialog, which ->
                 Toast.makeText(this, "$selectedSchool Selected", Toast.LENGTH_SHORT).show()
-            }.setNegativeButton("Cancel"){dialog, which ->
+            }.setNegativeButton("Cancel") { dialog, which ->
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }.show()
         val finalSchool: String = selectedSchool
 
 
-            //register
-        reg_button.setOnClickListener{
+        //register
+        reg_button.setOnClickListener {
             progressDialogShow()
-            if(checkTerms.isChecked){
+            if (checkTerms.isChecked) {
                 when {
-                    TextUtils.isEmpty(reg_email.text.toString().trim { it <= ' '}) -> {
+                    TextUtils.isEmpty(reg_email.text.toString().trim { it <= ' ' }) -> {
                         Toast.makeText(
                             this@Register,
                             "Please enter your email.",
@@ -90,7 +84,7 @@ class Register : AppCompatActivity() {
                         ).show()
                         progressDialogHide()
                     }
-                    TextUtils.isEmpty(reg_name.text.toString().trim { it <= ' '}) -> {
+                    TextUtils.isEmpty(reg_name.text.toString().trim { it <= ' ' }) -> {
                         Toast.makeText(
                             this@Register,
                             "Please enter your full_name.",
@@ -98,7 +92,7 @@ class Register : AppCompatActivity() {
                         ).show()
                         progressDialogHide()
                     }
-                    TextUtils.isEmpty(reg_pass.text.toString().trim { it <= ' '}) -> {
+                    TextUtils.isEmpty(reg_pass.text.toString().trim { it <= ' ' }) -> {
                         Toast.makeText(
                             this@Register,
                             "Please enter your password.",
@@ -106,7 +100,7 @@ class Register : AppCompatActivity() {
                         ).show()
                         progressDialogHide()
                     }
-                    TextUtils.isEmpty(reg_confirm.text.toString().trim { it <= ' '}) -> {
+                    TextUtils.isEmpty(reg_confirm.text.toString().trim { it <= ' ' }) -> {
                         Toast.makeText(
                             this@Register,
                             "Please confirm your password.",
@@ -115,19 +109,18 @@ class Register : AppCompatActivity() {
                         progressDialogHide()
                     }
                     else -> {
-                        val name: String = reg_name.text.toString().trim { it <= ' '}
-                        val email: String = reg_email.text.toString().trim { it <= ' '}
-                        val password: String = reg_pass.text.toString().trim { it <= ' '}
-                        val confirm: String = reg_confirm.text.toString().trim() { it <= ' '}
+                        val email: String = reg_email.text.toString().trim { it <= ' ' }
+                        val password: String = reg_pass.text.toString().trim { it <= ' ' }
+                        val confirm: String = reg_confirm.text.toString().trim() { it <= ' ' }
 
-                        if(password == confirm){
-
+                        if (password == confirm) {
 
 
-                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                            FirebaseAuth.getInstance()
+                                .createUserWithEmailAndPassword(email, password)
                                 .addOnCompleteListener { task ->
                                     //if task is successful
-                                    if(task.isSuccessful){
+                                    if (task.isSuccessful) {
 
                                         Toast.makeText(
                                             this@Register,
@@ -142,25 +135,34 @@ class Register : AppCompatActivity() {
 
                                         auth = FirebaseAuth.getInstance()
                                         val uid = auth.currentUser?.uid
-                                        databaseReference = FirebaseDatabase.getInstance().getReference("Students")
+                                        databaseReference =
+                                            FirebaseDatabase.getInstance().getReference("Students")
                                         val name = reg_name.text.toString()
                                         val email = reg_email.text.toString()
                                         val account_id = uid.toString()
                                         val type = "Student"
 
 
-                                        val user = StudentProfile(name, email, finalSchool, account_id, type, colors[random(0, colors.size-1)])
+                                        val user = StudentProfile(
+                                            name,
+                                            email,
+                                            finalSchool,
+                                            account_id,
+                                            type,
+                                            colors[random(0, colors.size - 1)]
+                                        )
 
-                                        if (uid!=null){
-                                            databaseReference.child(uid).setValue(user).addOnCompleteListener{
-                                                if (it.isSuccessful){
-                                                    val intent = Intent(this, Login::class.java)
-                                                    startActivity(intent)
-                                                    finish()
+                                        if (uid != null) {
+                                            databaseReference.child(uid).setValue(user)
+                                                .addOnCompleteListener {
+                                                    if (it.isSuccessful) {
+                                                        val intent = Intent(this, Login::class.java)
+                                                        startActivity(intent)
+                                                        finish()
+                                                    }
                                                 }
-                                            }
                                         }
-                                    }else {
+                                    } else {
                                         progressDialogHide()
                                         //show error message
                                         Toast.makeText(
@@ -170,18 +172,19 @@ class Register : AppCompatActivity() {
                                         ).show()
                                     }
                                 }
-                        }else{
+                        } else {
                             Toast.makeText(
                                 this,
                                 "Password not match, try again!",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            progressDialogHide()}
+                            progressDialogHide()
+                        }
                         //Create an instance and register user with email and password
 
                     }
                 }
-            }else{
+            } else {
                 progressDialogHide()
                 Toast.makeText(
                     this,
@@ -192,17 +195,19 @@ class Register : AppCompatActivity() {
 
         }
     }
-    private fun progressDialogShow(){
+
+    private fun progressDialogShow() {
         dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_layout)
         dialog.setTitle("Loading please wait")
         dialog.setCancelable(false)
         dialog.show()
     }
-    private fun progressDialogHide(){
+
+    private fun progressDialogHide() {
         dialog.hide()
     }
-    
+
 
     override fun onBackPressed() {
         val intent = Intent(this, Login::class.java)
@@ -218,7 +223,6 @@ class Register : AppCompatActivity() {
     }
 
     var selectedItemIndex = 0
-
 
 
 }

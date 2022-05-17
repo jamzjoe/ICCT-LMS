@@ -1,103 +1,76 @@
-package com.icct.icctlms.teacherfragments
+package com.icct.icctlms.fragments
 
-import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.icct.icctlms.Authentication.Teacher.CreateTeacherPost
 import com.icct.icctlms.R
+import com.icct.icctlms.adapter.GroupRoomPostAdapter
 import com.icct.icctlms.adapter.TeacherPostAdapter
-import com.icct.icctlms.data.RoomIDData
+import com.icct.icctlms.data.RoomPostData
 import com.icct.icctlms.data.TeacherPostData
-import kotlinx.android.synthetic.main.fragment_teacher_class.*
-import kotlinx.android.synthetic.main.fragment_teacher_home.*
+import com.icct.icctlms.databinding.FragmentStudentHomeBinding
+import com.icct.icctlms.gestures.SwipeGestures
+import com.icct.icctlms.tools.Dialog
+import kotlinx.android.synthetic.main.fragment_student_home.*
 
+class StudentHome : Fragment() {
 
-
-
-
-class TeacherHome : Fragment() {
-
+    private var _binding : FragmentStudentHomeBinding? = null
+    private val binding get() = _binding!!
     private lateinit var postArrayList: ArrayList<TeacherPostData>
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var dialog : Dialog
+    private lateinit var timeLineRecyclerView: RecyclerView
+    private lateinit var adapter : TeacherPostAdapter
     private lateinit var uid : String
-
+    private lateinit var dialog : Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_teacher_home, container, false)
-        val postButton = rootView.findViewById<FloatingActionButton>(R.id.post_message)
-        val classButton = rootView.findViewById<FloatingActionButton>(R.id.post_class)
-        recyclerView = rootView.findViewById(R.id.post_list)!!
-
-        uid = Firebase.auth.currentUser?.uid.toString()
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = FragmentStudentHomeBinding.inflate(inflater, container, false)
+        dialog = Dialog()
         postArrayList = arrayListOf()
-
-        progressDialogShow()
+        timeLineRecyclerView = binding.timelineList
+        timeLineRecyclerView.setHasFixedSize(true)
+        timeLineRecyclerView.layoutManager = LinearLayoutManager(context)
+        uid = Firebase.auth.currentUser?.uid.toString()
+        dialog.progressDialogShow(this.requireContext(), "Loading all post, please wait...")
         timeline()
-        viewTimeLine()
 
-
-
-
-
-        postButton.setOnClickListener{
-            val intent = Intent(this.requireContext(), CreateTeacherPost::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-        }
-        classButton.setOnClickListener{
-            MaterialAlertDialogBuilder(this.requireContext())
-                .setTitle("NOTE FROM DEVELOPER")
-                .setMessage("Relax and chill; the developer is currently watching K drama. Keep yourself up to date.")
-                .setPositiveButton("Okay"){_,_ ->
-
-                }.show()
-        }
-
-        return rootView
-    }
-    private fun viewTimeLine() {
-        val teacherTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid)
-        teacherTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
+        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
+        studentTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
                     postArrayList.clear()
-                    progressDialogHide()
                     for (each in snapshot.children){
                         val post = each.getValue(TeacherPostData::class.java)
                         postArrayList.add(post!!)
                     }
-                    val adapter = TeacherPostAdapter(postArrayList)
+                    adapter = TeacherPostAdapter(postArrayList)
+                    dialog.progressDialogHide()
                     postArrayList.sortByDescending {
                         it.sortKey
                     }
-                    recyclerView.adapter = adapter
+                    timeLineRecyclerView.adapter = adapter
                     if (adapter.itemCount > 0){
                         no_data_view.visibility = View.GONE
                     }
                 }else{
-                    progressDialogHide()
+                    dialog.progressDialogHide()
                 }
             }
 
@@ -105,21 +78,25 @@ class TeacherHome : Fragment() {
                 TODO("Not yet implemented")
             }
         })
+
+
+
+
+        return binding.root
     }
 
     private fun timeline() {
-        //retrieve class room post
-        val getRoomID = FirebaseDatabase.getInstance().getReference("Class").child(uid)
-        getRoomID.addValueEventListener(object : ValueEventListener {
+        val getRoomID = FirebaseDatabase.getInstance().getReference("JoinClass").child(uid)
+        getRoomID.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.exists()){
-                    progressDialogHide()
+                    dialog.progressDialogHide()
                     postArrayList.clear()
                     for (each in snapshot.children){
                         val roomID = each.child("roomID").value.toString()
-                        val postToStudentTimeLine = FirebaseDatabase.getInstance().getReference("Class Post").child("Room ID: $roomID")
 
-                        //retrieve class post in a room
+                        //retrieve class post to timeline
+                        val postToStudentTimeLine = FirebaseDatabase.getInstance().getReference("Class Post").child("Room ID: $roomID")
                         postToStudentTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
@@ -146,7 +123,7 @@ class TeacherHome : Fragment() {
                                             message = message,
                                             postData = null)
 
-                                        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid).child(roomPostID)
+                                        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid).child(roomPostID)
                                         studentTimeLine.setValue(postData)
                                     }
                                 }
@@ -156,6 +133,7 @@ class TeacherHome : Fragment() {
                                 TODO("Not yet implemented")
                             }
                         })
+
 
 
                     }
@@ -168,18 +146,18 @@ class TeacherHome : Fragment() {
 
         })
 
-        //retrieve group room post
-        val getGroupID = FirebaseDatabase.getInstance().getReference("Group").child(uid)
-        getGroupID.addValueEventListener(object : ValueEventListener {
+
+            //retrieve join group roomID
+            val getJoinGroup = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
+        getJoinGroup.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
-                    progressDialogHide()
                     for (each in snapshot.children){
+                        dialog.progressDialogHide()
                         val roomID = each.child("roomID").value.toString()
-
-                        //retrieve group post in a room
-                        val teacherTimeLine = FirebaseDatabase.getInstance().getReference("Group Post").child("Room ID: $roomID")
-                        teacherTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
+                        //retrieve room group post
+                        val groupTimeLine = FirebaseDatabase.getInstance().getReference("Group Post").child("Room ID: $roomID")
+                        groupTimeLine.addListenerForSingleValueEvent(object: ValueEventListener{
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()){
                                     for (each in snapshot.children){
@@ -205,7 +183,7 @@ class TeacherHome : Fragment() {
                                             message = message,
                                             postData = null)
 
-                                        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid).child(roomPostID)
+                                        val studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid).child(roomPostID)
                                         studentTimeLine.setValue(postData)
                                     }
                                 }
@@ -223,65 +201,14 @@ class TeacherHome : Fragment() {
                 TODO("Not yet implemented")
             }
         })
-
     }
 
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        post_message.visibility = View.GONE
-        post_message_text.visibility = View.GONE
-        post_class.visibility = View.GONE
-        post_class_text.visibility = View.GONE
-
-        var isAllFabVisible = false
-
-        post_btn.setOnClickListener{
-            if (!isAllFabVisible){
-                change_opacity.setBackgroundResource(R.color.transparent_color)
-                change_opacity.invalidate()
-                val fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in)
-                change_opacity.startAnimation(fadeIn)
-                post_btn.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate))
-                Handler(Looper.myLooper()!!).postDelayed({
-                    post_message_text.visibility = View.VISIBLE
-                    post_message.show()
-                },140)
-                Handler(Looper.myLooper()!!).postDelayed({
-                    post_class.show()
-                    post_class_text.visibility = View.VISIBLE
-                },130)
-
-
-                isAllFabVisible = true
-            }else{
-                post_btn.startAnimation(AnimationUtils.loadAnimation(context, R.anim.rotate))
-                change_opacity.setBackgroundResource(R.color.zero)
-                change_opacity.invalidate()
-                val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                change_opacity.startAnimation(fadeOut)
-                post_class.hide()
-                post_message.hide()
-                post_class_text.visibility = View.GONE
-                post_message_text.visibility = View.GONE
-
-                isAllFabVisible = false
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
-    private fun progressDialogShow(){
-        dialog = Dialog(this.requireContext())
-        dialog.setContentView(R.layout.dialog_layout)
-        dialog.setTitle("Loading please wait")
-        dialog.setCancelable(false)
-        dialog.show()
-    }
-    private fun progressDialogHide(){
-        dialog.hide()
-    }
-
-
+    private fun randomCode(): String = List(6) {
+        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
+    }.joinToString("")
 }

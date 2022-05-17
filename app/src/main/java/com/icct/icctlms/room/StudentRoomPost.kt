@@ -124,6 +124,8 @@ class StudentRoomPost : Fragment() {
         postData = randomID()
 
 
+
+
    executeThis()
 
 
@@ -336,8 +338,7 @@ class StudentRoomPost : Fragment() {
                                     if (it.exists()){
                                         postData = randomID()
                                         val message = etMessage.text.toString()
-                                        val userName = it.child("name").value.toString()
-                                        val data = RoomPostData(roomID, userName, sortKey, postData, userName, finalDate, finalHour, "Student", message)
+                                        val data = RoomPostData(roomID, personName, sortKey, postData, name, finalDate, finalHour, "Student", message)
                                         val databaseRoomPost = FirebaseDatabase.getInstance().getReference("Group Post")
                                         databaseRoomPost.child("Room ID: $roomID").child(postData).setValue(data).addOnSuccessListener {
                                             progressDialogHide()
@@ -366,7 +367,8 @@ class StudentRoomPost : Fragment() {
                                         postData = randomID()
                                         val message = etMessage.text.toString()
                                         val userName = it.child("name").value.toString()
-                                        val data = RoomPostData(roomID, userName, sortKey, postData, userName, finalDate, finalHour, "Student", message)
+                                        val subjectName = it.child("subjectTitle").value.toString()
+                                        val data = RoomPostData(roomID, personName, sortKey, postData, name, finalDate, finalHour, "Student", message)
                                         val databaseRoomPost = FirebaseDatabase.getInstance().getReference("Class Post")
                                         databaseRoomPost.child("Room ID: $roomID").child(postData).setValue(data).addOnSuccessListener {
                                             progressDialogHide()

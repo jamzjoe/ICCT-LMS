@@ -188,6 +188,7 @@ class TeacherClass : Fragment() {
                                                         val databaseClass = FirebaseDatabase.getInstance().getReference("Public Class").child(roomCode)
                                                             .child("Members")
                                                         databaseClass.child(uid).removeValue()
+                                                        deleteTimeline()
 
                                                         adapter.deleteItem(position)
                                                         recyclerView.adapter?.notifyItemRemoved(position)
@@ -248,6 +249,11 @@ class TeacherClass : Fragment() {
             }
 
         })
+    }
+
+    private fun deleteTimeline() {
+        val deleteTime = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid)
+        deleteTime.removeValue()
     }
 
     private fun executeGroup() {

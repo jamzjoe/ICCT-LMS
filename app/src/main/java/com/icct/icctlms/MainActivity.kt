@@ -24,20 +24,14 @@ import com.icct.icctlms.fragments.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
-import android.graphics.Bitmap
-import android.util.Base64
-import android.util.Log
-import java.io.ByteArrayOutputStream
-import android.content.SharedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_teacher_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
 
-    private val homeFragment = Home()
+    private val homeFragment = StudentHome()
     private val classFragment = Class()
     private val messageFragment = Message()
     private val notificationFragment = Notification()
@@ -69,6 +63,7 @@ class MainActivity : AppCompatActivity() {
             back.visibility = View.GONE
             search_holder.visibility = View.GONE
         }
+
 
 
 

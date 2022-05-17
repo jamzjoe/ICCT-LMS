@@ -46,7 +46,7 @@ class ClassRoomPostAdapter(private val postList: ArrayList<RoomPostData>) : Recy
     override fun onBindViewHolder(holder: ClassRoomPostAdapter.MyViewHolder, position: Int) {
         val currentItem = postList[position]
 
-        holder.name.text = currentItem.name
+        holder.name.text = currentItem.personName
         holder.type.text = currentItem.type
         holder.hour.text = currentItem.hours
         holder.date.text = currentItem.date

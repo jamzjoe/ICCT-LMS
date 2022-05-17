@@ -34,7 +34,7 @@ class AnnouncementAdapter(private val announcementList: ArrayList<AnnouncementDa
         return MyViewHolder(announcementView, mListener)
     }
 
-    override fun onBindViewHolder(holder: AnnouncementAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = announcementList[position]
         holder.title.text = currentItem.title
         holder.date.text = currentItem.date

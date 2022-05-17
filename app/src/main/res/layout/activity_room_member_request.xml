@@ -52,4 +52,15 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/room_members_item" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NO MEMBER REQUEST"
+            android:textStyle="bold"
+            android:id="@+id/no_request"/>
+    </RelativeLayout>
 </RelativeLayout>

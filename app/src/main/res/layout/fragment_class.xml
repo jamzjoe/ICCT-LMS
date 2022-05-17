@@ -5,45 +5,45 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.Class">
-<RelativeLayout
-    android:id="@+id/custom_nav"
-    android:layout_centerHorizontal="true"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/custom_nav"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:text="CLASS"
-            android:textSize="15sp"
-            android:id="@+id/class_btn"
-            style="@style/Widget.Material3.Button"
-            android:elevation="0dp"
-            android:backgroundTint="@color/transparent"
-            android:textColor="@color/black"
-            android:layout_marginStart="200dp"
-            android:layout_width="200dp"
-            android:layout_height="50dp"  />
-<androidx.legacy.widget.Space
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/grp_btn"
-            android:textSize="15sp"
-            style="@style/Widget.Material3.Button"
-            android:text="GROUP"
-            android:backgroundTint="@color/transparent"
-            android:textColor="@color/black"
-            android:layout_marginEnd="200dp"
-            android:layout_width="200dp"
-            android:layout_height="50dp" />
-    </LinearLayout>
-</RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:text="CLASS"
+                android:textSize="15sp"
+                android:id="@+id/class_btn"
+                style="@style/Widget.Material3.Button"
+                android:elevation="0dp"
+                android:backgroundTint="@color/transparent"
+                android:textColor="@color/black"
+                android:layout_marginStart="200dp"
+                android:layout_width="200dp"
+                android:layout_height="50dp"  />
+            <androidx.legacy.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/grp_btn"
+                android:textSize="15sp"
+                style="@style/Widget.Material3.Button"
+                android:text="GROUP"
+                android:backgroundTint="@color/transparent"
+                android:textColor="@color/black"
+                android:layout_marginEnd="200dp"
+                android:layout_width="200dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_below="@id/custom_nav"
         android:layout_width="match_parent"
@@ -65,11 +65,6 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"/>
 
-            <ScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
 
                 <RelativeLayout
 
@@ -78,18 +73,63 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/student_class_list"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <RelativeLayout
+                        android:id="@+id/class_thats"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:listitem="@layout/classes_item" />
+                        android:layout_below="@id/student_class_list"
+                        android:layout_centerHorizontal="true">
 
+                        <ImageView
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/logo2"
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/ic_no_class" />
+
+                        <TextView
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/logo2"
+                            android:fontFamily="@font/headings"
+                            android:text="That's all for now." />
+
+
+                    </RelativeLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_below="@id/class_thats"
+                        android:id="@+id/student_group_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <RelativeLayout
+                        android:id="@+id/group_thats"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/student_group_list"
+                        android:layout_centerHorizontal="true">
+
+                        <ImageView
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/logo"
+                            android:layout_width="150dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/ic_no_class" />
+
+                        <TextView
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/logo"
+                            android:fontFamily="@font/headings"
+                            android:text="That's all for now." />
+
+
+                    </RelativeLayout>
                 </RelativeLayout>
-            </ScrollView>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                tools:listitem="@layout/group_layout"
-                android:id="@+id/student_group_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 

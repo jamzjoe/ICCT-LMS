@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,9 @@ import com.icct.icctlms.RoomActivity
 import com.icct.icctlms.adapter.MembersAdapter
 import com.icct.icctlms.data.CountData
 import com.icct.icctlms.data.RoomMembersData
+import com.icct.icctlms.data.TeacherPostData
 import com.icct.icctlms.database.Notification
+import kotlinx.android.synthetic.main.activity_room_member_request.*
 import kotlinx.android.synthetic.main.activity_welcome.*
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -38,6 +41,7 @@ class RoomMemberRequest : AppCompatActivity() {
     private lateinit var finalHour : String
     private lateinit var today : Calendar
     private lateinit var date : String
+    private var count : Int = 0
     private lateinit var sortKey : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,12 +111,12 @@ class RoomMemberRequest : AppCompatActivity() {
                     }
                     recyclerView.adapter = adapter
 
-                    val count = adapter.itemCount.toString()
-                    val data = CountData(count)
+                    count = adapter.itemCount
+                    noData(count)
+                    val data = CountData(count.toString())
                     val membersCount = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
                     membersCount.child("Population").setValue(data)
 
-                    Toast.makeText(this@RoomMemberRequest, count, Toast.LENGTH_SHORT).show()
 
                     //adapter click listener
                     adapter.setOnItemClickListener(object : MembersAdapter.onItemClickListener{
@@ -141,12 +145,15 @@ class RoomMemberRequest : AppCompatActivity() {
                                                         val setStudentNotification = Notification()
                                                         val description = "$teacherName accepted your request to join class $roomName."
                                                         setStudentNotification.studentNotification(studentUID, "", description, randomCode(), date, sortKey)
+
                                                     }
                                                 }
 
                                                 executeClassMembers()
                                                 adapter.deleteItem(position)
                                                 recyclerView.adapter?.notifyItemRemoved(position)
+
+                                                noData(count)
                                             }
                                         }
 
@@ -161,6 +168,8 @@ class RoomMemberRequest : AppCompatActivity() {
                                             executeClassMembers()
                                             adapter.deleteItem(position)
                                             recyclerView.adapter?.notifyItemRemoved(position)
+
+                                            noData(count)
                                         }
 
                                     }
@@ -179,6 +188,13 @@ class RoomMemberRequest : AppCompatActivity() {
 
         })
     }
+
+    private fun noData(count : Int) {
+        if(count > 0){
+            no_request.visibility = View.GONE
+        }
+    }
+
     private fun executeGroupMembers() {
         databaseGroup.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -226,6 +242,8 @@ class RoomMemberRequest : AppCompatActivity() {
                                                         val setStudentNotification = Notification()
                                                         val description = "$teacherName accepted your request to join group $roomName."
                                                         setStudentNotification.studentNotification(studentUID, "", description, randomCode(), date, sortKey)
+
+
                                                     }
                                                 }
                                             }
