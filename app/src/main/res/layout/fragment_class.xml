@@ -82,10 +82,10 @@
                         android:layout_centerHorizontal="true">
 
                         <ImageView
-                            android:layout_centerHorizontal="true"
                             android:id="@+id/logo2"
                             android:layout_width="150dp"
                             android:layout_height="200dp"
+                            android:layout_centerHorizontal="true"
                             android:src="@drawable/ic_no_class" />
 
                         <TextView

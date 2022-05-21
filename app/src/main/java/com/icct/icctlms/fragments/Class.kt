@@ -84,6 +84,11 @@ class Class : Fragment() {
 
         progressDialogShow()
 
+
+        classRecyclerView.visibility = View.VISIBLE
+        groupRecyclerView.visibility = View.GONE
+        binding.groupThats.visibility = View.GONE
+        binding.classThats.visibility = View.VISIBLE
         databaseReference = FirebaseDatabase.getInstance().getReference("JoinGroup").child(uid)
         executeGroup()
 
@@ -116,6 +121,9 @@ class Class : Fragment() {
 
         //use this key to sort arraylist
         sortKey = now.toMillis().toString()
+
+
+
         return root
     }
 

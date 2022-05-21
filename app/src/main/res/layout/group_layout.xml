@@ -64,15 +64,27 @@
                 android:text=""
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/create_group_section"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/group_txt_title"
+            <RelativeLayout
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/tw_font"
-                android:text="SECTION "
-                android:textSize="15sp" />
+                android:id="@+id/section_holder"
+                android:layout_below="@id/group_txt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Section: "/>
+                <TextView
+                    android:maxLines="1"
+                    android:layout_toEndOf="@id/teacher"
+                    android:id="@+id/create_group_section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tw_font"
+                    android:text="SECTION "
+                    android:textSize="15sp" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/pending_text"
@@ -87,7 +99,7 @@
                 android:id="@+id/group_count_members"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/create_group_section"
+                android:layout_below="@id/section_holder"
                 android:layout_marginStart="10dp" />
 
         </RelativeLayout>

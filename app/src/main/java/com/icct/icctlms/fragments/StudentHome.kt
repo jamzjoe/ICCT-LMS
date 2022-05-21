@@ -5,24 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.icct.icctlms.R
-import com.icct.icctlms.adapter.GroupRoomPostAdapter
 import com.icct.icctlms.adapter.TeacherPostAdapter
-import com.icct.icctlms.data.RoomPostData
 import com.icct.icctlms.data.TeacherPostData
 import com.icct.icctlms.databinding.FragmentStudentHomeBinding
-import com.icct.icctlms.gestures.SwipeGestures
 import com.icct.icctlms.tools.Dialog
-import kotlinx.android.synthetic.main.fragment_student_home.*
 
 class StudentHome : Fragment() {
 
@@ -48,8 +39,6 @@ class StudentHome : Fragment() {
         uid = Firebase.auth.currentUser?.uid.toString()
 
         studentTimeLine = FirebaseDatabase.getInstance().getReference("Student TimeLine").child(uid)
-
-        viewTimeLine()
 
         dialog.progressDialogShow(this.requireContext(), "Loading all post, please wait...")
         timeline()
@@ -78,7 +67,7 @@ class StudentHome : Fragment() {
                     }
                     timeLineRecyclerView.adapter = adapter
                     if (adapter.itemCount > 0){
-                        no_data_view.visibility = View.GONE
+                        binding.noDataView.visibility = View.GONE
                     }
                 }else{
                     dialog.progressDialogHide()
@@ -212,12 +201,4 @@ class StudentHome : Fragment() {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-    private fun randomCode(): String = List(6) {
-        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
-    }.joinToString("")
 }

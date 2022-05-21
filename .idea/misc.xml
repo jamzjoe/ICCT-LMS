@@ -23,9 +23,11 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/fragment_teacher_home.xml" value="0.25679347826086957" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/fragment_teacher_message.xml" value="0.2223731884057971" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/fragment_teacher_notification.xml" value="0.26313405797101447" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/fragment_teachers_room_post.xml" value="0.2223731884057971" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/group_layout.xml" value="0.26268115942028986" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/post_list.xml" value="0.25679347826086957" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/post_view.xml" value="0.25679347826086957" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/recipient_list_item.xml" value="0.2223731884057971" />
       </map>
     </option>
   </component>

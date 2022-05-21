@@ -162,8 +162,7 @@ class StudentRoomActivity : AppCompatActivity() {
 
     private fun needHelp() {
         student_help_button.setOnClickListener{
-            showDialog("Need help?", "To delete a post, simply slide it to the right.\n" +
-                    "If there isn't a link associated to the button, ask your teacher.")
+            showDialog("Note", "A post can only be deleted by your teacher after it has been published.")
         }
     }
 

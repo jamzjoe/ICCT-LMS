@@ -25,6 +25,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.adapter.TeacherPostAdapter
 import com.icct.icctlms.data.RoomIDData
 import com.icct.icctlms.data.TeacherPostData
+import com.icct.icctlms.databinding.FragmentTeacherHomeBinding
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_home.*
 
@@ -38,29 +39,34 @@ class TeacherHome : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var dialog : Dialog
     private lateinit var uid : String
+    private var _binding : FragmentTeacherHomeBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var postButton : FloatingActionButton
+    private lateinit var classButton : FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_teacher_home, container, false)
-        val postButton = rootView.findViewById<FloatingActionButton>(R.id.post_message)
-        val classButton = rootView.findViewById<FloatingActionButton>(R.id.post_class)
-        recyclerView = rootView.findViewById(R.id.post_list)!!
+        _binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
+        postButton = binding.postMessage
+        classButton = binding.postClass
+        recyclerView = binding.postList
 
         uid = Firebase.auth.currentUser?.uid.toString()
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         postArrayList = arrayListOf()
-        viewTimeLine()
         progressDialogShow()
         timeline()
         viewTimeLine()
 
+        buttons()
 
+        return binding.root
+    }
 
-
-
+    private fun buttons() {
         postButton.setOnClickListener{
             val intent = Intent(this.requireContext(), CreateTeacherPost::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -74,9 +80,8 @@ class TeacherHome : Fragment() {
 
                 }.show()
         }
-
-        return rootView
     }
+
     private fun viewTimeLine() {
         val teacherTimeLine = FirebaseDatabase.getInstance().getReference("Teacher TimeLine").child(uid)
         teacherTimeLine.addListenerForSingleValueEvent(object : ValueEventListener{
@@ -94,7 +99,7 @@ class TeacherHome : Fragment() {
                     }
                     recyclerView.adapter = adapter
                     if (adapter.itemCount > 0){
-                        no_data_view.visibility = View.GONE
+                        binding.noDataView.visibility = View.GONE
                     }
                 }else{
                     progressDialogHide()
@@ -284,6 +289,8 @@ class TeacherHome : Fragment() {
     private fun progressDialogHide(){
         dialog.hide()
     }
+
+
 
 
 }
