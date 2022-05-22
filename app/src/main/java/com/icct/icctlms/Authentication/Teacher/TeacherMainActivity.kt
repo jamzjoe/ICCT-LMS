@@ -26,6 +26,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.SchoolAnnouncement
 import com.icct.icctlms.UpdateProfile.UpdateTeachersProfile
 import com.icct.icctlms.Welcome
+import com.icct.icctlms.database.NewMessageIsTrue
 import com.icct.icctlms.newsAndUpdates.CreateNewsAndUpdates
 import com.icct.icctlms.teacherfragments.*
 import kotlinx.android.synthetic.main.activity_teacher_main.*
@@ -60,6 +61,7 @@ class TeacherMainActivity : AppCompatActivity() {
             teacher_searchBar.isIconified = false
         }
         showTopProfile()
+        showMessageBadge()
 
 
 
@@ -71,7 +73,7 @@ class TeacherMainActivity : AppCompatActivity() {
         showProfile()
         //database read user info
         auth = FirebaseAuth.getInstance()
-        val uid = auth.currentUser?.uid
+        uid = auth.currentUser?.uid.toString()
         badgeNumber()
         database = FirebaseDatabase.getInstance().getReference("Teachers")
         if (uid != null) {
@@ -135,6 +137,10 @@ class TeacherMainActivity : AppCompatActivity() {
                 R.id.teacher_top_messages -> {
                     replaceFragment(messageFragment)
                     badgeNumber()
+                    val messageBadge = nav.getOrCreateBadge(R.id.teacher_top_messages)
+                    messageBadge.isVisible = false
+                    val offBadge = NewMessageIsTrue()
+                    offBadge.teacherNewMessage("false", uid)
                 }
                 R.id.teacher_top_myclass -> {
                     replaceFragment(classFragment)
@@ -166,6 +172,18 @@ class TeacherMainActivity : AppCompatActivity() {
 
         teacher_hamburger.setOnClickListener{
             drawerToggle.openDrawer(GravityCompat.START)
+        }
+    }
+
+    private fun showMessageBadge() {
+        val haveMessage = FirebaseDatabase.getInstance().getReference("Chat").child("TeacherReceived").child(uid).child("NewMessage")
+        haveMessage.get().addOnSuccessListener {
+            if (it.exists()){
+                val isAnyMessage = it.child("haveNewMessage").value.toString()
+
+                    val messageBadge = nav.getOrCreateBadge(R.id.teacher_top_messages)
+                    messageBadge.isVisible = isAnyMessage == "true"
+            }
         }
     }
 

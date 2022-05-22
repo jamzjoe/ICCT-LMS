@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.nav_header.*
 import java.io.File
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
+import com.icct.icctlms.data.NewMessage
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             back.visibility = View.GONE
             search_holder.visibility = View.GONE
         }
+        
+        messageBadge()
 
 
 
@@ -128,7 +131,12 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId){
                 R.id.top_dashboard -> replaceFragment(homeFragment)
                 R.id.top_notif -> replaceFragment(notificationFragment)
-                R.id.top_messages -> replaceFragment(messageFragment)
+                R.id.top_messages -> {
+                    replaceFragment(messageFragment)
+                    newMessage("false")
+                    val messageBadge = nav.getOrCreateBadge(R.id.top_messages)
+                    messageBadge.isVisible = false
+                }
                 R.id.top_myclass -> replaceFragment(classFragment)
                 R.id.top_planner -> replaceFragment(plannerFragment)
 
@@ -153,6 +161,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun messageBadge() {
+
+        val get = FirebaseDatabase.getInstance().getReference("Chat").child("StudentSend").child(uid).child("NewMessage")
+        get.get().addOnSuccessListener {
+            if (it.exists()){
+
+                newMessage("true")
+                val haveNewMessage = it.child("haveNewMessage").value.toString()
+
+                val messageBadge = nav.getOrCreateBadge(R.id.top_messages)
+                messageBadge.isVisible = haveNewMessage == "true"
+            }
+        }
+
+    }
+
+    private fun newMessage(message : String){
+        val data = NewMessage(message)
+        FirebaseDatabase.getInstance().getReference("Chat").child("StudentSend").child(uid).child("NewMessage").setValue(data)
+    }
     private fun badgeNumber() {
         val notificationReference = FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid.toString())
         notificationReference.addListenerForSingleValueEvent(object : ValueEventListener {

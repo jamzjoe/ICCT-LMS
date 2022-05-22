@@ -24,6 +24,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.adapter.StudentMessageAdapter
 import com.icct.icctlms.data.MessageData
 import com.icct.icctlms.data.UserData
+import com.icct.icctlms.database.NewMessageIsTrue
 import com.icct.icctlms.databinding.ActivityTeacherMessageRoomBinding
 import kotlinx.android.synthetic.main.activity_student_message_room.*
 import kotlinx.android.synthetic.main.activity_teacher_message_room.*
@@ -187,6 +188,8 @@ class TeacherMessageRoom : AppCompatActivity() {
                         sentToDatabase.child(randomCode()).setValue(data).addOnSuccessListener {
                             Toast.makeText(this, "Sent successfully!", Toast.LENGTH_SHORT).show()
                             executeMessage()
+                            val haveNewMessage = NewMessageIsTrue()
+                            haveNewMessage.newMessage("true", studentUID)
                             teacher_message_et.text?.clear()
                             val teacherData = MessageData(
                                 type = "sender",

@@ -244,6 +244,10 @@ class TeachersRoomPost : Fragment() {
                                                     message
                                             )
                                             .setPositiveButton("OK"){_,_->
+                                                val list = listOf<String>("Student Timeline", "Teacher TimeLine")
+                                                for(each in list){
+                                                    FirebaseDatabase.getInstance().getReference(each).removeValue()
+                                                }
                                                 deleteThisPostClass.child(postData).removeValue().addOnSuccessListener {
                                                     showToastMessage("$message has been deleted.")
                                                 }
