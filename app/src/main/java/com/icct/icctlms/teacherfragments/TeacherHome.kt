@@ -10,22 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.icct.icctlms.Authentication.Teacher.CreateTeacherPost
 import com.icct.icctlms.R
 import com.icct.icctlms.adapter.TeacherPostAdapter
-import com.icct.icctlms.data.RoomIDData
 import com.icct.icctlms.data.TeacherPostData
 import com.icct.icctlms.databinding.FragmentTeacherHomeBinding
+import com.icct.icctlms.tools.AlertDialog
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_home.*
 
@@ -107,7 +104,8 @@ class TeacherHome : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                AlertDialog().showDialog(requireContext(), "Error", "Can't load. Please check your internet connection.",
+                "Understood", null)
             }
         })
     }

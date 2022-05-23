@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat.recreate
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,10 +19,12 @@ import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.icct.icctlms.R
 import com.icct.icctlms.adapter.NotificationAdapter
+import com.icct.icctlms.data.IsRead
 import com.icct.icctlms.data.NotificationData
 import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentNotificationBinding
 import com.icct.icctlms.gestures.SwipeGestures
+import com.icct.icctlms.tools.AlertDialog
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
@@ -57,11 +60,6 @@ class Notification : Fragment() {
         unreadRecyclerView.setHasFixedSize(true)
         unreadRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        readRecyclerView = binding.studentNotificationReviewedRecyclerview
-        readRecyclerView.setHasFixedSize(true)
-        readRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        readArrayList = arrayListOf()
         unreadArrayList = arrayListOf()
 
 
@@ -95,98 +93,32 @@ class Notification : Fragment() {
         getUnread = FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid)
         getRead = FirebaseDatabase.getInstance().getReference("Reviewed").child("Student").child(uid)
 
-        executeRead()
         executeUnread()
         progressDialogShow()
+        markAllAsRead()
+        deleteNotif()
         return binding.root
     }
 
-    private fun executeRead() {
+    private fun deleteNotif() {
+        binding.deleteAll.setOnClickListener{
+            AlertDialog().showDialog(this.requireContext(), "Warning!", "Are you sure you want to delete all?", "OKAY", deleteAll(){})
 
-        getRead.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                if (snapshot.exists()){
-                    readArrayList.clear()
-
-                    for (classSnapShot in snapshot.children){
-                        val classData = classSnapShot.getValue(NotificationData::class.java)!!
-                        readArrayList.add(classData)
-                    }
-                    val adapter = NotificationAdapter(readArrayList)
-                    readRecyclerView.adapter = adapter
-                    progressDialogHide()
-                    readArrayList.sortByDescending {
-                        it.sortKey
-                    }
-
-                    val swipeGestures = object : SwipeGestures(this@Notification.requireContext()){
-
-                        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                            val position : Int = viewHolder.adapterPosition
-                            when(direction){
-                                ItemTouchHelper.LEFT -> {
-                                    MaterialAlertDialogBuilder(this@Notification.requireContext())
-                                        .setMessage("Delete this notification?")
-                                        .setPositiveButton("Delete"){_,_ ->
-                                            val notificationID = readArrayList[position].notificationID.toString()
-                                            val description = readArrayList[position].description.toString()
-
-                                            val deleteReviewed = Notification()
-                                            deleteReviewed.deleteStudentReviewed(uid, notificationID)
-                                            Snackbar.make(binding.root, "Deleted", Snackbar.LENGTH_SHORT).show()
-
-                                            adapter.deleteItem(position)
-                                            adapter.notifyItemRemoved(position)
-                                            readRecyclerView.adapter?.notifyItemRemoved(position)
-                                            executeUnread()
-                                            executeRead()
-                                        }.setNegativeButton("Cancel"){_,_ ->
-                                            executeUnread()
-                                            executeRead()
-                                        }.setOnCancelListener(){
-                                            executeRead()
-                                            executeUnread()
-                                        }
-                                        .show()
-
-                                }
-                            }
-
-
-
-                        }
-                    }
-                    val touchHelper = ItemTouchHelper(swipeGestures)
-                    touchHelper.attachToRecyclerView(readRecyclerView)
-                    adapter.setOnItemClickListener(object : NotificationAdapter.onItemClickListener{
-
-                        override fun onItemClick(position: Int) {
-
-                            val delete = FirebaseDatabase.getInstance().getReference()
-
-
-                        }
-
-
-
-                    })
-
-
-
-
-                }else{
-                    progressDialogHide()
-                }
-            }
-
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
+        }
     }
+
+    private fun deleteAll(function: () -> Unit) {
+        FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid).removeValue()
+    }
+
+
+    private fun markAllAsRead() {
+        val data = IsRead("true")
+        binding.markAll.setOnClickListener{
+            FirebaseDatabase.getInstance().getReference("Notifications").child("IsRead").child(uid).setValue(data)
+        }
+    }
+
 
     private fun executeUnread() {
         getUnread.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -216,25 +148,20 @@ class Notification : Fragment() {
                                         .setMessage("Mark as read?")
                                         .setPositiveButton("Okay"){_,_ ->
                                             val notificationID = unreadArrayList[position].notificationID.toString()
-                                            val description = unreadArrayList[position].description.toString()
 
-                                            Snackbar.make(binding.root, "Move to reviewed.", Snackbar.LENGTH_SHORT).show()
+                                            Snackbar.make(binding.root, "Deleted.", Snackbar.LENGTH_SHORT).show()
                                             val action = Notification()
                                             action.deleteStudentUnread(uid, notificationID)
-                                            action.moveToStudentReviewed(uid, "", description, notificationID, dateReviewed, sortKey)
 
                                             adapter.deleteItem(position)
                                             unreadRecyclerView.adapter?.notifyItemRemoved(position)
                                             adapter.notifyItemRemoved(position)
                                             executeUnread()
-                                            executeRead()
 
                                         }.setNegativeButton("Cancel"){_,_ ->
                                             executeUnread()
-                                            executeRead()
-                                        }.setOnCancelListener(){
+                                        }.setOnCancelListener {
                                             executeUnread()
-                                            executeRead()
                                         }.show()
 
                                 }
@@ -250,7 +177,7 @@ class Notification : Fragment() {
 
                         override fun onItemClick(position: Int) {
 
-                            val delete = FirebaseDatabase.getInstance().getReference()
+                            val delete = FirebaseDatabase.getInstance().reference
 
 
                         }

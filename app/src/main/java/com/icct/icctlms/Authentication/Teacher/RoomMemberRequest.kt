@@ -17,6 +17,7 @@ import com.icct.icctlms.R
 import com.icct.icctlms.RoomActivity
 import com.icct.icctlms.adapter.MembersAdapter
 import com.icct.icctlms.data.CountData
+import com.icct.icctlms.data.IsRead
 import com.icct.icctlms.data.RoomMembersData
 import com.icct.icctlms.data.TeacherPostData
 import com.icct.icctlms.database.Notification
@@ -152,6 +153,8 @@ class RoomMemberRequest : AppCompatActivity() {
                                                         val teacherName = it.child("name").value.toString()
                                                         val setStudentNotification = Notification()
                                                         val description = "$teacherName accepted your request to join class $roomName."
+                                                        val isRead = IsRead("false")
+                                                        FirebaseDatabase.getInstance().getReference("Notifications").child("IsRead").child(uid).setValue(isRead)
                                                         setStudentNotification.studentNotification(studentUID, "", description, randomCode(), date, sortKey)
 
                                                     }

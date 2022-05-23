@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         uid = Firebase.auth.currentUser?.uid.toString()
         //fragments
         nav = findViewById(R.id.top_nav)
-        badgeNumber()
         replaceFragment(homeFragment)
 
         searchBar.setOnClickListener{
@@ -66,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
         
         messageBadge()
+        notificationBadge()
 
 
 
@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
 
         showProfile()
+
         //database read user info
         auth = FirebaseAuth.getInstance()
         val uid = auth.currentUser?.uid
@@ -161,15 +162,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun notificationBadge() {
+        FirebaseDatabase.getInstance().getReference("Notifications").child("IsRead").child(uid)
+            .get().addOnSuccessListener {
+                if (it.exists()){
+                    val isRead = it.child("read").value.toString()
+                        val nav = nav.getOrCreateBadge(R.id.top_notif)
+                        nav.isVisible = isRead == "false"
+
+                }
+            }
+    }
+
     private fun messageBadge() {
 
         val get = FirebaseDatabase.getInstance().getReference("Chat").child("StudentSend").child(uid).child("NewMessage")
         get.get().addOnSuccessListener {
             if (it.exists()){
-
-                newMessage("true")
                 val haveNewMessage = it.child("haveNewMessage").value.toString()
-
                 val messageBadge = nav.getOrCreateBadge(R.id.top_messages)
                 messageBadge.isVisible = haveNewMessage == "true"
             }
@@ -180,29 +190,6 @@ class MainActivity : AppCompatActivity() {
     private fun newMessage(message : String){
         val data = NewMessage(message)
         FirebaseDatabase.getInstance().getReference("Chat").child("StudentSend").child(uid).child("NewMessage").setValue(data)
-    }
-    private fun badgeNumber() {
-        val notificationReference = FirebaseDatabase.getInstance().getReference("Notifications").child("Student").child(uid.toString())
-        notificationReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()){
-                    val count = snapshot.childrenCount
-                    val teacherNotifBadge = nav.getOrCreateBadge(R.id.top_notif)
-                    teacherNotifBadge.isVisible = true
-                    badgeNumber()
-
-                }else{
-                    val badge = nav.getBadge(R.id.top_notif)
-                    badge?.clearNumber()
-                    badge?.isVisible = false
-                    badgeNumber()
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
     }
 
 

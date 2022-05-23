@@ -34,6 +34,7 @@ import com.icct.icctlms.data.RoomMembersData
 import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentTeacherClassBinding
 import com.icct.icctlms.gestures.SwipeGestures
+import com.icct.icctlms.tools.AlertDialog
 import kotlinx.android.synthetic.main.activity_teacher_main.*
 import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
@@ -498,6 +499,7 @@ class TeacherClass : Fragment() {
                                         val newNotification = Notification()
                                         val me = ""
                                         val description = "You successfully created the class named $title."
+                                        AlertDialog().showDialog(requireContext(), "Note", description, "OK", null)
                                         newNotification.notification(uid, me, description, randomID(), date, sortKey)
 
                                     }
@@ -571,6 +573,7 @@ class TeacherClass : Fragment() {
                                     val newNotification = Notification()
                                     val me = ""
                                     val description = "You successfully created the group named $finalGroupName, section $finalSection."
+                                    AlertDialog().showDialog(requireContext(), "Note", description, "OK", null)
                                     newNotification.notification(uid, me, description, randomID(), date, sortKey)
 
                                 }

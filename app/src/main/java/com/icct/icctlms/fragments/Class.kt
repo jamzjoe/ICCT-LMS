@@ -33,6 +33,7 @@ import com.icct.icctlms.data.RoomMembersData
 import com.icct.icctlms.database.Notification
 import com.icct.icctlms.databinding.FragmentClassBinding
 import com.icct.icctlms.gestures.SwipeGestures
+import com.icct.icctlms.tools.AlertDialog
 import kotlinx.android.synthetic.main.fragment_class.*
 import kotlinx.android.synthetic.main.fragment_teacher_class.*
 import java.time.LocalDateTime
@@ -515,6 +516,7 @@ class Class : Fragment() {
                                                         val newNotification = Notification()
                                                         val me = ""
                                                         val description = "$currentName wants to join the class named $subjectTitle."
+                                                        AlertDialog().showDialog(this.requireContext(), "Note!", "Your permission request will be sent to the queue room named $subjectTitle.", "OKAY", null)
                                                         newNotification.notification(uid, me, description, randomCode(), date, sortKey)
                                                         val getTeacherUID = FirebaseDatabase.getInstance().getReference("Public Class").child(roomID)
                                                         getTeacherUID.get().addOnSuccessListener {
@@ -636,6 +638,7 @@ class Class : Fragment() {
                                                         val description =
                                                             "$currentName wants to join the group named $subjectTitle."
                                                         newNotification.notification(uid, me, description, randomCode(), date, sortKey)
+                                                        AlertDialog().showDialog(this.requireContext(), "Note!", "Your permission request will be sent to the queue room named $subjectTitle.", "OKAY", null)
                                                         val getTeacherUID = FirebaseDatabase
                                                             .getInstance().getReference("Public " +
                                                                     "Group").child(roomID)
