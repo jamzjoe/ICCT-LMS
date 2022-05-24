@@ -23,6 +23,7 @@ import com.icct.icctlms.adapter.AnnouncementAdapter
 import com.icct.icctlms.data.AnnouncementData
 import kotlinx.android.synthetic.main.activity_create_nesws_and_updates.*
 import kotlinx.android.synthetic.main.activity_forgot_password.*
+import kotlinx.android.synthetic.main.activity_school_announcement.*
 import kotlinx.android.synthetic.main.announcement_item.*
 import kotlinx.android.synthetic.main.announcement_update_layout.*
 import java.time.LocalDate
@@ -133,15 +134,16 @@ val announce = FirebaseDatabase.getInstance().getReference("Admin").child("Annou
 
 
                     for (postSnapShot in snapshot.children){
-                        snapshot.child(uid)
                         val announcement = postSnapShot.getValue(AnnouncementData::class.java)
                         announcementArrayList.add(announcement!!)
                     }
                     val adapter = AnnouncementAdapter(announcementArrayList)
+
                     announcementArrayList.sortByDescending {
                         it.sortKey
                     }
                     recyclerView.adapter = adapter
+
 
                     //adapter click listener
                     adapter.setOnItemClickListener(object : AnnouncementAdapter.onItemClickListener{

@@ -3,6 +3,7 @@ package com.icct.icctlms
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
 import com.icct.icctlms.adapter.ViewersAnnouncementAdapter
 import com.icct.icctlms.data.AnnouncementData
+import kotlinx.android.synthetic.main.activity_school_announcement.*
 
 class SchoolAnnouncement : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -48,6 +50,9 @@ class SchoolAnnouncement : AppCompatActivity() {
                         it.sortKey
                     }
                     recyclerView.adapter = adapter
+                    if(adapter.itemCount > 0){
+                        empty_view.visibility = View.GONE
+                    }
 
                     //adapter click listener
                     adapter.setOnItemClickListener(object : ViewersAnnouncementAdapter.onItemClickListener{

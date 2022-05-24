@@ -486,14 +486,7 @@ class TeacherClass : Fragment() {
                                     databaseClass.child(uid).child(roomId).setValue(createClass).addOnCompleteListener{
                                         executeClass()
                                         databasePublic.child(roomId).child("Members").child(uid).setValue(data)
-                                        wall.setBackgroundResource(R.color.zero)
-                                        wall.invalidate()
-                                        val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                                        wall.startAnimation(fadeOut)
-                                        add_class.hide()
-                                        add_room.hide()
-                                        add_class_text.visibility = View.GONE
-                                        add_room_text.visibility = View.GONE
+                                        outAnimation()
                                         progressDialogHide()
 
                                         val newNotification = Notification()
@@ -560,14 +553,7 @@ class TeacherClass : Fragment() {
                                 databaseGroup.child(uid).child(roomId).setValue(createGroup).addOnCompleteListener{
                                     executeGroup()
                                     databasePublic.child(roomId).child("Members").child(uid).setValue(data)
-                                    wall.setBackgroundResource(R.color.zero)
-                                    wall.invalidate()
-                                    val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
-                                    wall.startAnimation(fadeOut)
-                                    add_class.hide()
-                                    add_room.hide()
-                                    add_class_text.visibility = View.GONE
-                                    add_room_text.visibility = View.GONE
+                                    outAnimation()
                                     progressDialogHide()
 
                                     val newNotification = Notification()
@@ -594,6 +580,16 @@ class TeacherClass : Fragment() {
 
 
     }
+    private fun outAnimation(){
+        wall.setBackgroundResource(R.color.zero)
+        wall.invalidate()
+        val fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out)
+        wall.startAnimation(fadeOut)
+        add_class.hide()
+        add_room.hide()
+        add_class_text.visibility = View.GONE
+        add_room_text.visibility = View.GONE
+    }
 
     private fun copy(code : EditText){
         val clipboardManager = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -612,7 +608,7 @@ class TeacherClass : Fragment() {
             .show()
     }
 
-    private fun randomID(): String = List(16) {
+    private fun randomID(): String = List(20) {
         (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
     }.joinToString("")
 

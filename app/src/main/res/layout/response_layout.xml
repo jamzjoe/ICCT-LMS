@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    android:layout_margin="8dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/logo"
+            android:layout_margin="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/logo_plain"/>
+
+        <RelativeLayout
+            android:layout_toEndOf="@id/logo"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:id="@+id/response"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+           <RelativeLayout
+               android:layout_margin="10dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:textColor="@color/black"
+                   android:fontFamily="@font/sub_headings"
+                   android:id="@+id/question_text"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Your question:" />
+               <TextView
+                   android:fontFamily="@font/sub_headings"
+                   android:textColor="@color/black"
+                   android:id="@+id/respone_text"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Response"
+                   android:layout_below="@id/question_text"/>
+           </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+</RelativeLayout>

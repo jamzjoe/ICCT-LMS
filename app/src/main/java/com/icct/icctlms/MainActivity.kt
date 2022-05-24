@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun helpCenter() {
-        Toast.makeText(this, "This features is on development. Stay updated.", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this, HelpCenter::class.java))
     }
 
     private fun whatsNew() {

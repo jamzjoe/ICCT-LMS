@@ -1,5 +1,6 @@
 package com.icct.icctlms.teacherfragments
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat.recreate
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,18 +47,14 @@ class TeacherNotification : Fragment() {
     private lateinit var getNotification : DatabaseReference
     private lateinit var uid: String
     private lateinit var dialog: Dialog
-    private lateinit var reviewedArrayList: ArrayList<NotificationData>
-    private lateinit var getReviewed : DatabaseReference
     private lateinit var hour : String
     private lateinit var finalHour : String
     private lateinit var today : Calendar
     private lateinit var date : String
     private lateinit var sortKey : String
     private lateinit var dateReviewed : String
-    private lateinit var deleteRev : ImageView
     private lateinit var deleteRead : ImageView
 
-    private lateinit var reviewedRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,14 +67,9 @@ class TeacherNotification : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        reviewedRecyclerView = binding.notificationReviewedRecyclerview
-        reviewedRecyclerView.setHasFixedSize(true)
-        reviewedRecyclerView.layoutManager = LinearLayoutManager(context)
 
         deleteRead = binding.deleteRead
-        deleteRev = binding.deleteRev
         notificationArrayList = arrayListOf()
-        reviewedArrayList = arrayListOf()
         uid = Firebase.auth.currentUser?.uid.toString()
 
 
@@ -105,9 +98,7 @@ class TeacherNotification : Fragment() {
         sortKey = now.toMillis().toString()
 
         getNotification = FirebaseDatabase.getInstance().getReference("Notifications").child(uid)
-        getReviewed = FirebaseDatabase.getInstance().getReference("Reviewed").child(uid)
       executeNotification()
-        executeReviewed()
 
         deleteAll()
         binding.refresh.setOnClickListener{
@@ -124,11 +115,11 @@ class TeacherNotification : Fragment() {
             MaterialAlertDialogBuilder(this.requireContext())
                 .setMessage("Are you sure you want to delete all unread notifications?")
                 .setPositiveButton("DELETE"){_, _ ->
+                    notificationArrayList.clear()
                     val deleteAllUnread = Notification()
-                    deleteAllUnread.deleteAllUnread(uid)
+                    deleteAllUnread.deleteAllUnread(uid, Execute(){})
+
                     progressDialogHide()
-                    executeReviewed()
-                    executeNotification()
                 }.setNegativeButton("Cancel"){_,_ ->
                     progressDialogHide()
                 }.setOnCancelListener{
@@ -137,114 +128,16 @@ class TeacherNotification : Fragment() {
 
                 .show()
         }
-        deleteRev.setOnClickListener{
-            progressDialogShow()
-                MaterialAlertDialogBuilder(this.requireContext())
-                    .setMessage("Are you sure you want to delete all reviewed notifications?")
-                    .setPositiveButton("DELETE"){_, _ ->
-                        val deleteAllReviewed = Notification()
-                        deleteAllReviewed.deleteAllReviewed(uid)
-                        progressDialogHide()
-                        executeReviewed()
-                        executeNotification()
-                    }.setNegativeButton("Cancel"){_,_ ->
-                        progressDialogHide()
-                    }.setOnCancelListener{
-                        progressDialogHide()
-                    }
 
-                    .show()
-        }
+    }
+
+    private fun Execute(function: () -> Unit) {
+executeNotification()
+        recreate(this.requireContext() as Activity)
     }
 
 
-    private fun executeReviewed() {
-                getReviewed.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-
-                        if (snapshot.exists()){
-                            reviewedArrayList.clear()
-
-                            for (classSnapShot in snapshot.children){
-                                val classData = classSnapShot.getValue(NotificationData::class.java)!!
-                                reviewedArrayList.add(classData)
-                            }
-                            val adapter = NotificationAdapter(reviewedArrayList)
-                            reviewedRecyclerView.adapter = adapter
-                            progressDialogHide()
-                            reviewedArrayList.sortByDescending {
-                                it.sortKey
-                            }
-
-                            val swipeGestures = object : SwipeGestures(this@TeacherNotification.requireContext()){
-
-                                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                                    val position : Int = viewHolder.adapterPosition
-                                    when(direction){
-                                        ItemTouchHelper.LEFT -> {
-                                            MaterialAlertDialogBuilder(this@TeacherNotification.requireContext())
-                                                .setMessage("Delete this notification?")
-                                                .setPositiveButton("Delete"){_,_ ->
-                                                    val notificationID = reviewedArrayList[position].notificationID.toString()
-                                                    val description = reviewedArrayList[position].description.toString()
-
-                                                    val deleteReviewed = Notification()
-                                                    deleteReviewed.deleteReviewed(uid, notificationID)
-                                                    Snackbar.make(binding.root, "Deleted", Snackbar.LENGTH_SHORT).show()
-
-                                                    adapter.deleteItem(position)
-                                                    adapter.notifyItemRemoved(position)
-                                                    reviewedRecyclerView.adapter?.notifyItemRemoved(position)
-                                                    executeNotification()
-                                                    executeReviewed()
-                                                }.setNegativeButton("Cancel"){_,_ ->
-                                                    executeNotification()
-                                                    executeReviewed()
-                                                }.setOnCancelListener(){
-                                                    executeReviewed()
-                                                    executeNotification()
-                                                }
-                                                .show()
-
-                                        }
-                                    }
-
-
-
-                                }
-                            }
-                            val touchHelper = ItemTouchHelper(swipeGestures)
-                            touchHelper.attachToRecyclerView(reviewedRecyclerView)
-                            adapter.setOnItemClickListener(object : NotificationAdapter.onItemClickListener{
-
-                                override fun onItemClick(position: Int) {
-
-                                    val delete = FirebaseDatabase.getInstance().getReference()
-
-
-                                }
-
-
-
-                            })
-
-
-
-
-                        }else{
-                            progressDialogHide()
-                        }
-                    }
-
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
-            }
-
-            private fun executeNotification() {
+    fun executeNotification() {
                 getNotification.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -277,20 +170,16 @@ class TeacherNotification : Fragment() {
                                                     Snackbar.make(binding.root, "Move to reviewed.", Snackbar.LENGTH_SHORT).show()
                                                     val action = Notification()
                                                     action.deleteUnread(uid, notificationID)
-                                                    action.moveToReviewed(uid, "", description, notificationID, dateReviewed, sortKey)
 
                                                     adapter.deleteItem(position)
                                                     recyclerView.adapter?.notifyItemRemoved(position)
                                                     adapter.notifyItemRemoved(position)
                                                     executeNotification()
-                                                    executeReviewed()
 
                                                 }.setNegativeButton("Cancel"){_,_ ->
                                                    executeNotification()
-                                                    executeReviewed()
                                                 }.setOnCancelListener(){
                                                     executeNotification()
-                                                    executeReviewed()
                                                 }.show()
 
                                         }
@@ -314,10 +203,6 @@ class TeacherNotification : Fragment() {
 
 
                             })
-
-
-
-
                         }else{
                             progressDialogHide()
                         }

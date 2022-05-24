@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout-v28/activity_help_center.xml" value="0.30520833333333336" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_admin_main2.xml" value="0.19067028985507245" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_help_center.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_main.xml" value="0.25679347826086957" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_room.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_room_member_request.xml" value="0.2223731884057971" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_school_announcement.xml" value="0.30520833333333336" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_student_message_room.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_student_room.xml" value="0.33" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/activity_teacher_message_room.xml" value="0.26313405797101447" />
@@ -29,6 +33,7 @@
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/post_list.xml" value="0.25679347826086957" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/post_view.xml" value="0.25679347826086957" />
         <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/recipient_list_item.xml" value="0.2223731884057971" />
+        <entry key="..\:/Users/jamis/AndroidStudioProjects/ICCT LMS/ICCT-LMS-master/app/src/main/res/layout/response_layout.xml" value="0.33" />
       </map>
     </option>
   </component>

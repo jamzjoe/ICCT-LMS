@@ -75,8 +75,8 @@ class Welcome : AppCompatActivity() {
             .show()
         createAdmin.get().addOnSuccessListener {
             if (it.exists()){
-                val username = it.child("Username").value.toString()
-                val password = it.child("Password").value.toString()
+                val username = it.child("username").value.toString()
+                val password = it.child("password").value.toString()
 
 
                 adminSubmit.setOnClickListener{

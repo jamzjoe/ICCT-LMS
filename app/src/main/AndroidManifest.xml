@@ -20,6 +20,7 @@
             android:name=".messages.StudentMessageRoom"
             android:exported="false" />
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".HelpCenter"
             android:exported="false" />
         <activity

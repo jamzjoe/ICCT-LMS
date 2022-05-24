@@ -80,9 +80,10 @@ class Notification {
         deleteUnread.child(notificationID).removeValue().addOnSuccessListener {
         }
     }
-    fun deleteAllUnread(uid: String) {
+    fun deleteAllUnread(uid: String, unit : Unit) {
         val deleteUnread = FirebaseDatabase.getInstance().getReference("Notifications").child(uid)
         deleteUnread.removeValue().addOnSuccessListener {
+            kotlin.run { unit }
         }
     }
 
